@@ -1,5 +1,3 @@
-const CopyPlugin = require('copy-webpack-plugin');
-
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
 });
@@ -7,12 +5,15 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 module.exports = withBundleAnalyzer({
   reactStrictMode: true,
   pageExtensions: ['js', 'jsx', 'mdx', 'ts', 'tsx'],
+  i18n: {
+    locales: ['en', 'pt'],
+    defaultLocale: 'en',
+  },
   images: {
     domains: ['github.blog'],
     deviceSizes: [320, 640, 1080, 1200],
     imageSizes: [64, 128],
   },
-  swcMinify: true,
   compiler: {
     styledComponents: true,
   },

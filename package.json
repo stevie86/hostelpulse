@@ -3,10 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "yarn tinacms server:start -c \"next dev\"",
-    "build": "yarn tinacms server:start -c \"next build\"",
-    "start": "yarn tinacms server:start -c \"next start\"",
-    "lint": "next lint"
+    "dev": "bunx --bun next dev",
+    "build": "npx next build",
+    "start": "npx next start",
+    "lint": "next lint",
+    "build:check": "./scripts/build-check.sh",
+    "build:dev": "./scripts/build-check.sh dev",
+    "build:prod": "./scripts/build-check.sh prod",
+    "build:test": "./scripts/build-check.sh test",
+    "build:verify": "./scripts/build-check.sh verify",
+    "predeploy": "./scripts/pre-deploy-check.sh"
   },
   "dependencies": {
     "@accessible/drawer": "^3.0.2",
@@ -18,6 +24,7 @@
     "gray-matter": "^4.0.3",
     "lodash": "^4.17.21",
     "next": "12.1.0",
+    "next-intl": "^4.3.7",
     "nextjs-color-mode": "^1.0.5",
     "polished": "^4.1.3",
     "prism-react-renderer": "^1.3.5",
@@ -38,7 +45,6 @@
     "use-resize-observer": "^9.1.0"
   },
   "devDependencies": {
-    "@babel/eslint-parser": "^7.21.3",
     "@fec/remark-a11y-emoji": "^3.1.0",
     "@next/bundle-analyzer": "^13.3.1",
     "@tinacms/cli": "^0.60.0",
@@ -49,7 +55,6 @@
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "@typescript-eslint/parser": "^5.59.9",
     "all-contributors-cli": "^6.26.0",
-    "@babel/eslint-parser": "^7.11.0",
     "copy-webpack-plugin": "^11.0.0",
     "eslint": "^8.0.0",
     "eslint-config-next": "^13.2.4",

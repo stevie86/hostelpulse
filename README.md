@@ -1,158 +1,211 @@
-<br/>
-<p align="center">
+# Hostelpulse V1.0
 
-  <a href="https://github.com/Blazity/next-saas-starter" >
-    <img src="https://i.imgur.com/jmc2Q1w.png" alt="Logo"  width="49%">
-  </a>
-   <a href="https://github.com/Blazity/next-saas-starter">
-    <img src="https://i.imgur.com/CxkjHhi.png" alt="Logo" width="49%">
-  </a> 
+A specialized SaaS platform designed to become the central operating system for independent hostel owners, starting with a focus on the Lisbon market.
 
-  <h3 align="center">✨ Free Next.js marketing website template for SaaS startups ✨</h3>
+## 🚀 Mission
 
-  <p align="center">
-    Everything you need to build a great landing page / marketing website for your startup. Great SEO metrics, Green WebVitals, 🚀 Performance, Clean & Pragmatic Codebase out of the box.
-    <br/>
-    <br/>
-    <a href="https://next-saas-starter-ashy.vercel.app/">View Demo</a>
-    .
-    <a href="https://github.com/Blazity/next-saas-starter/issues">Report Bug</a>
-    .
-    <a href="https://github.com/Blazity/next-saas-starter/issues">Request Feature</a>
-  </p>
-</p>
+Hostelpulse empowers independent hostel entrepreneurs by automating administrative tasks, eliminating revenue loss, and providing tools for business growth.
 
-<div align="center">
+## ✨ Key Features
 
-![Contributors](https://img.shields.io/github/contributors/Blazity/next-saas-starter?color=dark-green) ![Issues](https://img.shields.io/github/issues/Blazity/next-saas-starter) ![License](https://img.shields.io/github/license/Blazity/next-saas-starter)
+- **💰 Automated City Tax Collection**: Simplify collecting Lisbon City Tax from guests who book via platforms that don't automate it
+- **📄 Automated 'Factura' Generation**: Generate official Portuguese invoices for business travelers
+- **📊 Revenue Optimization**: Eliminate revenue loss from double bookings and manual errors
+- **⚡ Administrative Automation**: Streamline operations and reduce time spent on manual tasks
+- **📈 Business Growth Tools**: Analytics and insights to help hostels scale sustainably
+- **🔗 Multi-Platform Integration**: Works alongside existing systems like Cloudbeds or as a primary solution
 
-</div>
+## 🛠 Technology Stack
 
-<p align="center"><b>Created with :heart: at Blazity </b></p>
-<p align="center"><a href="https://blazity.com/">Blazity</a> is a group of Next.js/Jamstack/Headless experts. Contact us at <a href="mailto:contact@blazity.com">contact@blazity.com</a> if you’d like to talk about your project or just to have a chat with us</p>
+- **Runtime**: Bun for fast JavaScript execution and package management
+- **Framework**: Next.js for full-stack React applications
+- **Database**: Supabase (PostgreSQL) for scalable data management
+- **UI Framework**: Tailwind CSS with Shadcn UI components
+- **Payments**: Stripe for secure payment processing
+- **Deployment**: Vercel for global CDN and serverless functions
+- **Authentication**: Built-in user management and security
 
-<a href="https://discord.gg/fyWtyNKmfX" style="width: 100%; display: flex; justify-content: center;">
-  <img src="https://discordapp.com/api/guilds/1111676875782234175/widget.png?style=banner2" alt="Blazity Discord Banner"/>
-</a>
-<br />
-
-## Table Of Contents
-
-- [Features](#-features)
-- [Getting Started](#-getting-started)
-- [One click deploy](#one-click-deploy)
-- [Built With](#-built-with)
-- [Contributing](#-contributing)
-  - [Creating A Pull Request](#creating-a-pull-request)
-- [Acknowledgements](#-acknowledgements)
-- [Contributors](#-contributors)
-- [License](#-license)
-
-## Features
-
-- ⚡ **Next.js** - React framework for static rendering
-- **Best SEO setup** - Meta Tags, JSON-LD and Open Graph Tags
-- **[Tina CMS](https://tina.io/) integration** - local & (optional) production CMS
-- **Optimized for Web Vitals**
-- **Blog with MDX**
-- **Mailchimp Integration** - for newsletters
-- **Sendgrid Integration** - for sending emails
-- **Dark mode** - and customizable themes!
-- **No UI library** - just styled components, so you don't have to learn any new syntax
-- **One click deployment** - with Vercel or any other serverless deployment environment
-- **Eslint** - with Next.js's recommended settings and imports sorting rule
-- **Prettier**
-
-## 🤓 Getting Started
-
-- Click `Use the template` or [this link](https://github.com/Blazity/next-saas-starter/generate)
-- Setup your [sendgrid](https://sendgrid.com/) API key and add it to environment variables (`SENDGRID_API_KEY` - `.env.local`)
-- Adjust the template to your needs (and checkout `env.ts` file)
-- Deploy the project on [Vercel](https://vercel.com/) **don't forget to add env variables**
-- _(optional)_ Create [Tina Cloud account](https://app.tina.io/), [a project](https://tina.io/docs/tina-cloud/) and fill these `NEXT_PUBLIC_ORGANIZATION_NAME`, `NEXT_PUBLIC_TINA_CLIENT_ID` env vars with proper values
-  > Tina's Content API authenticates directly with GitHub removing the need for users to create GitHub accounts. Access is granted through the dashboard, allowing users to login directly through your site and begin editing! Any changes that are saved by your editors will be commited to the configured branch in your GitHub repository.
-  - For more details [see the docs](https://tina.io/docs/tina-cloud/)
+## 📁 Project Structure
 
 ```
-# run the dev mode
-$ yarn dev
-
-# run the prod mode
-yarn start
-
-# build the app
-yarn build
+/
+├── components/          # Reusable React components and UI elements
+├── pages/              # Next.js pages and API routes
+├── views/              # Page-specific view components
+├── hooks/              # Custom React hooks for state management
+├── contexts/           # React context providers for global state
+├── utils/              # Utility functions and business logic helpers
+├── public/             # Static assets and media files
+├── scripts/            # Build automation and deployment scripts
+├── docs/               # Project documentation and guides
+├── .kilocode/          # Governance framework and memory bank
+└── kilocode-export/    # Governance framework source code
 ```
 
-> Hint: To edit the blog pages go to [/admin](http://localhost:3000/admin) and navigate to a blog page to edit it. To exit editing mode navigate to [/admin/logout](http://localhost:3000/admin/logout)
+## 🚀 Quick Start
 
-## 🚀 One click deploy
+### Prerequisites
 
-Clone the repository and one-click deploy to Vercel for free!
+- **Node.js**: 18.0.0+ (for compatibility with Next.js 12)
+- **Bun**: Latest version for package management
+- **Git**: For version control
 
-[![Vercel](https://vercel.com/button)](https://vercel.com/new/git/external?repository-url=https://github.com/Blazity/next-saas-starter)
+### Installation
 
-Clone the repository and one-click deploy to Netlify for free!
+1. **Install Bun** (if not already installed):
+   ```bash
+   curl -fsSL https://bun.sh/install | bash
+   source ~/.bashrc
+   ```
 
-[![Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/Blazity/next-saas-starter)
+2. **Clone and setup**:
+   ```bash
+   git clone <repository-url>
+   cd hostelpulse
+   bun install
+   ```
 
-## 🧰 Built With
+3. **Start development server**:
+   ```bash
+   bun run dev
+   ```
 
-- Statically generated pages with [**Next.js** ](https://github.com/vercel/next.js)
-- [Styled components](https://github.com/styled-components/styled-components/)
-- [MDX](https://github.com/mdx-js/mdx)
-- [TypeScript](https://github.com/Microsoft/TypeScript)
+4. **Open your browser** and visit `http://localhost:3000`
 
-## 🤲🏻 Contributing
+## 📜 Available Scripts
 
-Contributions are what make the open source community such an amazing place to be learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+### Development
+```bash
+bun run dev          # Start development server
+bun run build        # Build for production
+bun run start        # Start production server
+bun run lint         # Run ESLint
+```
 
-- If you have suggestions for adding or removing projects, feel free to [open an issue](https://github.com/Blazity/next-saas-starter/issues/new) to discuss it, or directly create a pull request after you edit the _README.md_ file with necessary changes.
-- Create individual PR for each suggestion.
+### Build Automation
+```bash
+bun run build:check  # Run build checks (dev/prod/test/verify)
+bun run build:dev    # Start development with checks
+bun run build:prod   # Build for production with validation
+bun run build:test   # Run tests only
+bun run build:verify # Build verification with failure handling
+bun run predeploy    # Pre-deployment checks
+```
 
-### Creating A Pull Request
+### Manual Script Execution
+```bash
+./scripts/build-check.sh dev     # Development server
+./scripts/build-check.sh prod    # Production build
+./scripts/build-check.sh test    # Run tests
+./scripts/build-check.sh verify  # Build verification
+./scripts/pre-deploy-check.sh    # Pre-deployment validation
+```
 
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+## 🏗 Governance & Documentation
 
-## 😎 Acknowledgements
+Hostelpulse uses a comprehensive governance framework to ensure consistent development practices and maintainable code.
 
-Big thanks to authors of these libraries:
+### Memory Bank System
 
-- https://github.com/neg4n/next-api-og-image - generating open graph images
-- https://github.com/blazity/nextjs-color-mode - non-flickering dark mode
-- https://github.com/Brew-Brew/css-in-js-media - a convenient way of creating media queries
+The Memory Bank is our core knowledge persistence system, located in `.kilocode/rules/memory-bank/`:
 
-## Support
+- **`brief.md`**: Project foundation and objectives
+- **`product.md`**: Product vision and user experience goals
+- **`context.md`**: Current work status and next steps
+- **`architecture.md`**: System design and technical decisions
+- **`tech.md`**: Technology stack and development setup
+- **`branding.md`**: Brand guidelines and visual identity
 
-If you're looking for help or simply want to share your thoughts about the project, we encourage you to join our Discord community. Here's the link: [https://blazity.com/discord](https://blazity.com/discord). It's a space where we exchange ideas and help one another. Everyone's input is appreciated, and we look forward to welcoming you.
+### Documentation Structure
 
-## ✨ Contributors
+- **`docs/KiloCode-Configuration.md`**: Configuration guidelines and mode usage
+- **`docs/KiloCode-General.md`**: General KiloCode framework documentation
+- **`docs/process-improvement-analysis.md`**: Process improvement methodologies
 
-Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+### Development Workflow
 
-<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-<!-- prettier-ignore-start -->
-<!-- markdownlint-disable -->
-<table>
-  <tr>
-    <td align="center"><a href="https://bstefanski.com/"><img src="https://avatars.githubusercontent.com/u/28964599?v=4?s=64" width="64px;" alt=""/><br /><sub><b>Bart Stefanski</b></sub></a><br /><a href="https://github.com/Blazity/next-saas-starter/commits?author=bmstefanski" title="Code">💻</a></td>
-    <td align="center"><a href="https://github.com/ilasota"><img src="https://avatars.githubusercontent.com/u/34578189?v=4?s=64" width="64px;" alt=""/><br /><sub><b>Igor Lasota</b></sub></a><br /><a href="https://github.com/Blazity/next-saas-starter/commits?author=ilasota" title="Code">💻</a></td>
-    <td align="center"><a href="https://github.com/jbryn"><img src="https://avatars.githubusercontent.com/u/52970664?v=4?s=64" width="64px;" alt=""/><br /><sub><b>Jan Bryński</b></sub></a><br /><a href="https://github.com/Blazity/next-saas-starter/commits?author=jbryn" title="Code">💻</a></td>
-    <td align="center"><a href="https://www.logana.dev/"><img src="https://avatars.githubusercontent.com/u/43075109?v=4?s=64" width="64px;" alt=""/><br /><sub><b>Logan Anderson</b></sub></a><br /><a href="https://github.com/Blazity/next-saas-starter/commits?author=logan-anderson" title="Code">💻</a> <a href="https://github.com/Blazity/next-saas-starter/commits?author=logan-anderson" title="Documentation">📖</a> <a href="#mentoring-logan-anderson" title="Mentoring">🧑‍🏫</a></td>
-  </tr>
-</table>
+1. **Memory Bank First**: Always read memory bank files before starting work
+2. **Branch Management**: Use feature branches with clear naming conventions
+3. **Code Quality**: Automated linting, testing, and build validation
+4. **Documentation**: Update memory bank after significant changes
 
-<!-- markdownlint-restore -->
-<!-- prettier-ignore-end -->
+## 🎯 Target Audience
 
-<!-- ALL-CONTRIBUTORS-LIST:END -->
+Hostelpulse serves independent hostel owners and managers in Lisbon who:
+- Manage 1-2 hostel locations
+- Are deeply involved in daily operations
+- Are tech-savvy but time-poor
+- Frustrated with complex enterprise software like Cloudbeds
+- Need affordable, specialized solutions for their niche
 
-This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
+## 💡 Our Solution
 
-## 📝 License
+We provide a lightweight, powerful SaaS platform that serves as either:
+- **Primary Solution**: For hostels seeking an affordable alternative to Cloudbeds
+- **Profit-Maximization Toolkit**: Works alongside existing systems to add high-value features
 
-Distributed under the MIT License. See [LICENSE](https://github.com/Blazity/next-saas-starter/blob/main/LICENSE.md) for more information.
+### Key Differentiators
+- **Lisbon Market Focus**: Deep understanding of local regulations and business practices
+- **Revenue Protection**: Automated systems prevent double bookings and revenue loss
+- **Administrative Automation**: Streamlines time-consuming manual processes
+- **Scalable Architecture**: Grows with hostel business needs
+
+## 🔧 Configuration Files
+
+- **`next.config.js`**: Next.js configuration
+- **`tailwind.config.js`**: Tailwind CSS customization
+- **`postcss.config.js`**: PostCSS configuration
+- **`tsconfig.json`**: TypeScript configuration
+- **`.eslintrc.json`**: ESLint rules and plugins
+- **`.prettierrc`**: Code formatting rules
+
+## 🚀 Deployment
+
+### Production Build
+```bash
+bun run build:prod
+```
+
+### Pre-deployment Checks
+```bash
+bun run predeploy
+```
+
+### Deployment Requirements
+- Must be on `main` branch
+- No uncommitted changes
+- All tests passing
+- Memory bank files present
+- Build validation successful
+
+## 🤝 Contributing
+
+1. **Read the Memory Bank**: Start by reading all memory bank files
+2. **Follow Governance**: Adhere to established processes and guidelines
+3. **Branch Strategy**: Create feature branches from `main`
+4. **Code Quality**: Ensure tests pass and code is linted
+5. **Documentation**: Update memory bank for significant changes
+
+## 📊 Success Metrics
+
+- **Hostel Partnerships**: 50+ independent hostels in Lisbon onboarded in first year
+- **Revenue Impact**: Help hostels increase revenue by 15-25% through automation
+- **Time Savings**: Save hostel owners 10+ hours per week on administrative tasks
+- **User Adoption**: 80%+ monthly active users among subscribed hostels
+- **Platform Reliability**: 99.9% uptime with automated tax collection accuracy
+- **Customer Satisfaction**: 4.8+ star rating from hostel owner feedback
+
+## 📄 License
+
+This project is licensed under the terms specified in the LICENSE file.
+
+## 🆘 Support
+
+For questions or support:
+- Check the memory bank files for project context
+- Review the governance documentation
+- Follow established development workflows
+
+---
+
+**Hostelpulse** - Empowering Lisbon's independent hostel owners with automation, revenue protection, and business growth tools.
