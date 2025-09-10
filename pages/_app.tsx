@@ -7,7 +7,6 @@ import { AppProps } from 'next/dist/shared/lib/router/router';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { ColorModeScript } from 'nextjs-color-mode';
-import { NextIntlClientProvider } from 'next-intl';
 import React, { PropsWithChildren } from 'react';
 import { TinaEditProvider } from 'tinacms/dist/edit-state';
 
@@ -17,7 +16,9 @@ import Navbar from 'components/Navbar';
 import NavigationDrawer from 'components/NavigationDrawer';
 import NewsletterModal from 'components/NewsletterModal';
 import WaveCta from 'components/WaveCta';
+import EnhancedErrorBoundary from 'components/EnhancedErrorBoundary';
 import { NewsletterModalContextProvider, useNewsletterModalContext } from 'contexts/newsletter-modal.context';
+import { AuthProvider } from 'contexts/auth.context';
 import { NavItems } from 'types';
 
 const navItems: NavItems = [
@@ -49,40 +50,42 @@ function MyApp({ Component, pageProps }: AppProps) {
       <ColorModeScript />
       <GlobalStyle />
 
-      <NextIntlClientProvider locale="en" messages={pageProps.messages}>
-        <Providers>
-          <Modals />
-          <Navbar items={navItems} />
-          <TinaEditProvider
-            editMode={
-              <TinaCMS
-                query={pageProps.query}
-                variables={pageProps.variables}
-                data={pageProps.data}
-                isLocalClient={!process.env.NEXT_PUBLIC_TINA_CLIENT_ID}
-                branch={process.env.NEXT_PUBLIC_EDIT_BRANCH}
-                clientId={process.env.NEXT_PUBLIC_TINA_CLIENT_ID}
-                {...pageProps}
-              >
-                {(livePageProps: any) => <Component {...livePageProps} />}
-              </TinaCMS>
-            }
-          >
-            <Component {...pageProps} />
-          </TinaEditProvider>
-          <WaveCta />
-          <Footer />
-        </Providers>
-      </NextIntlClientProvider>
+      <Providers>
+        <Modals />
+        <Navbar items={navItems} />
+        <TinaEditProvider
+          editMode={
+            <TinaCMS
+              query={pageProps.query}
+              variables={pageProps.variables}
+              data={pageProps.data}
+              isLocalClient={!process.env.NEXT_PUBLIC_TINA_CLIENT_ID}
+              branch={process.env.NEXT_PUBLIC_EDIT_BRANCH}
+              clientId={process.env.NEXT_PUBLIC_TINA_CLIENT_ID}
+              {...pageProps}
+            >
+              {(livePageProps: any) => <Component {...livePageProps} />}
+            </TinaCMS>
+          }
+        >
+          <Component {...pageProps} />
+        </TinaEditProvider>
+        <WaveCta />
+        <Footer />
+      </Providers>
     </>
   );
 }
 
 function Providers<T>({ children }: PropsWithChildren<T>) {
   return (
-    <NewsletterModalContextProvider>
-      <NavigationDrawer items={navItems}>{children}</NavigationDrawer>
-    </NewsletterModalContextProvider>
+    <EnhancedErrorBoundary>
+      <AuthProvider>
+        <NewsletterModalContextProvider>
+          <NavigationDrawer items={navItems}>{children}</NavigationDrawer>
+        </NewsletterModalContextProvider>
+      </AuthProvider>
+    </EnhancedErrorBoundary>
   );
 }
 
