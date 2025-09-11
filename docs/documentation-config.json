@@ -1,0 +1,71 @@
+{
+  "standards": {
+    "markdown": {
+      "lineLength": 80,
+      "headerStyle": "atx",
+      "emphasisStyle": "asterisk",
+      "strongStyle": "asterisk",
+      "linkStyle": "inline",
+      "referenceLinks": false,
+      "fencedCodeBlocks": true,
+      "fencedCodeBlockStyle": "backtick"
+    },
+    "api": {
+      "versioning": "semantic",
+      "responseFormat": "json",
+      "errorFormat": "standard",
+      "pagination": "cursor",
+      "rateLimiting": "header-based"
+    },
+    "naming": {
+      "files": "kebab-case",
+      "directories": "kebab-case",
+      "apiEndpoints": "kebab-case",
+      "databaseTables": "snake_case",
+      "variables": "camelCase"
+    }
+  },
+  "templates": {
+    "feature": {
+      "requiredFields": ["name", "description", "priority", "userStories"],
+      "optionalFields": ["apiEndpoints", "databaseChanges", "testingStrategy"]
+    },
+    "api": {
+      "requiredFields": ["name", "version", "endpoints"],
+      "optionalFields": ["authentication", "rateLimiting", "examples"]
+    },
+    "userGuide": {
+      "requiredFields": ["name", "description", "steps"],
+      "optionalFields": ["prerequisites", "troubleshooting", "faqs"]
+    }
+  },
+  "metadata": {
+    "version": "1.0.0",
+    "lastUpdated": "2025-09-11T07:42:38.147Z",
+    "author": "Hostelpulse Auto-Documentation System",
+    "contact": "docs@hostelpulse.com"
+  },
+  "paths": {
+    "templates": "./docs/templates/",
+    "output": "./docs/generated/",
+    "metadata": "./docs/metadata/",
+    "changelogs": "./docs/changelogs/"
+  },
+  "integrations": {
+    "git": {
+      "enabled": true,
+      "hooks": ["pre-commit", "post-commit"],
+      "commitMessageFormat": "type(scope): description"
+    },
+    "ci": {
+      "enabled": true,
+      "platforms": ["github-actions"],
+      "triggers": ["push", "pull_request"]
+    },
+    "api": {
+      "enabled": true,
+      "formats": ["openapi", "markdown"],
+      "autoGenerate": true
+    }
+  }
+}

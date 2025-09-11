@@ -46,6 +46,13 @@ const LoginPage: React.FC = () => {
             <p className="mt-2 text-center text-sm text-gray-600">
               Manage your hostel operations with ease
             </p>
+
+            {/* Demo credentials for MVP */}
+            <div className="mt-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
+              <p className="text-sm text-blue-800 font-medium mb-2">Demo Credentials:</p>
+              <p className="text-sm text-blue-700">Email: demo@hostelpulse.com</p>
+              <p className="text-sm text-blue-700">Password: demo123</p>
+            </div>
           </div>
 
           <form className="mt-8 space-y-6" onSubmit={handleSubmit}>

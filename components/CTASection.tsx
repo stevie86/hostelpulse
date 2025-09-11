@@ -34,7 +34,7 @@ const CTASection = () => {
             />
             <Button type="submit">Keep me updated</Button>
           </Form>
-          {isSubmitted && <SuccessMessage>Thank you! We'll keep you updated.</SuccessMessage>}
+          {isSubmitted && <SuccessMessage>Thank you! We&apos;ll keep you updated.</SuccessMessage>}
         </CTAContent>
       </Container>
     </Section>

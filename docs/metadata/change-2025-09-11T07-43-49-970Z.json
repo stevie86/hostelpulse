@@ -1,0 +1,488 @@
+{
+  "timestamp": "2025-09-11T07:43:49.970Z",
+  "changes": [
+    {
+      "file": ".env.example",
+      "type": "modified",
+      "before": null,
+      "after": null,
+      "description": "Modified .env.example"
+    },
+    {
+      "file": ".gitignore",
+      "type": "modified",
+      "before": null,
+      "after": null,
+      "description": "Modified .gitignore"
+    },
+    {
+      "file": ".kilocode/rules/memory-bank/context.md",
+      "type": "modified",
+      "before": null,
+      "after": null,
+      "description": "Modified .kilocode/rules/memory-bank/context.md"
+    },
+    {
+      "file": ".kilocode/rules/memory-bank/tech.md",
+      "type": "modified",
+      "before": null,
+      "after": null,
+      "description": "Modified .kilocode/rules/memory-bank/tech.md"
+    },
+    {
+      "file": ".kilocodemodes",
+      "type": "modified",
+      "before": null,
+      "after": null,
+      "description": "Modified .kilocodemodes"
+    },
+    {
+      "file": "bun.lock",
+      "type": "modified",
+      "before": null,
+      "after": null,
+      "description": "Modified bun.lock"
+    },
+    {
+      "file": "components/CTASection.tsx",
+      "type": "modified",
+      "before": null,
+      "after": null,
+      "description": "Modified components/CTASection.tsx"
+    },
+    {
+      "file": "components/Footer.tsx",
+      "type": "modified",
+      "before": null,
+      "after": null,
+      "description": "Modified components/Footer.tsx"
+    },
+    {
+      "file": "components/Link.tsx",
+      "type": "modified",
+      "before": null,
+      "after": null,
+      "description": "Modified components/Link.tsx"
+    },
+    {
+      "file": "i18n.ts",
+      "type": "deleted",
+      "before": null,
+      "after": null,
+      "description": "Deleted i18n.ts"
+    },
+    {
+      "file": "package-lock.json",
+      "type": "modified",
+      "before": null,
+      "after": null,
+      "description": "Modified package-lock.json"
+    },
+    {
+      "file": "package.json",
+      "type": "modified",
+      "before": null,
+      "after": null,
+      "description": "Modified package.json"
+    },
+    {
+      "file": "pages/_app.tsx",
+      "type": "modified",
+      "before": null,
+      "after": null,
+      "description": "Modified pages/_app.tsx"
+    },
+    {
+      "file": "sprints/coming-soon-landing-page-sprint.md",
+      "type": "modified",
+      "before": null,
+      "after": null,
+      "description": "Modified sprints/coming-soon-landing-page-sprint.md"
+    },
+    {
+      "file": ".autonomous-config.json",
+      "type": "modified",
+      "before": null,
+      "after": null,
+      "description": "Modified .autonomous-config.json"
+    },
+    {
+      "file": ".env",
+      "type": "modified",
+      "before": null,
+      "after": null,
+      "description": "Modified .env"
+    },
+    {
+      "file": ".github/workflows/autonomous-workflow.yml",
+      "type": "modified",
+      "before": null,
+      "after": null,
+      "description": "Modified .github/workflows/autonomous-workflow.yml"
+    },
+    {
+      "file": ".github/workflows/governance-checks.yml",
+      "type": "modified",
+      "before": null,
+      "after": null,
+      "description": "Modified .github/workflows/governance-checks.yml"
+    },
+    {
+      "file": ".github/workflows/test-first.yml",
+      "type": "modified",
+      "before": null,
+      "after": null,
+      "description": "Modified .github/workflows/test-first.yml"
+    },
+    {
+      "file": ".governance-config.json",
+      "type": "modified",
+      "before": null,
+      "after": null,
+      "description": "Modified .governance-config.json"
+    },
+    {
+      "file": ".husky/",
+      "type": "modified",
+      "before": null,
+      "after": null,
+      "description": "Modified .husky/"
+    },
+    {
+      "file": ".kilocode/mcp.json",
+      "type": "modified",
+      "before": null,
+      "after": null,
+      "description": "Modified .kilocode/mcp.json"
+    },
+    {
+      "file": ".kilocode/modes/",
+      "type": "modified",
+      "before": null,
+      "after": null,
+      "description": "Modified .kilocode/modes/"
+    },
+    {
+      "file": ".test-first-config.json",
+      "type": "modified",
+      "before": null,
+      "after": null,
+      "description": "Modified .test-first-config.json"
+    },
+    {
+      "file": "SPRINT_ACCOMPLISHMENTS_SUMMARY.md",
+      "type": "modified",
+      "before": null,
+      "after": null,
+      "description": "Modified SPRINT_ACCOMPLISHMENTS_SUMMARY.md"
+    },
+    {
+      "file": "components/AuthButton.tsx",
+      "type": "modified",
+      "before": null,
+      "after": null,
+      "description": "Modified components/AuthButton.tsx"
+    },
+    {
+      "file": "components/AuthInput.tsx",
+      "type": "modified",
+      "before": null,
+      "after": null,
+      "description": "Modified components/AuthInput.tsx"
+    },
+    {
+      "file": "components/AuthLayout.tsx",
+      "type": "modified",
+      "before": null,
+      "after": null,
+      "description": "Modified components/AuthLayout.tsx"
+    },
+    {
+      "file": "components/ContentArea.tsx",
+      "type": "modified",
+      "before": null,
+      "after": null,
+      "description": "Modified components/ContentArea.tsx"
+    },
+    {
+      "file": "components/ErrorBoundary.tsx",
+      "type": "modified",
+      "before": null,
+      "after": null,
+      "description": "Modified components/ErrorBoundary.tsx"
+    },
+    {
+      "file": "components/Header.tsx",
+      "type": "modified",
+      "before": null,
+      "after": null,
+      "description": "Modified components/Header.tsx"
+    },
+    {
+      "file": "components/ProtectedRoute.tsx",
+      "type": "modified",
+      "before": null,
+      "after": null,
+      "description": "Modified components/ProtectedRoute.tsx"
+    },
+    {
+      "file": "components/WedgeCard.tsx",
+      "type": "modified",
+      "before": null,
+      "after": null,
+      "description": "Modified components/WedgeCard.tsx"
+    },
+    {
+      "file": "components/__tests__/Button.test.tsx",
+      "type": "modified",
+      "before": null,
+      "after": null,
+      "description": "Modified components/__tests__/Button.test.tsx"
+    },
+    {
+      "file": "components/__tests__/Container.test.tsx",
+      "type": "modified",
+      "before": null,
+      "after": null,
+      "description": "Modified components/__tests__/Container.test.tsx"
+    },
+    {
+      "file": "components/__tests__/Input.test.tsx",
+      "type": "modified",
+      "before": null,
+      "after": null,
+      "description": "Modified components/__tests__/Input.test.tsx"
+    },
+    {
+      "file": "contexts/__tests__/",
+      "type": "modified",
+      "before": null,
+      "after": null,
+      "description": "Modified contexts/__tests__/"
+    },
+    {
+      "file": "contexts/auth.context.tsx",
+      "type": "modified",
+      "before": null,
+      "after": null,
+      "description": "Modified contexts/auth.context.tsx"
+    },
+    {
+      "file": "docs/documentation-config.json",
+      "type": "modified",
+      "before": null,
+      "after": null,
+      "description": "Modified docs/documentation-config.json"
+    },
+    {
+      "file": "docs/templates/",
+      "type": "modified",
+      "before": null,
+      "after": null,
+      "description": "Modified docs/templates/"
+    },
+    {
+      "file": "governance-mode-design.md",
+      "type": "modified",
+      "before": null,
+      "after": null,
+      "description": "Modified governance-mode-design.md"
+    },
+    {
+      "file": "hooks/__tests__/",
+      "type": "modified",
+      "before": null,
+      "after": null,
+      "description": "Modified hooks/__tests__/"
+    },
+    {
+      "file": "jest.config.js",
+      "type": "modified",
+      "before": null,
+      "after": null,
+      "description": "Modified jest.config.js"
+    },
+    {
+      "file": "jest.setup.js",
+      "type": "modified",
+      "before": null,
+      "after": null,
+      "description": "Modified jest.setup.js"
+    },
+    {
+      "file": "lib/",
+      "type": "modified",
+      "before": null,
+      "after": null,
+      "description": "Modified lib/"
+    },
+    {
+      "file": "pages/account.tsx",
+      "type": "modified",
+      "before": null,
+      "after": null,
+      "description": "Modified pages/account.tsx"
+    },
+    {
+      "file": "pages/api/auth/",
+      "type": "modified",
+      "before": null,
+      "after": null,
+      "description": "Modified pages/api/auth/"
+    },
+    {
+      "file": "pages/api/dashboard.ts",
+      "type": "modified",
+      "before": null,
+      "after": null,
+      "description": "Modified pages/api/dashboard.ts"
+    },
+    {
+      "file": "pages/dashboard.tsx",
+      "type": "modified",
+      "before": null,
+      "after": null,
+      "description": "Modified pages/dashboard.tsx"
+    },
+    {
+      "file": "prisma/",
+      "type": "modified",
+      "before": null,
+      "after": null,
+      "description": "Modified prisma/"
+    },
+    {
+      "file": "scripts/ai-code-generator.js",
+      "type": "modified",
+      "before": null,
+      "after": null,
+      "description": "Modified scripts/ai-code-generator.js"
+    },
+    {
+      "file": "scripts/ai-peer-review.js",
+      "type": "modified",
+      "before": null,
+      "after": null,
+      "description": "Modified scripts/ai-peer-review.js"
+    },
+    {
+      "file": "scripts/audit-trail.js",
+      "type": "modified",
+      "before": null,
+      "after": null,
+      "description": "Modified scripts/audit-trail.js"
+    },
+    {
+      "file": "scripts/auto-documentation.js",
+      "type": "modified",
+      "before": null,
+      "after": null,
+      "description": "Modified scripts/auto-documentation.js"
+    },
+    {
+      "file": "scripts/auto-refactor.js",
+      "type": "modified",
+      "before": null,
+      "after": null,
+      "description": "Modified scripts/auto-refactor.js"
+    },
+    {
+      "file": "scripts/feature-planner.js",
+      "type": "modified",
+      "before": null,
+      "after": null,
+      "description": "Modified scripts/feature-planner.js"
+    },
+    {
+      "file": "scripts/generate-tests.js",
+      "type": "modified",
+      "before": null,
+      "after": null,
+      "description": "Modified scripts/generate-tests.js"
+    },
+    {
+      "file": "scripts/governance-rules-engine.js",
+      "type": "modified",
+      "before": null,
+      "after": null,
+      "description": "Modified scripts/governance-rules-engine.js"
+    },
+    {
+      "file": "scripts/performance-optimizer.js",
+      "type": "modified",
+      "before": null,
+      "after": null,
+      "description": "Modified scripts/performance-optimizer.js"
+    },
+    {
+      "file": "scripts/security-scanner.js",
+      "type": "modified",
+      "before": null,
+      "after": null,
+      "description": "Modified scripts/security-scanner.js"
+    },
+    {
+      "file": "sprints/mvp-prototype-sprint.md",
+      "type": "modified",
+      "before": null,
+      "after": null,
+      "description": "Modified sprints/mvp-prototype-sprint.md"
+    },
+    {
+      "file": "sprints/supabase-migration-sprint.md",
+      "type": "modified",
+      "before": null,
+      "after": null,
+      "description": "Modified sprints/supabase-migration-sprint.md"
+    },
+    {
+      "file": "sprints/tech-debt-wednesday.md",
+      "type": "modified",
+      "before": null,
+      "after": null,
+      "description": "Modified sprints/tech-debt-wednesday.md"
+    },
+    {
+      "file": "sprints/test-deploy-readiness-sprint.md",
+      "type": "modified",
+      "before": null,
+      "after": null,
+      "description": "Modified sprints/test-deploy-readiness-sprint.md"
+    },
+    {
+      "file": "sprints/ui-implementation-sprint.md",
+      "type": "modified",
+      "before": null,
+      "after": null,
+      "description": "Modified sprints/ui-implementation-sprint.md"
+    },
+    {
+      "file": "supabase/",
+      "type": "modified",
+      "before": null,
+      "after": null,
+      "description": "Modified supabase/"
+    },
+    {
+      "file": "test-supabase.js",
+      "type": "modified",
+      "before": null,
+      "after": null,
+      "description": "Modified test-supabase.js"
+    },
+    {
+      "file": "utils/__tests__/",
+      "type": "modified",
+      "before": null,
+      "after": null,
+      "description": "Modified utils/__tests__/"
+    },
+    {
+      "file": "utils/supabase.ts",
+      "type": "modified",
+      "before": null,
+      "after": null,
+      "description": "Modified utils/supabase.ts"
+    }
+  ]
+}

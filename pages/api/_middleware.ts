@@ -75,9 +75,9 @@ export function middleware(request: NextRequest) {
 
   // Rate limiting
   if (!checkRateLimit(clientIP)) {
-    return NextResponse.json(
-      { error: 'Too many requests. Please try again later.' },
-      { status: 429 }
+    return new NextResponse(
+      JSON.stringify({ error: 'Too many requests. Please try again later.' }),
+      { status: 429, headers: { 'Content-Type': 'application/json' } }
     );
   }
 
@@ -85,9 +85,9 @@ export function middleware(request: NextRequest) {
   const validation = validateRequest(request);
   if (!validation.valid) {
     console.warn(`Blocked suspicious request from ${clientIP}: ${validation.error}`);
-    return NextResponse.json(
-      { error: 'Bad request' },
-      { status: 400 }
+    return new NextResponse(
+      JSON.stringify({ error: 'Bad request' }),
+      { status: 400, headers: { 'Content-Type': 'application/json' } }
     );
   }
 

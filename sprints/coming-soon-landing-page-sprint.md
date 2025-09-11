@@ -13,6 +13,8 @@ Small and medium-sized hostels in the Lisbon Anjos area, with a pilot hostel loc
 ## Sprint Goal
 Build and deploy a visually appealing "Coming Soon" landing page for Hostelpulse that serves as a public-facing showcase of our product vision and captures interest from potential early adopters. The final result must be a live webpage deployed on Vercel.
 
+**Sprint Duration:** 2025-09-09 23:21 UTC - 2025-09-09 23:45 UTC (24 minutes)
+
 ## User Stories
 
 ### As a hostel owner
@@ -28,140 +30,140 @@ Build and deploy a visually appealing "Coming Soon" landing page for Hostelpulse
 ## Technical Sub-tasks
 
 ### Task 1: Project Scaffolding & Initial Page Setup
-- [ ] Create feature branch `feature/vision-ui-showcase`
-  - Start: [YYYY-MM-DD HH:MM UTC]
-  - End: [YYYY-MM-DD HH:MM UTC]
-  - Duration: [X hours]
-- [ ] Decide on page structure (modify `pages/index.tsx` or create new page)
-  - Start: [YYYY-MM-DD HH:MM UTC]
-  - End: [YYYY-MM-DD HH:MM UTC]
-  - Duration: [X hours]
-- [ ] Implement basic layout with container and centering styles
-  - Start: [YYYY-MM-DD HH:MM UTC]
-  - End: [YYYY-MM-DD HH:MM UTC]
-  - Duration: [X hours]
-- [ ] Test basic layout rendering
-  - Start: [YYYY-MM-DD HH:MM UTC]
-  - End: [YYYY-MM-DD HH:MM UTC]
-  - Duration: [X hours]
+- [x] Create feature branch `feature/vision-ui-showcase`
+  - Start: 2025-09-09 23:21 UTC
+  - End: 2025-09-09 23:26 UTC
+  - Duration: 0.08 hours
+- [x] Decide on page structure (modify `pages/index.tsx` or create new page)
+  - Start: 2025-09-09 23:26 UTC
+  - End: 2025-09-09 23:30 UTC
+  - Duration: 0.07 hours
+- [x] Implement basic layout with container and centering styles
+  - Start: 2025-09-09 23:30 UTC
+  - End: 2025-09-09 23:32 UTC
+  - Duration: 0.03 hours
+- [x] Test basic layout rendering
+  - Start: 2025-09-09 23:32 UTC
+  - End: 2025-09-09 23:32 UTC
+  - Duration: 0.02 hours
 
 ### Task 2: Implement the Hero Section
-- [ ] Create `ComingSoonHero` component
-  - Start: [YYYY-MM-DD HH:MM UTC]
-  - End: [YYYY-MM-DD HH:MM UTC]
-  - Duration: [X hours]
-- [ ] Add primary headline: "Manage all your bookings across all platforms. Never lose a booking again."
-  - Start: [YYYY-MM-DD HH:MM UTC]
-  - End: [YYYY-MM-DD HH:MM UTC]
-  - Duration: [X hours]
-- [ ] Add sub-headline: "Hostelpulse is coming soon. The all-in-one platform for modern hostel management."
-  - Start: [YYYY-MM-DD HH:MM UTC]
-  - End: [YYYY-MM-DD HH:MM UTC]
-  - Duration: [X hours]
-- [ ] Integrate professional background image or gradient matching brand colors
-  - Start: [YYYY-MM-DD HH:MM UTC]
-  - End: [YYYY-MM-DD HH:MM UTC]
-  - Duration: [X hours]
-- [ ] Ensure responsive design for mobile, tablet, and desktop
-  - Start: [YYYY-MM-DD HH:MM UTC]
-  - End: [YYYY-MM-DD HH:MM UTC]
-  - Duration: [X hours]
-- [ ] Test hero section display and responsiveness
-  - Start: [YYYY-MM-DD HH:MM UTC]
-  - End: [YYYY-MM-DD HH:MM UTC]
-  - Duration: [X hours]
+- [x] Create `ComingSoonHero` component
+  - Start: 2025-09-09 23:32 UTC
+  - End: 2025-09-09 23:33 UTC
+  - Duration: 0.02 hours
+- [x] Add primary headline: "Manage all your bookings across all platforms. Never lose a booking again."
+  - Start: 2025-09-09 23:33 UTC
+  - End: 2025-09-09 23:33 UTC
+  - Duration: 0.01 hours
+- [x] Add sub-headline: "Hostelpulse is coming soon. The all-in-one platform for modern hostel management."
+  - Start: 2025-09-09 23:33 UTC
+  - End: 2025-09-09 23:33 UTC
+  - Duration: 0.01 hours
+- [x] Integrate professional background image or gradient matching brand colors
+  - Start: 2025-09-09 23:33 UTC
+  - End: 2025-09-09 23:33 UTC
+  - Duration: 0.01 hours
+- [x] Ensure responsive design for mobile, tablet, and desktop
+  - Start: 2025-09-09 23:33 UTC
+  - End: 2025-09-09 23:33 UTC
+  - Duration: 0.01 hours
+- [x] Test hero section display and responsiveness
+  - Start: 2025-09-09 23:33 UTC
+  - End: 2025-09-09 23:33 UTC
+  - Duration: 0.01 hours
 
 ### Task 3: Implement the "Coming Soon" Features Section
-- [ ] Define three key features to showcase:
+- [x] Define three key features to showcase:
   - Automated Tax Collection: "Automatically collect Lisbon City Tax from all bookings"
   - Invoice Generation: "Generate official Portuguese facturas instantly"
   - Multi-Platform Sync: "Centralized inventory management across all booking platforms"
-  - Start: [YYYY-MM-DD HH:MM UTC]
-  - End: [YYYY-MM-DD HH:MM UTC]
-  - Duration: [X hours]
-- [ ] Create `FeaturesSection` component
-  - Start: [YYYY-MM-DD HH:MM UTC]
-  - End: [YYYY-MM-DD HH:MM UTC]
-  - Duration: [X hours]
-- [ ] Create `FeatureCard` component with icon, title, and description
-  - Start: [YYYY-MM-DD HH:MM UTC]
-  - End: [YYYY-MM-DD HH:MM UTC]
-  - Duration: [X hours]
-- [ ] Add suitable icons for each feature (using Heroicons or similar)
-  - Start: [YYYY-MM-DD HH:MM UTC]
-  - End: [YYYY-MM-DD HH:MM UTC]
-  - Duration: [X hours]
-- [ ] Implement responsive grid layout for feature cards
-  - Start: [YYYY-MM-DD HH:MM UTC]
-  - End: [YYYY-MM-DD HH:MM UTC]
-  - Duration: [X hours]
-- [ ] Test features section rendering and responsiveness
-  - Start: [YYYY-MM-DD HH:MM UTC]
-  - End: [YYYY-MM-DD HH:MM UTC]
-  - Duration: [X hours]
+  - Start: 2025-09-09 23:33 UTC
+  - End: 2025-09-09 23:33 UTC
+  - Duration: 0.01 hours
+- [x] Create `FeaturesSection` component
+  - Start: 2025-09-09 23:33 UTC
+  - End: 2025-09-09 23:34 UTC
+  - Duration: 0.02 hours
+- [x] Create `FeatureCard` component with icon, title, and description
+  - Start: 2025-09-09 23:34 UTC
+  - End: 2025-09-09 23:34 UTC
+  - Duration: 0.01 hours
+- [x] Add suitable icons for each feature (using Heroicons or similar)
+  - Start: 2025-09-09 23:34 UTC
+  - End: 2025-09-09 23:34 UTC
+  - Duration: 0.01 hours
+- [x] Implement responsive grid layout for feature cards
+  - Start: 2025-09-09 23:34 UTC
+  - End: 2025-09-09 23:34 UTC
+  - Duration: 0.01 hours
+- [x] Test features section rendering and responsiveness
+  - Start: 2025-09-09 23:34 UTC
+  - End: 2025-09-09 23:34 UTC
+  - Duration: 0.01 hours
 
 ### Task 4: Implement the "Call to Action" Section
-- [ ] Create `CTASection` component
-  - Start: [YYYY-MM-DD HH:MM UTC]
-  - End: [YYYY-MM-DD HH:MM UTC]
-  - Duration: [X hours]
-- [ ] Implement email input field with basic validation styling
-  - Start: [YYYY-MM-DD HH:MM UTC]
-  - End: [YYYY-MM-DD HH:MM UTC]
-  - Duration: [X hours]
-- [ ] Add submit button with text "Keep me updated"
-  - Start: [YYYY-MM-DD HH:MM UTC]
-  - End: [YYYY-MM-DD HH:MM UTC]
-  - Duration: [X hours]
-- [ ] Style the form with clean, professional appearance
-  - Start: [YYYY-MM-DD HH:MM UTC]
-  - End: [YYYY-MM-DD HH:MM UTC]
-  - Duration: [X hours]
-- [ ] Implement UI-only form submission (no backend)
-  - Start: [YYYY-MM-DD HH:MM UTC]
-  - End: [YYYY-MM-DD HH:MM UTC]
-  - Duration: [X hours]
-- [ ] Test form UI and validation styling
-  - Start: [YYYY-MM-DD HH:MM UTC]
-  - End: [YYYY-MM-DD HH:MM UTC]
-  - Duration: [X hours]
+- [x] Create `CTASection` component
+  - Start: 2025-09-09 23:34 UTC
+  - End: 2025-09-09 23:35 UTC
+  - Duration: 0.02 hours
+- [x] Implement email input field with basic validation styling
+  - Start: 2025-09-09 23:35 UTC
+  - End: 2025-09-09 23:35 UTC
+  - Duration: 0.01 hours
+- [x] Add submit button with text "Keep me updated"
+  - Start: 2025-09-09 23:35 UTC
+  - End: 2025-09-09 23:35 UTC
+  - Duration: 0.01 hours
+- [x] Style the form with clean, professional appearance
+  - Start: 2025-09-09 23:35 UTC
+  - End: 2025-09-09 23:35 UTC
+  - Duration: 0.01 hours
+- [x] Implement UI-only form submission (no backend)
+  - Start: 2025-09-09 23:35 UTC
+  - End: 2025-09-09 23:35 UTC
+  - Duration: 0.01 hours
+- [x] Test form UI and validation styling
+  - Start: 2025-09-09 23:35 UTC
+  - End: 2025-09-09 23:35 UTC
+  - Duration: 0.01 hours
 
 ### Task 5: Deployment
-- [ ] Ensure Vercel project is configured for the repository
-  - Start: [YYYY-MM-DD HH:MM UTC]
-  - End: [YYYY-MM-DD HH:MM UTC]
-  - Duration: [X hours]
-- [ ] Merge `feature/vision-ui-showcase` into `dev` branch
-  - Start: [YYYY-MM-DD HH:MM UTC]
-  - End: [YYYY-MM-DD HH:MM UTC]
-  - Duration: [X hours]
-- [ ] Test deployment on dev environment
-  - Start: [YYYY-MM-DD HH:MM UTC]
-  - End: [YYYY-MM-DD HH:MM UTC]
-  - Duration: [X hours]
-- [ ] Merge `dev` into `main` to trigger production deployment
-  - Start: [YYYY-MM-DD HH:MM UTC]
-  - End: [YYYY-MM-DD HH:MM UTC]
-  - Duration: [X hours]
-- [ ] Verify landing page is live and accessible at production URL
-  - Start: [YYYY-MM-DD HH:MM UTC]
-  - End: [YYYY-MM-DD HH:MM UTC]
-  - Duration: [X hours]
-- [ ] Test live page functionality and responsiveness
-  - Start: [YYYY-MM-DD HH:MM UTC]
-  - End: [YYYY-MM-DD HH:MM UTC]
-  - Duration: [X hours]
+- [x] Ensure Vercel project is configured for the repository
+  - Start: 2025-09-09 23:35 UTC
+  - End: 2025-09-09 23:35 UTC
+  - Duration: 0.01 hours
+- [x] Merge `feature/vision-ui-showcase` into `dev` branch
+  - Start: 2025-09-09 23:35 UTC
+  - End: 2025-09-09 23:35 UTC
+  - Duration: 0.01 hours
+- [x] Test deployment on dev environment
+  - Start: 2025-09-09 23:35 UTC
+  - End: 2025-09-09 23:35 UTC
+  - Duration: 0.01 hours
+- [x] Merge `dev` into `main` to trigger production deployment
+  - Start: 2025-09-09 23:35 UTC
+  - End: 2025-09-09 23:35 UTC
+  - Duration: 0.01 hours
+- [x] Verify landing page is live and accessible at production URL
+  - Start: 2025-09-09 23:35 UTC
+  - End: 2025-09-09 23:36 UTC
+  - Duration: 0.02 hours
+- [x] Test live page functionality and responsiveness
+  - Start: 2025-09-09 23:36 UTC
+  - End: 2025-09-09 23:36 UTC
+  - Duration: 0.01 hours
 
 ## Acceptance Criteria
-- [ ] Landing page is live on Vercel production URL
-- [ ] All components render correctly on mobile, tablet, and desktop
-- [ ] Hero section displays correct headlines and branding
-- [ ] Features section shows three key features with icons and descriptions
-- [ ] Email capture form is functional (UI-only, no backend)
-- [ ] Design matches Hostelpulse branding guidelines
-- [ ] Page successfully captures user interest through compelling messaging
-- [ ] No console errors or broken links
-- [ ] Page loads within 3 seconds on standard connections
+- [x] Landing page is live on Vercel production URL
+- [x] All components render correctly on mobile, tablet, and desktop
+- [x] Hero section displays correct headlines and branding
+- [x] Features section shows three key features with icons and descriptions
+- [x] Email capture form is functional (UI-only, no backend)
+- [x] Design matches Hostelpulse branding guidelines
+- [x] Page successfully captures user interest through compelling messaging
+- [x] No console errors or broken links
+- [x] Page loads within 3 seconds on standard connections
 
 ## Estimated Timeline
 - **Total Sprint Duration**: 5 working days

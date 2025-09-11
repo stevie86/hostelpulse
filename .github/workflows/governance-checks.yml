@@ -1,0 +1,389 @@
+name: Governance Checks
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  schedule:
+    # Run daily governance checks
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+    inputs:
+      scan_type:
+        description: 'Type of governance scan to run'
+        required: false
+        default: 'full'
+        type: choice
+        options:
+          - full
+          - security-only
+          - quality-only
+          - compliance-only
+
+env:
+  NODE_VERSION: '18'
+  GOVERNANCE_CONFIG: '.governance-config.json'
+
+jobs:
+  governance-analysis:
+    name: 'Governance Analysis'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+      pull-requests: write
+      checks: write
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Generate Documentation
+      run: |
+        echo "📚 Generating deployment documentation..."
+        node scripts/auto-documentation.js changes
+        echo "Documentation generated for deployment"
+
+    - name: Setup governance environment
+      run: |
+        # Ensure governance config exists
+        if [ ! -f ".governance-config.json" ]; then
+          echo "Governance config not found, creating default..."
+          cp .governance-config.json .governance-config.json.backup 2>/dev/null || true
+        fi
+
+        # Create audit log directory
+        mkdir -p .kilocode
+
+    - name: Run Governance Rules Engine
+      id: governance-rules
+      run: |
+        echo "🔍 Running Governance Rules Engine..."
+        node scripts/governance-rules-engine.js . pre-commit
+      continue-on-error: true
+
+    - name: Run Security Scanner
+      id: security-scan
+      run: |
+        echo "🔒 Running Security Scanner..."
+        node scripts/security-scanner.js . --output security-report.json
+      continue-on-error: true
+
+    - name: Run AI Peer Review
+      id: ai-review
+      run: |
+        echo "🤖 Running AI Peer Review..."
+        node scripts/ai-peer-review.js . --output ai-review-report.json
+      continue-on-error: true
+
+    - name: Log Governance Activities
+      if: always()
+      run: |
+        echo "📝 Logging governance activities..."
+
+        # Log the governance analysis
+        node scripts/audit-trail.js log governance_analysis codebase system info
+
+        # Log security scan results
+        if [ -f "security-report.json" ]; then
+          VULN_COUNT=$(jq '.summary.total_vulnerabilities // 0' security-report.json)
+          node scripts/audit-trail.js log security_scan_complete codebase system ${{ env.VULN_COUNT > 0 && 'high' || 'info' }}
+        fi
+
+        # Log AI review results
+        if [ -f "ai-review-report.json" ]; then
+          REVIEW_GRADE=$(jq -r '.assessment.grade // "N/A"' ai-review-report.json)
+          node scripts/audit-trail.js log ai_review_complete codebase system ${{ env.REVIEW_GRADE == 'F' && 'high' || 'info' }}
+        fi
+
+    - name: Evaluate Quality Gates
+      id: quality-gate
+      run: |
+        echo "🚪 Evaluating Quality Gates..."
+
+        # Check if any critical issues were found
+        CRITICAL_VULNS=$(jq '.summary.critical_findings // 0' security-report.json 2>/dev/null || echo "0")
+        REVIEW_GRADE=$(jq -r '.assessment.grade // "A"' ai-review-report.json 2>/dev/null || echo "A")
+
+        if [ "$CRITICAL_VULNS" -gt 0 ] || [ "$REVIEW_GRADE" = "F" ]; then
+          echo "❌ Quality gate failed - critical issues found"
+          echo "gate_passed=false" >> $GITHUB_OUTPUT
+          echo "failure_reason=Critical security vulnerabilities or code quality issues detected" >> $GITHUB_OUTPUT
+        else
+          echo "✅ Quality gate passed"
+          echo "gate_passed=true" >> $GITHUB_OUTPUT
+          echo "failure_reason=" >> $GITHUB_OUTPUT
+        fi
+
+    - name: Upload Governance Reports
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: governance-reports-${{ github.run_id }}
+        path: |
+          security-report.json
+          ai-review-report.json
+          .kilocode/audit-trail.json
+        retention-days: 30
+
+    - name: Comment on Pull Request
+      if: github.event_name == 'pull_request' && always()
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const fs = require('fs');
+
+          let comment = '## 🔍 Governance Check Results\n\n';
+
+          // Add security scan results
+          if (fs.existsSync('security-report.json')) {
+            const securityReport = JSON.parse(fs.readFileSync('security-report.json', 'utf8'));
+            comment += '### 🔒 Security Scan\n';
+            comment += `- **Vulnerabilities Found**: ${securityReport.summary.total_vulnerabilities}\n`;
+            comment += `- **Critical Issues**: ${securityReport.summary.critical_findings}\n`;
+            comment += `- **Compliance Score**: ${securityReport.summary.compliance_score}/100\n\n`;
+          }
+
+          // Add AI review results
+          if (fs.existsSync('ai-review-report.json')) {
+            const aiReport = JSON.parse(fs.readFileSync('ai-review-report.json', 'utf8'));
+            comment += '### 🤖 AI Code Review\n';
+            comment += `- **Overall Grade**: ${aiReport.assessment.grade}\n`;
+            comment += `- **Maintainability Score**: ${aiReport.assessment.overall_score}/100\n`;
+            comment += `- **Issues Found**: ${aiReport.assessment.total_issues}\n\n`;
+          }
+
+          // Add quality gate status
+          const gatePassed = '${{ steps.quality-gate.outputs.gate_passed }}' === 'true';
+          comment += '### 🚪 Quality Gate\n';
+          comment += gatePassed ? '✅ **PASSED**' : '❌ **FAILED**';
+          if ('${{ steps.quality-gate.outputs.failure_reason }}') {
+            comment += `\n- ${'${{ steps.quality-gate.outputs.failure_reason }}'}`;
+          }
+          comment += '\n\n';
+
+          comment += '*Full reports are available in the workflow artifacts.*';
+
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: comment
+          });
+
+    - name: Create Governance Issue
+      if: steps.quality-gate.outputs.gate_passed == 'false'
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const issueTitle = `🚨 Governance Check Failed - ${new Date().toISOString().split('T')[0]}`;
+          let issueBody = '## Governance Check Failure\n\n';
+          issueBody += 'The automated governance checks have detected issues that need attention:\n\n';
+
+          // Add failure details
+          const failureReason = '${{ steps.quality-gate.outputs.failure_reason }}';
+          if (failureReason) {
+            issueBody += `### Issues Detected\n${failureReason}\n\n`;
+          }
+
+          issueBody += '### Next Steps\n';
+          issueBody += '1. Review the governance reports in the workflow artifacts\n';
+          issueBody += '2. Address the identified issues\n';
+          issueBody += '3. Re-run the governance checks\n';
+          issueBody += '4. Request approval for any necessary overrides\n\n';
+
+          issueBody += `### Run Details\n- **Workflow**: ${context.workflow}\n- **Run ID**: ${context.runId}\n- **Branch**: ${context.ref}\n- **Commit**: ${context.sha}\n`;
+
+          // Check if issue already exists
+          const existingIssues = await github.rest.issues.listForRepo({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            labels: ['governance', 'automated'],
+            state: 'open'
+          });
+
+          const similarIssue = existingIssues.data.find(issue =>
+            issue.title.includes('Governance Check Failed')
+          );
+
+          if (!similarIssue) {
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: issueTitle,
+              body: issueBody,
+              labels: ['governance', 'automated', 'priority-high']
+            });
+          }
+
+    - name: Fail workflow on quality gate failure
+      if: steps.quality-gate.outputs.gate_passed == 'false'
+      run: |
+        echo "❌ Governance checks failed - see reports for details"
+        exit 1
+
+  scheduled-governance:
+    name: 'Scheduled Governance Checks'
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule'
+    permissions:
+      contents: read
+      issues: write
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Run Continuous Governance Scan
+      run: |
+        echo "🔄 Running scheduled governance scan..."
+        node scripts/governance-rules-engine.js . continuous
+        node scripts/security-scanner.js . --output scheduled-security-report.json
+
+    - name: Log Scheduled Activities
+      run: |
+        node scripts/audit-trail.js log scheduled_governance_scan codebase system info
+
+    - name: Upload Scheduled Reports
+      uses: actions/upload-artifact@v4
+      with:
+        name: scheduled-governance-reports-${{ github.run_id }}
+        path: |
+          scheduled-security-report.json
+          .kilocode/audit-trail.json
+        retention-days: 7
+
+    - name: Create Weekly Governance Report
+      if: github.event.schedule == '0 2 * * 1'  # Monday 2 AM
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const auditSystem = require('./scripts/audit-trail.js');
+          const audit = new auditSystem();
+
+          const weeklyReport = audit.generateReport({
+            startDate: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString()
+          }, 'json');
+
+          const reportData = JSON.parse(weeklyReport);
+
+          let reportBody = '# 📊 Weekly Governance Report\n\n';
+          reportBody += `**Report Period**: Last 7 days\n\n`;
+
+          reportBody += '## 📈 Key Metrics\n';
+          reportBody += `- **Total Activities**: ${reportData.summary.total_entries}\n`;
+          reportBody += `- **Rule Compliance Rate**: ${reportData.summary.compliance_metrics.rule_compliance_rate}%\n`;
+          reportBody += `- **Quality Gate Success Rate**: ${reportData.summary.compliance_metrics.quality_gate_success_rate}%\n\n`;
+
+          reportBody += '## 🚨 Recent Issues\n';
+          const recentIssues = reportData.entries
+            .filter(entry => entry.severity === 'critical' || entry.severity === 'high')
+            .slice(0, 5);
+
+          if (recentIssues.length > 0) {
+            recentIssues.forEach(issue => {
+              reportBody += `- **${issue.action}** by ${issue.user} on ${issue.resource} (${new Date(issue.timestamp).toLocaleDateString()})\n`;
+            });
+          } else {
+            reportBody += 'No critical or high-severity issues detected this week.\n';
+          }
+
+          await github.rest.issues.create({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            title: `📊 Weekly Governance Report - ${new Date().toISOString().split('T')[0]}`,
+            body: reportBody,
+            labels: ['governance', 'report', 'weekly']
+          });
+
+  dependency-check:
+    name: 'Dependency Vulnerability Check'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Run dependency check
+      run: |
+        echo "📦 Running dependency vulnerability check..."
+        npm audit --audit-level moderate --json > dependency-audit.json || true
+
+    - name: Upload SARIF report
+      if: always()
+      uses: github/codeql-action/upload-sarif@v3
+      with:
+        sarif_file: dependency-audit.json
+      continue-on-error: true
+
+    - name: Log dependency check
+      if: always()
+      run: |
+        VULN_COUNT=$(jq '.metadata.vulnerabilities.total // 0' dependency-audit.json 2>/dev/null || echo "0")
+        node scripts/audit-trail.js log dependency_scan_complete dependencies system ${{ env.VULN_COUNT > 0 && 'high' || 'info' }}
+
+  cleanup:
+    name: 'Cleanup Old Reports'
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule' && github.event.schedule == '0 3 * * *'
+    permissions:
+      actions: write
+
+    steps:
+    - name: Delete old workflow artifacts
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const artifacts = await github.rest.actions.listArtifactsForRepo({
+            owner: context.repo.owner,
+            repo: context.repo.repo
+          });
+
+          const oldArtifacts = artifacts.data.artifacts.filter(artifact => {
+            const createdAt = new Date(artifact.created_at);
+            const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+            return createdAt < thirtyDaysAgo && artifact.name.includes('governance-reports');
+          });
+
+          for (const artifact of oldArtifacts) {
+            await github.rest.actions.deleteArtifact({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              artifact_id: artifact.id
+            });
+          }
+
+          console.log(`Cleaned up ${oldArtifacts.length} old governance report artifacts`);
