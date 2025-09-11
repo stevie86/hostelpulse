@@ -9,6 +9,8 @@ import Head from 'next/head';
 import { ColorModeScript } from 'nextjs-color-mode';
 import React, { PropsWithChildren } from 'react';
 import { TinaEditProvider } from 'tinacms/dist/edit-state';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { Toaster } from 'react-hot-toast';
 
 import Footer from 'components/Footer';
 import { GlobalStyle } from 'components/GlobalStyles';
@@ -78,13 +80,18 @@ function MyApp({ Component, pageProps }: AppProps) {
 }
 
 function Providers<T>({ children }: PropsWithChildren<T>) {
+  const queryClient = new QueryClient();
+
   return (
     <EnhancedErrorBoundary>
-      <AuthProvider>
-        <NewsletterModalContextProvider>
-          <NavigationDrawer items={navItems}>{children}</NavigationDrawer>
-        </NewsletterModalContextProvider>
-      </AuthProvider>
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>
+          <NewsletterModalContextProvider>
+            <NavigationDrawer items={navItems}>{children}</NavigationDrawer>
+            <Toaster position="top-right" />
+          </NewsletterModalContextProvider>
+        </AuthProvider>
+      </QueryClientProvider>
     </EnhancedErrorBoundary>
   );
 }
