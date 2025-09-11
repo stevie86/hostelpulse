@@ -16,17 +16,19 @@ const Dashboard = () => {
 
   // Mock tax collection data (replace with real API when available)
   const taxData = [
-    { id: 1, amount: 45, date: '2023-09-10', guest: 'Alice Johnson', platform: 'Booking.com' },
-    { id: 2, amount: 30, date: '2023-09-09', guest: 'Bob Smith', platform: 'Hostelworld' },
-    { id: 3, amount: 60, date: '2023-09-08', guest: 'Charlie Brown', platform: 'Airbnb' },
-    { id: 4, amount: 25, date: '2023-09-07', guest: 'Diana Prince', platform: 'Direct' },
+    { id: 1, amount: 45, date: '2025-09-11', guest: 'Maria Silva', platform: 'Booking.com', room: 'Dorm Room A' },
+    { id: 2, amount: 30, date: '2025-09-10', guest: 'João Santos', platform: 'Hostelworld', room: 'Private Room 1' },
+    { id: 3, amount: 60, date: '2025-09-09', guest: 'Ana Costa', platform: 'Airbnb', room: 'Dorm Room B' },
+    { id: 4, amount: 25, date: '2025-09-08', guest: 'Pedro Oliveira', platform: 'Direct', room: 'Single Room' },
+    { id: 5, amount: 35, date: '2025-09-07', guest: 'Sofia Ferreira', platform: 'Booking.com', room: 'Dorm Room A' },
   ];
 
   // Mock invoice data (replace with real API when available)
   const invoiceData = [
-    { id: 1, number: 'INV-001', amount: 120, date: '2023-09-10', client: 'Business Corp' },
-    { id: 2, number: 'INV-002', amount: 85, date: '2023-09-09', client: 'Travel Ltd' },
-    { id: 3, number: 'INV-003', amount: 200, date: '2023-09-08', client: 'Hotel Chain' },
+    { id: 1, number: 'INV-2025-001', amount: 120, date: '2025-09-11', client: 'Tech Startup Ltd', room: 'Meeting Room' },
+    { id: 2, number: 'INV-2025-002', amount: 85, date: '2025-09-10', client: 'Travel Agency', room: 'Group Booking' },
+    { id: 3, number: 'INV-2025-003', amount: 200, date: '2025-09-09', client: 'Corporate Client', room: 'Entire Floor' },
+    { id: 4, number: 'INV-2025-004', amount: 65, date: '2025-09-08', client: 'Local Business', room: 'Private Room 2' },
   ];
 
   // Sync mutation
@@ -105,6 +107,7 @@ const Dashboard = () => {
               <thead>
                 <tr className="bg-gray-50">
                   <th className="px-4 py-2 text-left">Guest</th>
+                  <th className="px-4 py-2 text-left">Room</th>
                   <th className="px-4 py-2 text-left">Amount</th>
                   <th className="px-4 py-2 text-left">Date</th>
                   <th className="px-4 py-2 text-left">Platform</th>
@@ -114,6 +117,7 @@ const Dashboard = () => {
                 {taxData.map((item) => (
                   <tr key={item.id} className="border-t">
                     <td className="px-4 py-2">{item.guest}</td>
+                    <td className="px-4 py-2">{item.room}</td>
                     <td className="px-4 py-2">€{item.amount}</td>
                     <td className="px-4 py-2">{item.date}</td>
                     <td className="px-4 py-2">{item.platform}</td>
@@ -133,6 +137,7 @@ const Dashboard = () => {
                 <tr className="bg-gray-50">
                   <th className="px-4 py-2 text-left">Invoice #</th>
                   <th className="px-4 py-2 text-left">Client</th>
+                  <th className="px-4 py-2 text-left">Room/Service</th>
                   <th className="px-4 py-2 text-left">Amount</th>
                   <th className="px-4 py-2 text-left">Date</th>
                 </tr>
@@ -142,6 +147,7 @@ const Dashboard = () => {
                   <tr key={item.id} className="border-t">
                     <td className="px-4 py-2">{item.number}</td>
                     <td className="px-4 py-2">{item.client}</td>
+                    <td className="px-4 py-2">{item.room}</td>
                     <td className="px-4 py-2">€{item.amount}</td>
                     <td className="px-4 py-2">{item.date}</td>
                   </tr>

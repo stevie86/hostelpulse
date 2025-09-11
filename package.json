@@ -7,6 +7,7 @@
     "build": "npx next build",
     "start": "npx next start",
     "lint": "next lint",
+    "test": "echo 'No tests specified yet'",
     "build:check": "./scripts/build-check.sh",
     "build:dev": "./scripts/build-check.sh dev",
     "build:prod": "./scripts/build-check.sh prod",
