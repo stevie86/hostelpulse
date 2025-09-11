@@ -1,15 +1,13 @@
-import { notFound } from 'next/navigation';
-import { getRequestConfig } from 'next-intl/server';
-
-// Can be imported from a shared config
+// Simplified i18n config for Next.js 12 compatibility
 export const locales = ['en', 'pt'] as const;
 export type Locale = (typeof locales)[number];
 
-export default getRequestConfig(async ({ locale }) => {
-  // Validate that the incoming `locale` parameter is valid
-  if (!locales.includes(locale as any)) notFound();
-
-  return {
-    messages: (await import(`./messages/${locale}.json`)).default
-  };
-});
+// Mock implementation - in a real app, this would handle internationalization
+export const getMessages = async (locale: string) => {
+  try {
+    return (await import(`./messages/${locale}.json`)).default;
+  } catch {
+    // Fallback to English if locale file doesn't exist
+    return (await import('./messages/en.json')).default;
+  }
+};
