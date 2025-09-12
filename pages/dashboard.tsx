@@ -1,5 +1,5 @@
 import React from 'react';
-import { useQuery, useMutation, useQueryClient } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import toast from 'react-hot-toast';
 import Container from '../components/Container';
 import Button from '../components/Button';

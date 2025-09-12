@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import PageNav from '../../components/PageNav'
 
 type Booking = {
   id: string
@@ -113,7 +114,7 @@ export default function OwnerDashboard() {
           Manage guests
         </Link>
       </div>
+      <PageNav next={{ href: '/owner/bookings', label: 'Go to Bookings' }} />
     </div>
   )
 }
-

@@ -9,68 +9,70 @@ import { media } from 'utils/media';
 const FEATURES = [
   {
     imageUrl: '/grid-icons/asset-1.svg',
-    title: 'Lorem ipsum dolor sit amet.',
-    description:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis error dolorem ipsa dolore facere est consequuntur aut, eos doloribus voluptate?',
+    title: 'Arrivals & Departures (Owner Dashboard)',
+    description: 'See today’s check‑ins/outs at a glance and update status with one click.',
+    status: 'Implemented' as const,
   },
   {
     imageUrl: '/grid-icons/asset-2.svg',
-    title: 'Lorem ipsum dolor sit amet.',
-    description:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis error dolorem ipsa dolore facere est consequuntur aut, eos doloribus voluptate?',
+    title: 'Guests Management',
+    description: 'Add guests and keep contact details organized for fast check‑ins.',
+    status: 'Implemented' as const,
   },
   {
     imageUrl: '/grid-icons/asset-3.svg',
-    title: 'Lorem ipsum dolor sit amet.',
-    description:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis error dolorem ipsa dolore facere est consequuntur aut, eos doloribus voluptate?',
+    title: 'Bookings Management + Overlap Protection',
+    description: 'Create/cancel/check‑in/out bookings; overlapping stays are prevented.',
+    status: 'Implemented' as const,
   },
   {
     imageUrl: '/grid-icons/asset-4.svg',
-    title: 'Lorem ipsum dolor sit amet.',
-    description:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis error dolorem ipsa dolore facere est consequuntur aut, eos doloribus voluptate?',
+    title: 'CSV Import/Export',
+    description: 'Migrate from Google Sheets quickly; import guests/bookings and export snapshots.',
+    status: 'Implemented' as const,
   },
   {
     imageUrl: '/grid-icons/asset-5.svg',
-    title: 'Lorem ipsum dolor sit amet.',
-    description:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis error dolorem ipsa dolore facere est consequuntur aut, eos doloribus voluptate?',
+    title: 'EU‑Hosted Supabase Backend',
+    description: 'Data hosted in the EU with strict RLS via server‑side APIs.',
+    status: 'Implemented' as const,
   },
   {
     imageUrl: '/grid-icons/asset-6.svg',
-    title: 'Lorem ipsum dolor sit amet.',
-    description:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis error dolorem ipsa dolore facere est consequuntur aut, eos doloribus voluptate?',
+    title: 'API Documentation (/api-docs)',
+    description: 'Static OpenAPI docs with Redoc for quick reference and integration.',
+    status: 'Implemented' as const,
   },
   {
     imageUrl: '/grid-icons/asset-7.svg',
-    title: 'Lorem ipsum dolor sit amet.',
-    description:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis error dolorem ipsa dolore facere est consequuntur aut, eos doloribus voluptate?',
+    title: 'Keypad Instructions via Email',
+    description: 'Send guests check‑in codes and “how to use” steps in one click (SendGrid).',
+    status: 'Coming Soon' as const,
   },
   {
     imageUrl: '/grid-icons/asset-8.svg',
-    title: 'Lorem ipsum dolor sit amet.',
-    description:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis error dolorem ipsa dolore facere est consequuntur aut, eos doloribus voluptate?',
+    title: 'Telegram Ops Bot',
+    description: 'Chat commands for /today, /checkin <id>, /checkout <id>, /sendcode <id>.',
+    status: 'Coming Soon' as const,
   },
   {
     imageUrl: '/grid-icons/asset-9.svg',
-    title: 'Lorem ipsum dolor sit amet.',
-    description:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis error dolorem ipsa dolore facere est consequuntur aut, eos doloribus voluptate?',
+    title: 'Multi‑House Owner Scoping',
+    description: 'Owner auth, per‑house scoping, and RLS‑backed access controls.',
+    status: 'Coming Soon' as const,
   },
 ];
 
 export default function FeaturesPage() {
   return (
-    <Page title="Features" description="Elit aute do nisi Lorem id ea culpa sint duis eu tempor dolore elit.">
+    <Page
+      title="Features"
+      description="Practical tools for hostel owners: daily ops today, integrations tomorrow."
+    >
       <Wrapper>
-        <SectionTitle>Check out this quick introduction</SectionTitle>
-        <YoutubeVideo url="https://www.youtube.com/watch?v=BggrpKfqh1c" />
+        <SectionTitle>What’s live and what’s next</SectionTitle>
         <CustomAutofitGrid>
-          {FEATURES.map((singleFeature, idx) => (
+          {FEATURES.map((singleFeature) => (
             <BasicCard key={singleFeature.title} {...singleFeature} />
           ))}
         </CustomAutofitGrid>

@@ -1,9 +1,13 @@
 import { useEffect, useState } from 'react'
+import Link from 'next/link'
+import PageNav from '../../components/PageNav'
 
 export default function OwnerGuests() {
   const [guests, setGuests] = useState<any[]>([])
   const [error, setError] = useState<string | null>(null)
   const [form, setForm] = useState({ name: '', email: '', phone: '', nationality: '' })
+  const [csvText, setCsvText] = useState('')
+  const [importResult, setImportResult] = useState<any[] | null>(null)
 
   async function load() {
     setError(null)
@@ -23,6 +27,22 @@ export default function OwnerGuests() {
     const json = await res.json()
     if (!res.ok) return alert(json.error || 'Create failed')
     setForm({ name: '', email: '', phone: '', nationality: '' })
+    load()
+  }
+
+  async function importCsv() {
+    setImportResult(null)
+    const res = await fetch('/api/import/guests', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ csv: csvText }),
+    })
+    const json = await res.json()
+    if (!res.ok) {
+      alert(json.error || 'Import failed')
+      return
+    }
+    setImportResult(json.results || [])
     load()
   }
 
@@ -72,6 +92,36 @@ export default function OwnerGuests() {
           </tbody>
         </table>
       </div>
-    </div>
-  )}
+      <div className="border rounded p-4">
+        <h2 className="font-semibold mb-2">CSV Import / Export</h2>
+        <p className="text-xs text-gray-600 mb-2">Format: id,name,email,phone,nationality</p>
+        <textarea
+          className="w-full border p-2 text-sm h-40"
+          placeholder="Paste CSV here to import guests"
+          value={csvText}
+          onChange={(e) => setCsvText(e.target.value)}
+        />
+        <div className="mt-2 flex items-center gap-2">
+          <button className="bg-blue-600 text-white px-3 py-2 rounded text-sm" onClick={importCsv}>
+            Import CSV
+          </button>
+          <Link className="text-sm text-blue-600 underline" href="/api/export/guests">Download guests.csv</Link>
+        </div>
+        {importResult && (
+          <div className="mt-3 text-xs">
+            <div className="font-semibold mb-1">Import results</div>
+            <ul className="space-y-1 max-h-40 overflow-auto">
+              {importResult.map((r, i) => (
+                <li key={i} className={r.ok ? 'text-green-700' : 'text-red-700'}>
+                  Row {r.index + 1}: {r.ok ? `ok${r.id ? ` (id ${r.id})` : ''}` : r.error}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
 
+      <PageNav prev={{ href: '/owner/bookings', label: 'Back to Bookings' }} />
+    </div>
+  )
+}
