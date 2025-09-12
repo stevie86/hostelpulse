@@ -1,0 +1,2 @@
+id,hostel_id,guest_id,check_in,check_out,amount,status,created_at
+5184d049-d301-4e20-9797-a355586525c4,f66dfbec-3cfe-4a1a-bd16-bba4cfaa9e99,c3151b8b-760c-4384-ab97-b15bd9933ba0,2025-09-12,2025-09-13,99,confirmed,2025-09-12T10:44:44.173395+00:00

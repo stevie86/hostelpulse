@@ -118,6 +118,12 @@ npm run build
 npm run start
 ```
 
+### Implementation Verification (Owner Console)
+- Follow `docs/implementation-verification.md` for a quick smoke test and CLI checks.
+- Seed one hostel in Supabase, start dev, then run:
+  - `./scripts/supabase-api-test.sh smoke <HOSTEL_ID>`
+  - Open `/owner/dashboard`, `/owner/bookings`, `/owner/guests`
+
 ## 📝 Development Notes
 
 - Mock authentication allows any email/password

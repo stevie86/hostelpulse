@@ -11,16 +11,16 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   children,
   redirectTo = '/auth/login'
 }) => {
-  const { user, loading } = useAuth()
+  const { user, isLoading } = useAuth()
   const router = useRouter()
 
   useEffect(() => {
-    if (!loading && !user) {
+    if (!isLoading && !user) {
       router.push(redirectTo)
     }
-  }, [user, loading, router, redirectTo])
+  }, [user, isLoading, router, redirectTo])
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>

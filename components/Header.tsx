@@ -8,12 +8,12 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
-  const { user, signOut } = useAuth()
+  const { user, logout } = useAuth()
   const router = useRouter()
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
 
-  const handleSignOut = async () => {
-    await signOut()
+  const handleSignOut = () => {
+    logout()
     router.push('/auth/login')
   }
 
@@ -39,12 +39,7 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
             </button>
           </div>
 
-          {/* Logo for mobile */}
-          <div className="md:hidden flex items-center">
-            <div className="h-8 w-8 bg-blue-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-sm">H</span>
-            </div>
-          </div>
+          {/* Mobile logo removed to avoid stray initial */}
 
           {/* Spacer for mobile */}
           <div className="flex-1 md:hidden"></div>

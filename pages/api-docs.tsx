@@ -8,8 +8,18 @@ export default function ApiDocs() {
         <title>Hostelpulse API Docs</title>
         <meta name="robots" content="noindex" />
       </Head>
-      <Script src="https://cdn.redoc.ly/redoc/latest/bundles/redoc.standalone.js" strategy="afterInteractive" />
-      <redoc spec-url="/docs/openapi.json"></redoc>
+      <Script
+        src="https://cdn.redoc.ly/redoc/latest/bundles/redoc.standalone.js"
+        strategy="afterInteractive"
+        onLoad={() => {
+          // @ts-ignore
+          if (window && (window as any).Redoc) {
+            // @ts-ignore
+            (window as any).Redoc.init('/docs/openapi.json', {}, document.getElementById('redoc-container'))
+          }
+        }}
+      />
+      <div id="redoc-container" />
     </>
   )
 }

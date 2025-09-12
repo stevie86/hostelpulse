@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import PageNav from '../../components/PageNav'
+import OwnerNav from '../../components/OwnerNav'
 
 type Booking = {
   id: string
@@ -51,8 +52,9 @@ export default function OwnerDashboard() {
 
   return (
     <div className="p-6 space-y-6">
-      <h1 className="text-2xl font-bold">Owner Dashboard</h1>
-      <div className="text-sm text-gray-600">Quick view of arrivals/departures and booking ops</div>
+      <OwnerNav />
+      <h1 className="text-2xl sm:text-3xl font-bold leading-tight">Owner Dashboard</h1>
+      <div className="text-sm sm:text-base text-gray-700 leading-relaxed">Quick view of arrivals/departures and booking ops</div>
 
       {loading && <div>Loading...</div>}
       {error && (
@@ -67,7 +69,7 @@ export default function OwnerDashboard() {
             <h2 className="font-semibold mb-2">Today&apos;s Arrivals ({arrivals.length})</h2>
             <ul className="space-y-2">
               {arrivals.map((b) => (
-                <li key={b.id} className="flex items-center justify-between text-sm">
+                <li key={b.id} className="flex items-center justify-between text-xs sm:text-sm leading-relaxed">
                   <span>
                     Booking {b.id.slice(0, 6)} • status: <b>{b.status}</b>
                   </span>
@@ -89,7 +91,7 @@ export default function OwnerDashboard() {
             <h2 className="font-semibold mb-2">Today&apos;s Departures ({departures.length})</h2>
             <ul className="space-y-2">
               {departures.map((b) => (
-                <li key={b.id} className="flex items-center justify-between text-sm">
+                <li key={b.id} className="flex items-center justify-between text-xs sm:text-sm leading-relaxed">
                   <span>
                     Booking {b.id.slice(0, 6)} • status: <b>{b.status}</b>
                   </span>
@@ -107,11 +109,11 @@ export default function OwnerDashboard() {
       )}
 
       <div className="flex gap-3 text-sm">
-        <Link href="/owner/bookings" className="text-blue-600 underline">
-          Manage bookings
+        <Link href="/owner/bookings">
+          <a className="text-blue-600 underline">Manage bookings</a>
         </Link>
-        <Link href="/owner/guests" className="text-blue-600 underline">
-          Manage guests
+        <Link href="/owner/guests">
+          <a className="text-blue-600 underline">Manage guests</a>
         </Link>
       </div>
       <PageNav next={{ href: '/owner/bookings', label: 'Go to Bookings' }} />

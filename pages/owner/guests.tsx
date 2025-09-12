@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import OwnerNav from '../../components/OwnerNav'
 import PageNav from '../../components/PageNav'
 
 export default function OwnerGuests() {
@@ -48,7 +49,8 @@ export default function OwnerGuests() {
 
   return (
     <div className="p-6 space-y-6">
-      <h1 className="text-2xl font-bold">Guests</h1>
+      <OwnerNav />
+      <h1 className="text-2xl sm:text-3xl font-bold leading-tight">Guests</h1>
       {error && <div className="p-3 rounded bg-yellow-50 text-yellow-800">{error}</div>}
 
       <form onSubmit={addGuest} className="grid grid-cols-2 md:grid-cols-5 gap-2 items-end">
@@ -61,8 +63,8 @@ export default function OwnerGuests() {
         </button>
       </form>
 
-      <div className="border rounded">
-        <table className="w-full text-sm">
+      <div className="border rounded overflow-x-auto">
+        <table className="min-w-full text-xs sm:text-sm">
           <thead>
             <tr className="bg-gray-50 text-left">
               <th className="p-2">ID</th>
@@ -105,7 +107,9 @@ export default function OwnerGuests() {
           <button className="bg-blue-600 text-white px-3 py-2 rounded text-sm" onClick={importCsv}>
             Import CSV
           </button>
-          <Link className="text-sm text-blue-600 underline" href="/api/export/guests">Download guests.csv</Link>
+          <Link href="/api/export/guests">
+            <a className="text-sm text-blue-600 underline">Download guests.csv</a>
+          </Link>
         </div>
         {importResult && (
           <div className="mt-3 text-xs">

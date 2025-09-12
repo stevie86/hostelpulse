@@ -11,6 +11,8 @@ interface AuthContextType {
   isLoading: boolean;
   isAuthenticated: boolean;
   signIn: (email: string, password: string) => Promise<{ error?: { message: string } }>;
+  signUp: (email: string, password: string) => Promise<{ error?: { message: string } }>;
+  resetPassword: (email: string) => Promise<{ error?: { message: string } }>;
   logout: () => void;
 }
 
@@ -40,6 +42,22 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     });
   };
 
+  const signUp = async (email: string, password: string) => {
+    setIsLoading(true);
+    // Mock register - in a real app, this would call an API and send a verification email
+    return new Promise<{ error?: { message: string } }>((resolve) => {
+      setTimeout(() => {
+        setUser({
+          id: '1',
+          email,
+          name: 'New User',
+        });
+        setIsLoading(false);
+        resolve({}); // Success, no error
+      }, 1000);
+    });
+  };
+
   const logout = () => {
     setUser(null);
   };
@@ -49,6 +67,17 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     isLoading,
     isAuthenticated: !!user,
     signIn,
+    signUp,
+    resetPassword: async (email: string) => {
+      setIsLoading(true);
+      return new Promise<{ error?: { message: string } }>((resolve) => {
+        setTimeout(() => {
+          // Simulate success
+          setIsLoading(false);
+          resolve({});
+        }, 500);
+      });
+    },
     logout,
   };
 

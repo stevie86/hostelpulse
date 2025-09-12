@@ -10,6 +10,40 @@ This guide lets you verify the Supabase‑backed APIs and owner UI locally via C
 - Supabase schema pushed (EU project): `supabase db push`
 - Local dev server running: `bunx next dev` (or `npm run dev`)
 
+### Optional: Debug mode
+Enable verbose dev logs about Supabase configuration by setting `DEBUG_MODE=1` in your `.env.local`. On first API call, the server prints whether it is using a hosted Supabase URL or missing env vars.
+
+You can also check `/api/debug` for a quick JSON status (env, supabase mode/flags).
+
+## Quick Smoke Test (recommended)
+This runs an end‑to‑end flow: creates a test guest, creates a booking for a real hostel, lists data, and exports CSVs.
+
+1) Seed one hostel in Supabase (copy the returned `id` as `HOSTEL_ID`):
+```sql
+INSERT INTO hostels (name, city) VALUES ('Lisbon Central Hostel','Lisbon') RETURNING id;
+```
+
+2) Start the dev server:
+```bash
+bunx next dev   # or: npm run dev
+```
+
+3) Run the smoke script (replace `<HOSTEL_ID>`):
+```bash
+./scripts/supabase-api-test.sh smoke <HOSTEL_ID>
+```
+
+4) Expected output (summary):
+- Prints created guest JSON and booking JSON (201).
+- Lists first 5 guests and bookings (200).
+- Saves `guests.csv` and `bookings.csv` and prints their first lines.
+- Finishes with: `Smoke test complete. Guest: <UUID>, Booking: <UUID>`
+
+5) Run against a Vercel Preview (after opening a PR):
+```bash
+BASE_URL=https://<your-preview>.vercel.app ./scripts/supabase-api-test.sh smoke <HOSTEL_ID>
+```
+
 ## Optional: Seed Minimal Data in EU Project
 Use Supabase SQL Editor to insert one hostel and one guest (capture returned IDs):
 
@@ -112,6 +146,8 @@ curl -s -X POST http://localhost:3000/api/import/bookings \
 - 401/403 from Supabase: ensure `SUPABASE_SERVICE_ROLE_KEY` is set where the dev server runs.
 - 409 on create: adjust `check_in`/`check_out` to avoid overlaps for the same `hostel_id`.
 - 503 from API: verify `.env.local` values and restart the dev server.
+- Invalid `HOSTEL_ID`: create a hostel in Supabase SQL and paste the UUID into commands.
+- Run against Preview: set `BASE_URL=https://<your-preview>.vercel.app` before the command.
 
 ---
 Once these checks pass, the owner pages are ready to use:

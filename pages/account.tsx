@@ -3,9 +3,11 @@ import Head from 'next/head'
 import Link from '../components/Link'
 import ProtectedRoute from '../components/ProtectedRoute'
 import { useAuth } from '../contexts/auth.context'
+import { useRouter } from 'next/router'
 
 const AccountPage: React.FC = () => {
-  const { user } = useAuth()
+  const router = useRouter()
+  const { user, logout } = useAuth()
 
   if (!user) {
     return null
@@ -53,11 +55,7 @@ const AccountPage: React.FC = () => {
                     Account Created
                   </label>
                   <div className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-50 text-gray-500 sm:text-sm">
-                    {new Date(user.createdAt).toLocaleDateString('en-US', {
-                      year: 'numeric',
-                      month: 'long',
-                      day: 'numeric',
-                    })}
+                    N/A
                   </div>
                 </div>
 
@@ -73,15 +71,21 @@ const AccountPage: React.FC = () => {
             </div>
 
             {/* Account actions */}
-            <div className="bg-gray-50 px-4 py-3 sm:px-6 border-t border-gray-200">
+            <div className="bg-gray-50 px-4 py-3 sm:px-6 border-t border-gray-200 flex items-center justify-between">
               <div className="text-sm">
                 <p className="text-gray-600">
-                  Need to update your information or have questions about your account?
-                  <Link href="/contact" className="ml-1 text-blue-600 hover:text-blue-500">
-                    Contact support
+                  Need help?
+                  <Link href="/contact">
+                    <a className="ml-1 text-blue-600 hover:text-blue-500">Contact support</a>
                   </Link>
                 </p>
               </div>
+              <button
+                onClick={() => { logout(); router.replace('/auth/login') }}
+                className="text-sm text-red-600 hover:text-red-700"
+              >
+                Sign out
+              </button>
             </div>
           </div>
 

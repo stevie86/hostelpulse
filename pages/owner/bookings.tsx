@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import OwnerNav from '../../components/OwnerNav'
 import PageNav from '../../components/PageNav'
 
 type BookingForm = { hostel_id: string; guest_id: string; check_in: string; check_out: string; amount: number }
@@ -45,7 +46,8 @@ export default function OwnerBookings() {
 
   return (
     <div className="p-6 space-y-6">
-      <h1 className="text-2xl font-bold">Bookings</h1>
+      <OwnerNav />
+      <h1 className="text-2xl sm:text-3xl font-bold leading-tight">Bookings</h1>
       {error && <div className="p-3 rounded bg-yellow-50 text-yellow-800">{error}</div>}
 
       <form onSubmit={createBooking} className="grid grid-cols-2 md:grid-cols-6 gap-2 items-end">
@@ -59,8 +61,8 @@ export default function OwnerBookings() {
         </button>
       </form>
 
-      <div className="border rounded">
-        <table className="w-full text-sm">
+      <div className="border rounded overflow-x-auto">
+        <table className="min-w-full text-xs sm:text-sm">
           <thead>
             <tr className="bg-gray-50 text-left">
               <th className="p-2">ID</th>
@@ -74,7 +76,7 @@ export default function OwnerBookings() {
           <tbody>
             {bookings.map((b) => (
               <tr key={b.id} className="border-t">
-                <td className="p-2">{b.id.slice(0, 6)}</td>
+                <td className="p-2 whitespace-nowrap">{b.id.slice(0, 6)}</td>
                 <td className="p-2">{b.guests?.name || b.guest_id}</td>
                 <td className="p-2">{b.check_in}</td>
                 <td className="p-2">{b.check_out}</td>
@@ -129,7 +131,9 @@ export default function OwnerBookings() {
           >
             Import CSV
           </button>
-          <Link className="text-sm text-blue-600 underline" href="/api/export/bookings">Download bookings.csv</Link>
+          <Link href="/api/export/bookings">
+            <a className="text-sm text-blue-600 underline">Download bookings.csv</a>
+          </Link>
         </div>
         {importResult && (
           <div className="mt-3 text-xs">

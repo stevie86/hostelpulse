@@ -48,7 +48,7 @@ jobs:
         cache: 'npm'
 
     - name: Install dependencies
-      run: npm ci
+      run: npm install
 
     - name: Generate Documentation
       run: |
@@ -253,7 +253,7 @@ jobs:
         cache: 'npm'
 
     - name: Install dependencies
-      run: npm ci
+      run: npm install
 
     - name: Run Continuous Governance Scan
       run: |
@@ -335,7 +335,7 @@ jobs:
         cache: 'npm'
 
     - name: Install dependencies
-      run: npm ci
+      run: npm install
 
     - name: Run dependency check
       run: |

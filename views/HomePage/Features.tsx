@@ -8,57 +8,48 @@ import { media } from 'utils/media';
 const FEATURES = [
   {
     imageUrl: '/grid-icons/asset-1.svg',
-    title: 'Lorem ipsum dolor sit amet.',
-    description:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis error dolorem ipsa dolore facere est consequuntur aut, eos doloribus voluptate?',
+    title: 'Arrivals & Departures',
+    description: 'See today’s check‑ins/outs and update status instantly.',
   },
   {
     imageUrl: '/grid-icons/asset-2.svg',
-    title: 'Lorem ipsum dolor sit amet.',
-    description:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis error dolorem ipsa dolore facere est consequuntur aut, eos doloribus voluptate?',
+    title: 'Guests & Bookings',
+    description: 'Add guests, create/cancel bookings, and prevent overlaps.',
   },
   {
     imageUrl: '/grid-icons/asset-3.svg',
-    title: 'Lorem ipsum dolor sit amet.',
-    description:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis error dolorem ipsa dolore facere est consequuntur aut, eos doloribus voluptate?',
+    title: 'CSV Import/Export',
+    description: 'Move from spreadsheets in minutes; export snapshots anytime.',
   },
   {
     imageUrl: '/grid-icons/asset-4.svg',
-    title: 'Lorem ipsum dolor sit amet.',
-    description:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis error dolorem ipsa dolore facere est consequuntur aut, eos doloribus voluptate?',
+    title: 'EU‑Hosted Backend',
+    description: 'Supabase in the EU with strict server‑side writes.',
   },
   {
     imageUrl: '/grid-icons/asset-5.svg',
-    title: 'Lorem ipsum dolor sit amet.',
-    description:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis error dolorem ipsa dolore facere est consequuntur aut, eos doloribus voluptate?',
+    title: 'API Docs',
+    description: 'Browse endpoints at /api-docs for integration details.',
   },
   {
     imageUrl: '/grid-icons/asset-6.svg',
-    title: 'Lorem ipsum dolor sit amet.',
-    description:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis error dolorem ipsa dolore facere est consequuntur aut, eos doloribus voluptate?',
+    title: 'Keypad Email (Soon)',
+    description: 'Send guests codes and instructions with one click.',
   },
   {
     imageUrl: '/grid-icons/asset-7.svg',
-    title: 'Lorem ipsum dolor sit amet.',
-    description:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis error dolorem ipsa dolore facere est consequuntur aut, eos doloribus voluptate?',
+    title: 'Telegram Bot (Soon)',
+    description: 'Manage ops from chat: /today, /checkin, /sendcode.',
   },
   {
     imageUrl: '/grid-icons/asset-8.svg',
-    title: 'Lorem ipsum dolor sit amet.',
-    description:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis error dolorem ipsa dolore facere est consequuntur aut, eos doloribus voluptate?',
+    title: 'Multi‑House (Soon)',
+    description: 'Owner scoping + RLS for multiple properties.',
   },
   {
     imageUrl: '/grid-icons/asset-9.svg',
-    title: 'Lorem ipsum dolor sit amet.',
-    description:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis error dolorem ipsa dolore facere est consequuntur aut, eos doloribus voluptate?',
+    title: 'Audit & Alerts (Soon)',
+    description: 'Action logs and basic alerts for late arrivals.',
   },
 ];
 

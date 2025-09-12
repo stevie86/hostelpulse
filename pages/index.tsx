@@ -46,11 +46,11 @@ export default function HomePage() {
           {/* Hero Section */}
           <main className="py-16">
             <div className="text-center">
-              <h1 className="text-4xl sm:text-6xl font-bold text-gray-900 mb-6">
+              <h1 className="text-4xl sm:text-6xl font-extrabold text-gray-900 mb-4 leading-tight">
                 Lisbon Hostel
                 <span className="text-blue-600 block">Operations Console</span>
               </h1>
-              <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
+              <p className="text-lg sm:text-xl text-gray-700 leading-relaxed mb-8 max-w-3xl mx-auto px-2">
                 Check arrivals and departures, update check‑in/out, and manage guests and bookings. Import/export CSV from your spreadsheets to migrate fast.
               </p>
 
@@ -80,32 +80,34 @@ export default function HomePage() {
             </div>
 
             {/* Features Preview */}
-            <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="bg-white p-6 rounded-lg shadow-md">
+            <div className="mt-14 grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+              <div className="bg-white p-6 rounded-lg shadow-md text-left sm:text-center">
                 <div className="text-3xl mb-4">🗓️</div>
-                <h3 className="text-xl font-semibold mb-2">Arrivals & Departures</h3>
-                <p className="text-gray-600">Today’s check‑ins and check‑outs at a glance.</p>
+                <h3 className="text-lg sm:text-xl font-semibold mb-2 leading-snug">Arrivals & Departures</h3>
+                <p className="text-gray-700 text-base leading-relaxed">Today’s check‑ins and check‑outs at a glance.</p>
               </div>
-              <div className="bg-white p-6 rounded-lg shadow-md">
+              <div className="bg-white p-6 rounded-lg shadow-md text-left sm:text-center">
                 <div className="text-3xl mb-4">🧾</div>
-                <h3 className="text-xl font-semibold mb-2">Guests & Bookings</h3>
-                <p className="text-gray-600">Quickly add guests, create bookings, and update status.</p>
+                <h3 className="text-lg sm:text-xl font-semibold mb-2 leading-snug">Guests & Bookings</h3>
+                <p className="text-gray-700 text-base leading-relaxed">Quickly add guests, create bookings, and update status.</p>
               </div>
-              <div className="bg-white p-6 rounded-lg shadow-md">
+              <div className="bg-white p-6 rounded-lg shadow-md text-left sm:text-center">
                 <div className="text-3xl mb-4">📄</div>
-                <h3 className="text-xl font-semibold mb-2">CSV Import/Export</h3>
-                <p className="text-gray-600">Migrate from Google Sheets in minutes.</p>
+                <h3 className="text-lg sm:text-xl font-semibold mb-2 leading-snug">CSV Import/Export</h3>
+                <p className="text-gray-700 text-base leading-relaxed">Migrate from Google Sheets in minutes.</p>
               </div>
             </div>
 
             {/* Built for Lisbon band */}
-            <div className="mt-16 bg-white p-6 rounded-lg shadow-md border">
-              <h3 className="text-xl font-semibold mb-2">Built for Lisbon hostels</h3>
-              <p className="text-gray-600 mb-4">
-                EU‑hosted Supabase, simple owner workflows, and a roadmap for city‑tax and invoices. See our
-                {' '}<Link href="/api-docs" className="text-blue-600 underline">API docs</Link> for integration details.
+            <div className="mt-14 bg-white p-6 rounded-lg shadow-md border">
+              <h3 className="text-xl sm:text-2xl font-semibold mb-2 leading-snug">Built for Lisbon hostels</h3>
+              <p className="text-gray-700 text-base leading-relaxed mb-4">
+                EU‑hosted Supabase, simple owner workflows, and a roadmap for city‑tax and invoices. See our{' '}
+                <Link href="/api-docs">
+                  <a className="text-blue-600 underline">API docs</a>
+                </Link>{' '}for integration details.
               </p>
-              <div className="flex flex-wrap gap-3 text-sm text-gray-700">
+              <div className="flex flex-wrap gap-3 text-sm sm:text-base text-gray-700">
                 <span className="px-3 py-1 rounded bg-blue-50 border border-blue-200">EU Hosting</span>
                 <span className="px-3 py-1 rounded bg-green-50 border border-green-200">Owner‑only Console</span>
                 <span className="px-3 py-1 rounded bg-yellow-50 border border-yellow-200">CSV Import/Export</span>

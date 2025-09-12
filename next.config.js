@@ -95,7 +95,8 @@ const nextConfig = {
   },
 
   // Build optimization
-  output: 'standalone', // For Docker deployment
+  // Only enable 'standalone' output when explicitly requested; not needed on Vercel
+  ...(process.env.NEXT_OUTPUT_STANDALONE === '1' ? { output: 'standalone' } : {}),
   generateEtags: false, // Disable etags for better caching control
 
   // Compression

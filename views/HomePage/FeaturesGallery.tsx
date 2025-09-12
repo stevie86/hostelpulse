@@ -10,25 +10,25 @@ import { media } from 'utils/media';
 
 const TABS = [
   {
-    title: 'Find relevant media contacts - multiline title',
+    title: 'Arrivals & Departures',
     description:
-      '<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam quidem ipsam ratione dicta quis cupiditate consequuntur laborum ducimus iusto velit.</p>',
+      '<p>See today’s check‑ins and check‑outs at a glance. Update booking status with a single click to keep your occupancy accurate.</p>',
     imageUrl: '/demo-illustration-3.png',
     baseColor: '249,82,120',
     secondColor: '221,9,57',
   },
   {
-    title: 'Another amazing feature',
+    title: 'Guests & Bookings',
     description:
-      '<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam quidem ipsam ratione dicta quis cupiditate consequuntur laborum ducimus iusto velit.</p>',
+      '<p>Quickly add guests, create new bookings, and avoid date overlaps. Keep contact details and stay info tidy and searchable.</p>',
     imageUrl: '/demo-illustration-4.png',
     baseColor: '57,148,224',
     secondColor: '99,172,232',
   },
   {
-    title: 'And yet... another truly fascinating feature',
+    title: 'CSV Import/Export',
     description:
-      '<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam quidem ipsam ratione dicta quis cupiditate consequuntur laborum ducimus iusto velit.</p>',
+      '<p>Migrate from Google Sheets in minutes: import guests and bookings, export snapshots for reporting and backups.</p>',
     imageUrl: '/demo-illustration-5.png',
     baseColor: '88,193,132',
     secondColor: '124,207,158',

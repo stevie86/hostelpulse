@@ -1,6 +1,7 @@
 import React from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import { useAuth } from '../contexts/auth.context'
 
 interface SidebarProps {
   isOpen?: boolean
@@ -11,10 +12,11 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen = false, onClose }) => {
   const router = useRouter()
 
   const navigation = [
-    { name: 'Dashboard', href: '/dashboard', icon: '🏠' },
-    { name: 'Bookings', href: '/bookings', icon: '📅' },
-    { name: 'Settings', href: '/settings', icon: '⚙️' },
+    { name: 'Dashboard', href: '/owner/dashboard', icon: '🏠' },
+    { name: 'Bookings', href: '/owner/bookings', icon: '📅' },
+    { name: 'Guests', href: '/owner/guests', icon: '👥' },
   ]
+  const { logout } = useAuth()
 
   const handleLinkClick = () => {
     if (onClose) {
@@ -82,6 +84,14 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen = false, onClose }) => {
                 )
               })}
             </nav>
+            <div className="px-2 py-4 border-t border-gray-200">
+              <button
+                onClick={() => { logout(); router.replace('/auth/login') }}
+                className="w-full text-left px-2 py-2 text-sm text-red-600 hover:bg-red-50 rounded-md"
+              >
+                Sign out
+              </button>
+            </div>
           </div>
         </div>
       </div>

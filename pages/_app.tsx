@@ -3,7 +3,7 @@ import 'swiper/css/bundle';
 import 'swiper/css/navigation';
 import 'swiper/css/autoplay';
 
-import { AppProps } from 'next/dist/shared/lib/router/router';
+import type { AppProps } from 'next/app';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { ColorModeScript } from 'nextjs-color-mode';
@@ -54,7 +54,8 @@ function MyApp({ Component, pageProps }: AppProps) {
 
       <Providers>
         <Modals />
-        <Navbar items={navItems} />
+        <div className="antialiased text-gray-900">
+          <Navbar items={navItems} />
         <TinaEditProvider
           editMode={
             <TinaCMS
@@ -74,6 +75,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         </TinaEditProvider>
         <WaveCta />
         <Footer />
+        </div>
       </Providers>
     </>
   );
