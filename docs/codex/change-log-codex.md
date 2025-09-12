@@ -64,3 +64,75 @@ This log documents branches, commits, PRs, and operational actions performed to 
 ## Notes
 - Some commits were created via the GitHub API on remote branches; local logs may not include those SHAs unless the branch is checked out.
 - To finalize history cleanup, either force-update `main` from `clean/main` or make `clean/main` the default branch and deprecate the old `main`.
+
+## Recommended Next Steps (Clean, Protected, Deployable)
+
+1) Finalize history cleanup and default branch
+- Switch default branch to `clean/main` in GitHub Settings → Branches, or force-update `main` from `clean/main`:
+  - `git fetch origin && git checkout clean/main && git push origin +clean/main:main`
+- Retarget open PRs to the new default, then delete the old `main` and `master` to avoid confusion.
+
+2) Reapply and verify branch protection on the default branch
+- Require status checks before merging (set as required):
+  - Lint, Typecheck, Unit/Integration tests, Coverage threshold, Vercel Preview Deploy
+- Require at least 1 approving review and dismiss stale reviews.
+- Enforce linear history; disallow force pushes and deletions.
+- Enable “Require conversation resolution”.
+
+3) Merge CI branches and ensure deploys depend on successful builds
+- Open/merge PRs for:
+  - `ci/vercel-preview-clean` (Vercel PR previews)
+  - `test/codecoverage-clean` (baseline tests)
+  - `docs/codex-updates-clean` (documentation)
+- In GitHub Actions, make deploy jobs depend on build/tests and fail on build failure:
+
+```yaml
+name: Vercel Production Deploy
+on:
+  push:
+    branches: [ main ]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run build   # if this fails, job fails
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build            # ensures deploy does not run if build fails
+    steps:
+      - uses: actions/checkout@v4
+      - name: Deploy to Vercel (Production)
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          vercel-args: '--prod'
+```
+
+- For PR previews, keep deploy in the same job after the build steps (current workflow), or split as above with `needs: build`.
+
+4) Secrets and environment configuration
+- Confirm repo secrets exist: `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID`.
+- In Vercel, add Preview and Production env vars (NEXT_PUBLIC_*, DATABASE_URL if applicable).
+
+5) Testing and coverage enforcement
+- Pick a single test runner for React tests (Jest recommended) or adapt tests to Bun consistently.
+- Add coverage thresholds to Jest (e.g., lines/branches/functions: 95) and fail CI when under threshold.
+- Add a tiny Playwright smoke suite that runs on PR against the Preview URL (optional at MVP stage).
+
+6) Security hygiene
+- Add gitleaks to CI and a pre-push hook to prevent secret commits.
+- Keep `.kilocode/mcp.json` in `.gitignore`; rotate any previously leaked keys.
+
+7) Documentation and governance
+- Merge docs PR; add README links to the CI/CD guide and MVP sprint plan.
+- Add CODEOWNERS and ensure required-review policy aligns with owners.
