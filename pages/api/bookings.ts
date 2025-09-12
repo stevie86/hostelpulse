@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { supabaseServer } from '../../lib/supabase'
+import { getSupabaseServer } from '../../lib/supabase'
 
 function datesOverlap(aStart: string, aEnd: string, bStart: string, bEnd: string) {
   const aS = new Date(aStart).getTime()
@@ -11,8 +11,10 @@ function datesOverlap(aStart: string, aEnd: string, bStart: string, bEnd: string
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
+    const supabase = getSupabaseServer()
+    if (!supabase) return res.status(503).json({ error: 'Supabase is not configured' })
     if (req.method === 'GET') {
-      const { data, error } = await supabaseServer
+      const { data, error } = await supabase
         .from('bookings')
         .select('*, guests(*), hostels(*)')
         .order('check_in', { ascending: true })
@@ -26,7 +28,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(400).json({ error: 'hostel_id, guest_id, check_in, check_out are required' })
       }
       // Overlap check for the same hostel
-      const { data: existing, error: fetchErr } = await supabaseServer
+      const { data: existing, error: fetchErr } = await supabase
         .from('bookings')
         .select('id, check_in, check_out')
         .eq('hostel_id', hostel_id)
@@ -35,7 +37,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const hasOverlap = (existing || []).some((b) => datesOverlap(b.check_in as any, b.check_out as any, check_in, check_out))
       if (hasOverlap) return res.status(409).json({ error: 'Booking overlaps with an existing stay' })
 
-      const { data, error } = await supabaseServer
+      const { data, error } = await supabase
         .from('bookings')
         .insert({ hostel_id, guest_id, check_in, check_out, amount: amount ?? 0, status: 'confirmed' })
         .select('*')
@@ -49,7 +51,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       if (!id) return res.status(400).json({ error: 'id is required' })
       const update: Record<string, any> = {}
       if (status) update.status = status
-      const { data, error } = await supabaseServer.from('bookings').update(update).eq('id', id).select('*').single()
+      const { data, error } = await supabase.from('bookings').update(update).eq('id', id).select('*').single()
       if (error) return res.status(500).json({ error: error.message })
       return res.status(200).json({ booking: data })
     }
@@ -60,4 +62,3 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(500).json({ error: e?.message || 'Unexpected error' })
   }
 }
-

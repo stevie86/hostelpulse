@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { supabaseServer } from '../../lib/supabase'
+import { getSupabaseServer } from '../../lib/supabase'
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') {
@@ -7,19 +7,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(405).json({ error: 'Method not allowed' })
   }
   try {
+    const supabase = getSupabaseServer()
+    if (!supabase) return res.status(503).json({ error: 'Supabase is not configured' })
     const { guest_name, guest_email, hostel_id, check_in, check_out, message } = req.body || {}
     if (!guest_name || !guest_email || !hostel_id || !check_in || !check_out) {
       return res.status(400).json({ error: 'guest_name, guest_email, hostel_id, check_in, check_out required' })
     }
     // Optionally create the guest record if it does not exist
-    const { data: guest } = await supabaseServer
+    const { data: guest } = await supabase
       .from('guests')
       .upsert({ email: guest_email, name: guest_name }, { onConflict: 'email' })
       .select('*')
       .single()
 
     // Log a pending booking in bookings with status "requested"
-    const { data: booking, error } = await supabaseServer
+    const { data: booking, error } = await supabase
       .from('bookings')
       .insert({ hostel_id, guest_id: guest?.id, check_in, check_out, status: 'requested', amount: 0 })
       .select('*')
@@ -30,4 +32,3 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(500).json({ error: e?.message || 'Unexpected error' })
   }
 }
-
