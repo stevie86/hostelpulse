@@ -32,3 +32,6 @@ yarn-error.log*
 
 # vercel
 .vercel
+
+# Prevent committing local MCP config or secrets
+.kilocode/mcp.json
