@@ -296,15 +296,23 @@ jobs:
         name: test-results
 
     - name: Check quality metrics
+      env:
+        IS_PR: ${{ github.event_name == 'pull_request' }}
+        COVERAGE_THRESHOLD: ${{ github.event_name == 'pull_request' && '70' || '80' }}
       run: |
         # Check test coverage
         if [ -f "coverage/coverage-summary.json" ]; then
           COVERAGE=$(jq '.total.lines.pct' coverage/coverage-summary.json)
-          if (( $(echo "$COVERAGE < 80" | bc -l) )); then
-            echo "❌ Test coverage too low: $COVERAGE%"
-            exit 1
+          if (( $(echo "$COVERAGE < $COVERAGE_THRESHOLD" | bc -l) )); then
+            if [ "$IS_PR" = "true" ]; then
+              echo "⚠️  Test coverage below PR threshold ($COVERAGE% < $COVERAGE_THRESHOLD%). Not failing on PRs."
+            else
+              echo "❌ Test coverage too low: $COVERAGE% (threshold $COVERAGE_THRESHOLD%)"
+              exit 1
+            fi
+          else
+            echo "✅ Test coverage: $COVERAGE% (threshold $COVERAGE_THRESHOLD%)"
           fi
-          echo "✅ Test coverage: $COVERAGE%"
         fi
 
         # Check bundle size

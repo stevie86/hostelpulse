@@ -1,11 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
 import AutofitGrid from 'components/AutofitGrid';
-import BasicCard from 'components/BasicCard';
+import BasicCard, { BasicCardProps } from 'components/BasicCard';
 import Container from 'components/Container';
 import { media } from 'utils/media';
 
-const FEATURES = [
+const FEATURES: BasicCardProps[] = [
   {
     imageUrl: '/grid-icons/asset-1.svg',
     title: 'Arrivals & Departures',
@@ -33,23 +33,27 @@ const FEATURES = [
   },
   {
     imageUrl: '/grid-icons/asset-6.svg',
-    title: 'Keypad Email (Soon)',
+    title: 'Keypad Email',
     description: 'Send guests codes and instructions with one click.',
+    status: 'Coming Soon',
   },
   {
     imageUrl: '/grid-icons/asset-7.svg',
-    title: 'Telegram Bot (Soon)',
+    title: 'Telegram Bot',
     description: 'Manage ops from chat: /today, /checkin, /sendcode.',
+    status: 'Coming Soon',
   },
   {
     imageUrl: '/grid-icons/asset-8.svg',
-    title: 'Multi‑House (Soon)',
+    title: 'Multi‑House',
     description: 'Owner scoping + RLS for multiple properties.',
+    status: 'Coming Soon',
   },
   {
     imageUrl: '/grid-icons/asset-9.svg',
-    title: 'Audit & Alerts (Soon)',
+    title: 'Audit & Alerts',
     description: 'Action logs and basic alerts for late arrivals.',
+    status: 'Coming Soon',
   },
 ];
 

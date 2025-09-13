@@ -1,7 +1,7 @@
 import NextImage from 'next/image';
 import styled from 'styled-components';
 
-interface BasicCardProps {
+export interface BasicCardProps {
   title: string;
   description: string;
   imageUrl: string;
@@ -60,8 +60,14 @@ const Badge = styled.span`
     color: #ffffff;
   }
   &[data-status='Coming Soon'] {
-    background: rgba(59, 130, 246, 0.15); /* blue-500 tint */
-    color: #1e3a8a;
+    background: rgba(59, 130, 246, 0.18); /* blue-500 tint */
+    color: #1e3a8a; /* dark blue for light theme */
+
+    /* Improve contrast in dark mode */
+    @media (prefers-color-scheme: dark) {
+      background: rgba(59, 130, 246, 0.35); /* stronger tint for dark bg */
+      color: #e0ecff; /* light blue/near-white for contrast */
+    }
   }
   /* Future red statuses render with white text for readability */
   &[data-status='Blocked'],
