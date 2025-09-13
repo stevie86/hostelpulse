@@ -1,0 +1,18 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "submit": "Submit",
+    "cancel": "Cancel"
+  },
+  "navigation": {
+    "home": "Home",
+    "features": "Features",
+    "pricing": "Pricing",
+    "contact": "Contact"
+  },
+  "hero": {
+    "title": "Welcome to Hostelpulse",
+    "subtitle": "The all-in-one platform for modern hostel management"
+  }
+}

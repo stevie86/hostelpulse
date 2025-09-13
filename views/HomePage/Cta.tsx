@@ -13,11 +13,10 @@ export default function Cta() {
     <CtaWrapper>
       <Container>
         <Stack>
-          <OverTitle>Lorem ipsum dolor sit amet</OverTitle>
-          <SectionTitle>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Temporibus delectus?</SectionTitle>
+          <OverTitle>Ready to streamline operations?</OverTitle>
+          <SectionTitle>Import your sheet and go live today</SectionTitle>
           <Description>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda beatae accusamus deleniti nihil quas tempora numquam, vitae
-            culpa.
+            Bring your guests and bookings via CSV, then manage arrivals and departures from one simple console.
           </Description>
           <ButtonGroup>
             <NextLink href="#early-access" passHref>

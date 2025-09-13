@@ -4,12 +4,13 @@ import styled from 'styled-components';
 
 export interface LinkProps {
   href: string;
+  className?: string;
 }
 
-export default function Link({ href, children }: PropsWithChildren<LinkProps>) {
+export default function Link({ href, children, className }: PropsWithChildren<LinkProps>) {
   return (
     <NextLink href={href} passHref>
-      <Anchor>{children}</Anchor>
+      <Anchor className={className}>{children}</Anchor>
     </NextLink>
   );
 }

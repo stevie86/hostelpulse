@@ -1,0 +1,3 @@
+id,hostel_id,guest_id,check_in,check_out,amount,status
+,REPLACE_HOSTEL_ID,REPLACE_GUEST_ID_1,2025-10-15,2025-10-17,120,confirmed
+,REPLACE_HOSTEL_ID,REPLACE_GUEST_ID_2,2025-10-18,2025-10-19,80,confirmed

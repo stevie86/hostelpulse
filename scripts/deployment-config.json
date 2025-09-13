@@ -1,0 +1,215 @@
+{
+  "version": "1.0.0",
+  "description": "Hostelpulse Autonomous Deployment Configuration",
+
+  "environments": {
+    "canary": {
+      "name": "Canary",
+      "description": "Small percentage of traffic for early testing",
+      "traffic_percentage": 5,
+      "auto_promote": true,
+      "promote_threshold": {
+        "error_rate": 0.01,
+        "response_time": 2000,
+        "success_rate": 0.99
+      },
+      "rollback_on_failure": true,
+      "monitoring_window": 300000
+    },
+    "beta": {
+      "name": "Beta",
+      "description": "Larger traffic percentage for broader testing",
+      "traffic_percentage": 25,
+      "auto_promote": false,
+      "promote_threshold": {
+        "error_rate": 0.005,
+        "response_time": 1500,
+        "success_rate": 0.995
+      },
+      "rollback_on_failure": true,
+      "monitoring_window": 900000
+    },
+    "production": {
+      "name": "Production",
+      "description": "Full production deployment",
+      "traffic_percentage": 100,
+      "auto_promote": false,
+      "rollback_on_failure": true,
+      "monitoring_window": 1800000
+    }
+  },
+
+  "deployment_strategy": {
+    "type": "rolling_update",
+    "max_unavailable_percentage": 10,
+    "max_surge_percentage": 25,
+    "health_check_interval": 30000,
+    "health_check_timeout": 10000,
+    "readiness_probe": {
+      "path": "/api/health",
+      "initial_delay": 30000,
+      "period": 10000,
+      "timeout": 5000,
+      "success_threshold": 1,
+      "failure_threshold": 3
+    }
+  },
+
+  "feature_flags": {
+    "enabled": true,
+    "provider": "launchdarkly",
+    "default_values": {
+      "new_dashboard": false,
+      "enhanced_analytics": false,
+      "auto_tax_collection": true,
+      "beta_features": false
+    },
+    "rollout_rules": {
+      "percentage_based": true,
+      "user_segmentation": true,
+      "geographic_targeting": false
+    }
+  },
+
+  "ab_testing": {
+    "enabled": true,
+    "framework": "split",
+    "default_traffic_split": {
+      "control": 50,
+      "variant": 50
+    },
+    "metrics": [
+      "conversion_rate",
+      "bounce_rate",
+      "session_duration",
+      "error_rate"
+    ],
+    "statistical_significance": 0.95,
+    "minimum_sample_size": 1000,
+    "auto_conclusion": true
+  },
+
+  "monitoring": {
+    "enabled": true,
+    "providers": ["datadog", "new_relic"],
+    "metrics": {
+      "performance": {
+        "response_time": true,
+        "throughput": true,
+        "error_rate": true,
+        "apdex_score": true
+      },
+      "business": {
+        "conversion_rate": true,
+        "user_engagement": true,
+        "revenue_impact": true
+      },
+      "infrastructure": {
+        "cpu_usage": true,
+        "memory_usage": true,
+        "disk_usage": true,
+        "network_io": true
+      }
+    },
+    "alerts": {
+      "error_rate_threshold": 0.05,
+      "response_time_threshold": 3000,
+      "traffic_drop_threshold": 0.2,
+      "channels": ["slack", "email", "pagerduty"]
+    },
+    "dashboards": {
+      "deployment_status": true,
+      "performance_metrics": true,
+      "ab_test_results": true,
+      "feature_flag_status": true
+    }
+  },
+
+  "rollback": {
+    "enabled": true,
+    "auto_rollback": true,
+    "rollback_triggers": {
+      "error_rate": 0.1,
+      "response_time_degradation": 50,
+      "traffic_drop": 0.3,
+      "manual_trigger": true
+    },
+    "rollback_strategy": "immediate",
+    "backup_retention": 7,
+    "graceful_shutdown_timeout": 30000
+  },
+
+  "traffic_management": {
+    "enabled": true,
+    "provider": "vercel",
+    "routing_rules": {
+      "canary": {
+        "header_based": true,
+        "cookie_based": false,
+        "ip_based": false,
+        "percentage_based": true
+      },
+      "beta": {
+        "user_segmentation": true,
+        "feature_flags": true
+      }
+    },
+    "load_balancing": {
+      "algorithm": "round_robin",
+      "sticky_sessions": false,
+      "health_checks": true
+    }
+  },
+
+  "security": {
+    "enabled": true,
+    "ssl_enforcement": true,
+    "rate_limiting": {
+      "enabled": true,
+      "requests_per_minute": 1000,
+      "burst_limit": 100
+    },
+    "authentication": {
+      "required": true,
+      "methods": ["jwt", "oauth"]
+    },
+    "authorization": {
+      "role_based": true,
+      "permission_matrix": true
+    }
+  },
+
+  "logging": {
+    "enabled": true,
+    "level": "info",
+    "structured_logging": true,
+    "log_aggregation": true,
+    "retention_period": 30,
+    "searchable": true
+  },
+
+  "notifications": {
+    "enabled": true,
+    "events": {
+      "deployment_started": true,
+      "deployment_completed": true,
+      "rollback_triggered": true,
+      "ab_test_concluded": true,
+      "alert_triggered": true
+    },
+    "channels": {
+      "slack": {
+        "webhook_url": "${SLACK_WEBHOOK_URL}",
+        "channels": ["#deployments", "#alerts"]
+      },
+      "email": {
+        "recipients": ["devops@hostelpulse.com", "engineering@hostelpulse.com"],
+        "templates": {
+          "deployment_success": "deployment_success.html",
+          "deployment_failure": "deployment_failure.html",
+          "rollback": "rollback_notification.html"
+        }
+      }
+    }
+  }
+}

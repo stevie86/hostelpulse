@@ -1,0 +1,345 @@
+{
+  "version": "1.0.0",
+  "description": "Governance configuration for KiloCode - enforcing code quality, security, and compliance standards",
+  "enabled": true,
+  "strict_mode": false,
+  "notification_channels": ["console", "file"],
+  "alert_thresholds": {
+    "max_violations": 10,
+    "max_severity_score": 50,
+    "critical_alert_threshold": 5
+  },
+
+  "quality_gates": {
+    "pre-commit": {
+      "enabled": true,
+      "blocking": false,
+      "metrics": ["linting", "security"],
+      "thresholds": {
+        "linting_score": 95,
+        "security_vulnerabilities": 0
+      }
+    },
+    "pre-merge": {
+      "enabled": true,
+      "blocking": true,
+      "metrics": ["coverage", "complexity", "security"],
+      "thresholds": {
+        "code_coverage": 80,
+        "cyclomatic_complexity": 10,
+        "security_vulnerabilities": 0
+      }
+    },
+    "pre-deploy": {
+      "enabled": true,
+      "blocking": true,
+      "metrics": ["coverage", "security", "compliance"],
+      "thresholds": {
+        "code_coverage": 80,
+        "security_vulnerabilities": 0,
+        "compliance_score": 95
+      }
+    },
+    "continuous": {
+      "enabled": true,
+      "schedule": "daily",
+      "metrics": ["security", "compliance"],
+      "thresholds": {
+        "security_vulnerabilities": 0,
+        "compliance_score": 90
+      }
+    }
+  },
+
+  "security": {
+    "enabled_scans": ["owasp", "secrets", "dependencies", "configuration"],
+    "severity_threshold": "medium",
+    "exclude_patterns": ["node_modules", ".git", "dist", "build", "coverage"],
+    "custom_rules": [
+      {
+        "name": "no_hardcoded_secrets",
+        "pattern": "(?i)(password|secret|key|token)\\s*[=:]\\s*['\"][^'\"]{8,}['\"]",
+        "severity": "high",
+        "message": "Potential hardcoded secret detected"
+      },
+      {
+        "name": "secure_headers_check",
+        "pattern": "res\\.(setHeader|header)\\(['\"](x-frame-options|x-content-type-options|strict-transport-security)['\"]",
+        "severity": "medium",
+        "message": "Security headers should be configured"
+      }
+    ],
+    "owasp_focus_areas": [
+      "A01:2021-Broken_Access_Control",
+      "A02:2021-Cryptographic_Failures",
+      "A03:2021-Injection",
+      "A04:2021-Insecure_Design",
+      "A05:2021-Security_Misconfiguration",
+      "A06:2021-Vulnerable_Components",
+      "A07:2021-Identification_Failures"
+    ]
+  },
+
+  "ai_review": {
+    "enabled_checks": ["code_quality", "best_practices", "maintainability", "performance"],
+    "severity_threshold": "medium",
+    "max_suggestions": 20,
+    "languages": ["javascript", "typescript", "python", "java"],
+    "complexity_limits": {
+      "max_function_length": 50,
+      "max_nested_depth": 3,
+      "max_parameters": 4,
+      "max_file_length": 500
+    },
+    "patterns_to_flag": [
+      {
+        "name": "console_log_production",
+        "pattern": "console\\.log\\(",
+        "severity": "low",
+        "suggestion": "Remove console.log statements before production"
+      },
+      {
+        "name": "var_usage",
+        "pattern": "\\bvar\\s+",
+        "severity": "medium",
+        "suggestion": "Use const or let instead of var"
+      },
+      {
+        "name": "magic_numbers",
+        "pattern": "\\b\\d{3,}\\b",
+        "severity": "low",
+        "suggestion": "Extract magic numbers into named constants"
+      }
+    ]
+  },
+
+  "audit": {
+    "enabled": true,
+    "retention_days": 365,
+    "max_log_size": 100,
+    "encryption": false,
+    "export_formats": ["json", "csv", "pdf"],
+    "real_time_alerts": true,
+    "alert_channels": ["console"],
+    "integrity_check": true,
+    "anomaly_detection": {
+      "enabled": true,
+      "sensitivity": "medium",
+      "alert_on_anomalies": true
+    }
+  },
+
+  "compliance": {
+    "frameworks": {
+      "gdpr": {
+        "enabled": true,
+        "data_processing_check": true,
+        "consent_mechanism_check": true,
+        "data_retention_check": true
+      },
+      "hipaa": {
+        "enabled": false,
+        "phi_detection": true,
+        "access_controls": true
+      },
+      "soc2": {
+        "enabled": true,
+        "security_controls": true,
+        "availability_monitoring": true,
+        "confidentiality_protection": true
+      },
+      "iso27001": {
+        "enabled": false,
+        "risk_assessment": true,
+        "security_objectives": true
+      }
+    },
+    "custom_policies": [
+      {
+        "name": "data_classification",
+        "description": "Ensure sensitive data is properly classified and protected",
+        "checks": ["pii_detection", "confidential_data_marking"]
+      },
+      {
+        "name": "third_party_risk",
+        "description": "Assess and mitigate risks from third-party dependencies",
+        "checks": ["dependency_vulnerability_scan", "license_compliance"]
+      }
+    ]
+  },
+
+  "reporting": {
+    "dashboard": {
+      "enabled": true,
+      "refresh_interval": 300,
+      "metrics": [
+        "compliance_rate",
+        "violation_trend",
+        "security_score",
+        "code_quality_score"
+      ]
+    },
+    "scheduled_reports": [
+      {
+        "name": "weekly_compliance_report",
+        "schedule": "weekly",
+        "format": "pdf",
+        "recipients": ["compliance_team"],
+        "metrics": ["compliance_rate", "violation_summary", "security_findings"]
+      },
+      {
+        "name": "monthly_audit_report",
+        "schedule": "monthly",
+        "format": "pdf",
+        "recipients": ["audit_team", "management"],
+        "metrics": ["audit_trail_summary", "compliance_trend", "risk_assessment"]
+      }
+    ],
+    "alerts": {
+      "violation_threshold_alert": {
+        "enabled": true,
+        "threshold": 5,
+        "channels": ["email", "slack"]
+      },
+      "security_vulnerability_alert": {
+        "enabled": true,
+        "severity_threshold": "high",
+        "channels": ["email", "slack", "teams"]
+      },
+      "compliance_drift_alert": {
+        "enabled": true,
+        "drift_percentage": 10,
+        "channels": ["email"]
+      }
+    }
+  },
+
+  "integrations": {
+    "ci_cd": {
+      "github_actions": {
+        "enabled": true,
+        "workflow_file": ".github/workflows/governance-checks.yml",
+        "trigger_events": ["push", "pull_request"]
+      },
+      "jenkins": {
+        "enabled": false,
+        "pipeline_config": "jenkins/pipeline.groovy"
+      },
+      "gitlab_ci": {
+        "enabled": false,
+        "config_file": ".gitlab-ci.yml"
+      }
+    },
+    "notification_services": {
+      "slack": {
+        "enabled": false,
+        "webhook_url": "",
+        "channels": ["#governance-alerts", "#security"]
+      },
+      "teams": {
+        "enabled": false,
+        "webhook_url": "",
+        "channels": ["Governance", "Security"]
+      },
+      "email": {
+        "enabled": true,
+        "smtp_config": {},
+        "recipients": ["devops@company.com"]
+      }
+    },
+    "security_tools": {
+      "sonarcloud": {
+        "enabled": false,
+        "project_key": "",
+        "organization": ""
+      },
+      "snyk": {
+        "enabled": false,
+        "org_id": "",
+        "integration_id": ""
+      },
+      "checkmarx": {
+        "enabled": false,
+        "server_url": "",
+        "project_name": ""
+      }
+    }
+  },
+
+  "overrides": {
+    "enabled": true,
+    "approval_required": true,
+    "max_override_duration": 30,
+    "override_categories": [
+      "temporary_fix",
+      "legacy_code",
+      "third_party_integration",
+      "performance_optimization"
+    ],
+    "approval_workflow": {
+      "single_approver": {
+        "roles": ["tech_lead", "security_officer"],
+        "max_duration": 7
+      },
+      "dual_approver": {
+        "roles": ["tech_lead", "security_officer", "compliance_officer"],
+        "max_duration": 14
+      }
+    }
+  },
+
+  "performance": {
+    "scan_timeout": 300,
+    "parallel_scans": 2,
+    "cache_enabled": true,
+    "cache_ttl": 3600,
+    "resource_limits": {
+      "max_memory": "512MB",
+      "max_cpu": "50%",
+      "timeout": "300s"
+    }
+  },
+
+  "custom_rules": [
+    {
+      "id": "company_naming_convention",
+      "category": "style",
+      "severity": "medium",
+      "description": "Follow company naming conventions for variables and functions",
+      "pattern": "^[a-z][a-zA-Z0-9]*$",
+      "applies_to": ["javascript", "typescript"]
+    },
+    {
+      "id": "no_todo_comments",
+      "category": "maintainability",
+      "severity": "low",
+      "description": "TODO comments should be tracked in issue management system",
+      "pattern": "//\\s*TODO|//\\s*FIXME|//\\s*HACK",
+      "applies_to": ["javascript", "typescript", "python", "java"]
+    }
+  ],
+
+  "success_metrics": {
+    "compliance_rate_target": 95,
+    "false_positive_rate_target": 5,
+    "response_time_target": 30,
+    "resolution_time_target": 24,
+    "security_score_target": 90,
+    "code_quality_score_target": 85
+  },
+
+  "maintenance": {
+    "auto_update_rules": true,
+    "rule_update_frequency": "weekly",
+    "log_rotation": {
+      "enabled": true,
+      "max_age_days": 90,
+      "compression": true
+    },
+    "backup": {
+      "enabled": true,
+      "frequency": "daily",
+      "retention": 30
+    }
+  }
+}

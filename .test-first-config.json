@@ -1,0 +1,167 @@
+{
+  "version": "1.0.0",
+  "description": "Test-First Mode configuration for KiloCode",
+
+  "testing": {
+    "framework": "jest",
+    "testRunner": "jest",
+    "testEnvironment": "jsdom",
+
+    "coverage": {
+      "enabled": true,
+      "thresholds": {
+        "global": {
+          "branches": 80,
+          "functions": 80,
+          "lines": 80,
+          "statements": 80
+        },
+        "components": {
+          "branches": 75,
+          "functions": 75,
+          "lines": 75,
+          "statements": 75
+        },
+        "hooks": {
+          "branches": 85,
+          "functions": 85,
+          "lines": 85,
+          "statements": 85
+        },
+        "utils": {
+          "branches": 90,
+          "functions": 90,
+          "lines": 90,
+          "statements": 90
+        }
+      },
+      "exclude": [
+        "**/*.config.js",
+        "**/*.setup.js",
+        "**/node_modules/**",
+        "**/public/**",
+        "**/.next/**",
+        "**/coverage/**"
+      ]
+    },
+
+    "patterns": {
+      "testFiles": [
+        "**/__tests__/**/*.test.{js,ts,tsx}",
+        "**/*.test.{js,ts,tsx}",
+        "**/__tests__/**/*.spec.{js,ts,tsx}",
+        "**/*.spec.{js,ts,tsx}"
+      ],
+      "sourceFiles": [
+        "components/**/*.{js,ts,tsx}",
+        "pages/**/*.{js,ts,tsx}",
+        "hooks/**/*.{js,ts}",
+        "utils/**/*.{js,ts}",
+        "lib/**/*.{js,ts}",
+        "contexts/**/*.{js,ts,tsx}"
+      ]
+    }
+  },
+
+  "hooks": {
+    "preCommit": {
+      "enabled": true,
+      "commands": [
+        "npm test",
+        "npm run lint"
+      ]
+    },
+    "prePush": {
+      "enabled": true,
+      "commands": [
+        "npm run test:ci",
+        "npm run test:coverage"
+      ]
+    }
+  },
+
+  "automation": {
+    "generateTests": {
+      "enabled": true,
+      "script": "scripts/generate-tests.js",
+      "autoGenerate": false,
+      "templates": {
+        "component": "templates/component-test.js",
+        "hook": "templates/hook-test.js",
+        "api": "templates/api-test.js",
+        "util": "templates/util-test.js"
+      }
+    },
+
+    "testValidation": {
+      "requireTestsForNewCode": true,
+      "minimumTestCoverage": 80,
+      "enforceTestNaming": true,
+      "validateTestStructure": true
+    }
+  },
+
+  "reporting": {
+    "coverageReport": {
+      "enabled": true,
+      "format": ["html", "lcov", "text"],
+      "outputDir": "coverage",
+      "uploadToCodecov": false
+    },
+
+    "testResults": {
+      "enabled": true,
+      "format": "junit",
+      "outputFile": "test-results.xml",
+      "uploadToCI": true
+    }
+  },
+
+  "integrations": {
+    "ci": {
+      "githubActions": {
+        "enabled": true,
+        "workflow": ".github/workflows/test-first.yml",
+        "triggerOn": ["push", "pull_request"]
+      }
+    },
+
+    "codeQuality": {
+      "sonarQube": {
+        "enabled": false,
+        "projectKey": "hostelpulse",
+        "serverUrl": ""
+      }
+    }
+  },
+
+  "enforcement": {
+    "strictMode": true,
+    "failOnMissingTests": true,
+    "failOnCoverageBelowThreshold": true,
+    "blockCommitsWithoutTests": false,
+    "blockPushesWithoutTests": false
+  },
+
+  "customRules": {
+    "requireTestForEachFunction": true,
+    "requireTestForEachComponent": true,
+    "requireTestForEachHook": true,
+    "requireTestForEachUtil": true,
+    "requireTestForEachApiRoute": true
+  },
+
+  "notifications": {
+    "slack": {
+      "enabled": false,
+      "webhookUrl": "",
+      "notifyOn": ["testFailure", "coverageDrop"]
+    },
+
+    "email": {
+      "enabled": false,
+      "recipients": [],
+      "notifyOn": ["testFailure", "coverageDrop"]
+    }
+  }
+}

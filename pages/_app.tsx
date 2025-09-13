@@ -3,12 +3,14 @@ import 'swiper/css/bundle';
 import 'swiper/css/navigation';
 import 'swiper/css/autoplay';
 
-import { AppProps } from 'next/dist/shared/lib/router/router';
+import type { AppProps } from 'next/app';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { ColorModeScript } from 'nextjs-color-mode';
 import React, { PropsWithChildren } from 'react';
 import { TinaEditProvider } from 'tinacms/dist/edit-state';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { Toaster } from 'react-hot-toast';
 
 import Footer from 'components/Footer';
 import { GlobalStyle } from 'components/GlobalStyles';
@@ -16,7 +18,9 @@ import Navbar from 'components/Navbar';
 import NavigationDrawer from 'components/NavigationDrawer';
 import NewsletterModal from 'components/NewsletterModal';
 import WaveCta from 'components/WaveCta';
+import EnhancedErrorBoundary from 'components/EnhancedErrorBoundary';
 import { NewsletterModalContextProvider, useNewsletterModalContext } from 'contexts/newsletter-modal.context';
+import { AuthProvider } from 'contexts/auth.context';
 import { NavItems } from 'types';
 
 const navItems: NavItems = [
@@ -50,7 +54,8 @@ function MyApp({ Component, pageProps }: AppProps) {
 
       <Providers>
         <Modals />
-        <Navbar items={navItems} />
+        <div className="antialiased text-gray-900">
+          <Navbar items={navItems} />
         <TinaEditProvider
           editMode={
             <TinaCMS
@@ -70,16 +75,26 @@ function MyApp({ Component, pageProps }: AppProps) {
         </TinaEditProvider>
         <WaveCta />
         <Footer />
+        </div>
       </Providers>
     </>
   );
 }
 
 function Providers<T>({ children }: PropsWithChildren<T>) {
+  const queryClient = new QueryClient();
+
   return (
-    <NewsletterModalContextProvider>
-      <NavigationDrawer items={navItems}>{children}</NavigationDrawer>
-    </NewsletterModalContextProvider>
+    <EnhancedErrorBoundary>
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>
+          <NewsletterModalContextProvider>
+            <NavigationDrawer items={navItems}>{children}</NavigationDrawer>
+            <Toaster position="top-right" />
+          </NewsletterModalContextProvider>
+        </AuthProvider>
+      </QueryClientProvider>
+    </EnhancedErrorBoundary>
   );
 }
 

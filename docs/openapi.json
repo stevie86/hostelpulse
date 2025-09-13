@@ -1,0 +1,71 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Hostelpulse Owner API",
+    "version": "1.0.0",
+    "description": "Owner-only endpoints for guests, bookings, booking requests, and CSV import/export."
+  },
+  "paths": {
+    "/api/guests": {
+      "get": {
+        "summary": "List guests",
+        "responses": { "200": { "description": "OK" } }
+      },
+      "post": {
+        "summary": "Create guest",
+        "requestBody": { "required": true },
+        "responses": { "201": { "description": "Created" }, "400": { "description": "Bad Request" } }
+      },
+      "put": {
+        "summary": "Update guest",
+        "requestBody": { "required": true },
+        "responses": { "200": { "description": "OK" }, "400": { "description": "Bad Request" } }
+      }
+    },
+    "/api/bookings": {
+      "get": { "summary": "List bookings", "responses": { "200": { "description": "OK" } } },
+      "post": {
+        "summary": "Create booking",
+        "requestBody": { "required": true },
+        "responses": {
+          "201": { "description": "Created" },
+          "400": { "description": "Bad Request" },
+          "409": { "description": "Overlap" }
+        }
+      },
+      "put": {
+        "summary": "Update booking status",
+        "requestBody": { "required": true },
+        "responses": { "200": { "description": "OK" }, "400": { "description": "Bad Request" } }
+      }
+    },
+    "/api/booking-requests": {
+      "post": {
+        "summary": "Create a requested booking from guest details",
+        "requestBody": { "required": true },
+        "responses": { "201": { "description": "Created" }, "400": { "description": "Bad Request" } }
+      }
+    },
+    "/api/import/guests": {
+      "post": {
+        "summary": "Import guests from CSV (body.csv)",
+        "requestBody": { "required": true },
+        "responses": { "200": { "description": "OK" }, "400": { "description": "Bad Request" } }
+      }
+    },
+    "/api/import/bookings": {
+      "post": {
+        "summary": "Import bookings from CSV (body.csv)",
+        "requestBody": { "required": true },
+        "responses": { "200": { "description": "OK" }, "400": { "description": "Bad Request" } }
+      }
+    },
+    "/api/export/guests": {
+      "get": { "summary": "Export guests as CSV", "responses": { "200": { "description": "CSV" } } }
+    },
+    "/api/export/bookings": {
+      "get": { "summary": "Export bookings as CSV", "responses": { "200": { "description": "CSV" } } }
+    }
+  }
+}
+
