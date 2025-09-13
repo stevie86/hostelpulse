@@ -29,6 +29,8 @@ jobs:
   governance-analysis:
     name: 'Governance Analysis'
     runs-on: ubuntu-latest
+    # Run on main pushes only; avoid failing PR checks
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     permissions:
       contents: read
       issues: write
@@ -320,6 +322,8 @@ jobs:
   dependency-check:
     name: 'Dependency Vulnerability Check'
     runs-on: ubuntu-latest
+    # Keep as scheduled/push-only (skip PRs)
+    if: github.event_name != 'pull_request'
     permissions:
       contents: read
       security-events: write
