@@ -9,6 +9,8 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    # On PRs, run this job only if Vercel secrets exist; otherwise skip and let the Vercel App handle previews
+    if: ${{ github.event_name != 'pull_request' || (github.event_name == 'pull_request' && secrets.VERCEL_TOKEN != '' && secrets.VERCEL_ORG_ID != '' && secrets.VERCEL_PROJECT_ID != '') }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
