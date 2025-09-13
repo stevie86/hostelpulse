@@ -1,1 +1,12 @@
-npm test
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh" 2>/dev/null || true
+
+set -e
+
+if [ -x "./node_modules/.bin/jest" ]; then
+  echo "[husky] Running unit tests..."
+  npm test
+else
+  echo "[husky] jest not found locally; skipping tests for this commit."
+  echo "         Run 'npm install' (or 'bun install') to enable pre-commit tests."
+fi

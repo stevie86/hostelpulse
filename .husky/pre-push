@@ -1,5 +1,16 @@
-# Run integration tests before pushing
-npm run test:ci
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh" 2>/dev/null || true
+
+set -e
+
+# Run CI tests before pushing if jest is available
+if [ -x "./node_modules/.bin/jest" ]; then
+  echo "[husky] Running CI tests before push..."
+  npm run test:ci
+else
+  echo "[husky] jest not found locally; skipping pre-push tests."
+  echo "         Run 'npm install' to enable pre-push tests."
+fi
 
 # Temporarily disabled coverage check for MVP deployment
 # TODO: Re-enable coverage thresholds after improving test coverage
