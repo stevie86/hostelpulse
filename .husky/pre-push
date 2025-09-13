@@ -1,0 +1,12 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Optional tests before pushing; skip if Jest isn't installed locally
+if [ -x node_modules/.bin/jest ]; then
+  npm run test:ci
+else
+  echo "jest missing locally; skipping pre-push tests (CI will run them)"
+fi
+
+# Temporarily disabled coverage threshold for MVP; enforced in CI on main
+# npx jest --coverage --coverageThreshold='{"global":{"branches":80,"functions":80,"lines":80,"statements":80}}'
