@@ -1,0 +1,9 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Fast pre-commit checks: format + lint staged files
+if command -v npx >/dev/null 2>&1; then
+  npx --no-install lint-staged || true
+else
+  echo "lint-staged not available; skipping pre-commit checks"
+fi
