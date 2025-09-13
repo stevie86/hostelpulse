@@ -1,8 +1,9 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import { withAuth } from '../../lib/apiAuth'
+import { withCors } from '../../lib/corsHandler'
 import { supabase } from '../../lib/supabase'
 
-export default withAuth(async (req: NextApiRequest, res: NextApiResponse, auth) => {
+export default withCors(withAuth(async (req: NextApiRequest, res: NextApiResponse, auth) => {
   const { method } = req
   const ownerId = auth.user?.id || 'demo-owner'
 
@@ -76,4 +77,4 @@ export default withAuth(async (req: NextApiRequest, res: NextApiResponse, auth) 
       res.setHeader('Allow', ['GET', 'POST', 'PUT'])
       res.status(405).end(`Method ${method} Not Allowed`)
   }
-})
+}))

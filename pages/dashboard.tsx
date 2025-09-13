@@ -4,6 +4,7 @@ import Container from 'components/Container'
 import BasicCard from 'components/BasicCard'
 import Button from 'components/Button'
 import SectionTitle from 'components/SectionTitle'
+import AuthGuard from 'components/AuthGuard'
 import { format, isToday } from 'date-fns'
 
 interface Guest {
@@ -88,7 +89,8 @@ export default function DashboardPage() {
   }
 
   return (
-    <Container>
+    <AuthGuard>
+      <Container>
       <DashboardWrapper>
         <Header>
           <SectionTitle>Dashboard</SectionTitle>
@@ -171,7 +173,8 @@ export default function DashboardPage() {
           </BasicCard>
         </CardsGrid>
       </DashboardWrapper>
-    </Container>
+      </Container>
+    </AuthGuard>
   )
 }
 
