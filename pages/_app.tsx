@@ -23,6 +23,7 @@ const navItems: NavItems = [
   { title: 'Features', href: '/features' },
   { title: 'Pricing', href: '/pricing' },
   { title: 'Dashboard', href: '/dashboard' },
+  { title: 'Guests', href: '/guests' },
   { title: 'Login', href: '/auth/login', outlined: true },
 ];
 

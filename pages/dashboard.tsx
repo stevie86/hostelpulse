@@ -5,6 +5,7 @@ import BasicCard from 'components/BasicCard'
 import Button from 'components/Button'
 import SectionTitle from 'components/SectionTitle'
 import AuthGuard from 'components/AuthGuard'
+import CSVImportExport from 'components/CSVImportExport'
 import { format, isToday } from 'date-fns'
 
 interface Guest {
@@ -171,6 +172,16 @@ export default function DashboardPage() {
               <ActionButton href="/rooms">Manage Rooms</ActionButton>
             </ActionsGrid>
           </BasicCard>
+
+          <CSVImportExport 
+            type="guests" 
+            onImportSuccess={() => fetchData()}
+          />
+
+          <CSVImportExport 
+            type="bookings" 
+            onImportSuccess={() => fetchData()}
+          />
         </CardsGrid>
       </DashboardWrapper>
       </Container>
