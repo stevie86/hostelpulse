@@ -37,7 +37,7 @@ export default function RegisterPage() {
             <Input id="password" type="password" placeholder="••••••••" value={password} onChange={(e) => setPassword(e.target.value)} required />
             {error && <ErrorText>{error}</ErrorText>}
             <Actions>
-              <Button type="submit" disabled={loading}>
+              <Button as="button" type="submit" disabled={loading}>
                 {loading ? 'Creating…' : 'Create account'}
               </Button>
               <SmallLink href="/auth/login">Have an account? Log in</SmallLink>
@@ -99,4 +99,3 @@ const ErrorText = styled.div`
   color: #b91c1c;
   font-size: 1.3rem;
 `;
-

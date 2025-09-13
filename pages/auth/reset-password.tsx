@@ -31,7 +31,7 @@ export default function ResetPasswordPage() {
             <Input id="email" type="email" placeholder="you@example.com" value={email} onChange={(e) => setEmail(e.target.value)} required />
             {message && <InfoText>{message}</InfoText>}
             <Actions>
-              <Button type="submit" disabled={loading}>
+              <Button as="button" type="submit" disabled={loading}>
                 {loading ? 'Sending…' : 'Send reset link'}
               </Button>
               <SmallLink href="/auth/login">Back to login</SmallLink>
@@ -93,4 +93,3 @@ const InfoText = styled.div`
   color: #065f46; /* emerald-800 */
   font-size: 1.3rem;
 `;
-

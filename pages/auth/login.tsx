@@ -35,7 +35,7 @@ export default function LoginPage() {
             <Input id="password" type="password" placeholder="••••••••" value={password} onChange={(e) => setPassword(e.target.value)} required />
             {error && <ErrorText>{error}</ErrorText>}
             <Actions>
-              <Button type="submit" disabled={loading}>
+              <Button as="button" type="submit" disabled={loading}>
                 {loading ? 'Logging in…' : 'Log in'}
               </Button>
               <SmallLink href="/auth/reset-password">Forgot password?</SmallLink>
@@ -106,4 +106,3 @@ const ErrorText = styled.div`
   color: #b91c1c; /* red-700 */
   font-size: 1.3rem;
 `;
-
