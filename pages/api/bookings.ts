@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { getSupabaseServer } from '../../lib/supabase'
+import { requireAuth, supabaseForRequest } from '../../lib/apiAuth'
 
 function datesOverlap(aStart: string, aEnd: string, bStart: string, bEnd: string) {
   const aS = new Date(aStart).getTime()
@@ -11,7 +12,10 @@ function datesOverlap(aStart: string, aEnd: string, bStart: string, bEnd: string
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
-    const supabase = getSupabaseServer()
+    const auth = requireAuth(req)
+    if (!auth.ok) return res.status(401).json({ error: 'Unauthorized' })
+    // Prefer anon client + JWT when available (RLS-friendly); fallback to server for legacy flows
+    const supabase = auth.jwt ? supabaseForRequest(auth) : getSupabaseServer()
     if (!supabase) return res.status(503).json({ error: 'Supabase is not configured' })
     if (req.method === 'GET') {
       const { data, error } = await supabase

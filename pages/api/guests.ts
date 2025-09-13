@@ -1,9 +1,12 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { getSupabaseServer } from '../../lib/supabase'
+import { requireAuth, supabaseForRequest } from '../../lib/apiAuth'
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
-    const supabase = getSupabaseServer()
+    const auth = requireAuth(req)
+    if (!auth.ok) return res.status(401).json({ error: 'Unauthorized' })
+    const supabase = auth.jwt ? supabaseForRequest(auth) : getSupabaseServer()
     if (!supabase) return res.status(503).json({ error: 'Supabase is not configured' })
     if (req.method === 'GET') {
       const { data, error } = await supabase.from('guests').select('*').order('created_at', { ascending: false })
