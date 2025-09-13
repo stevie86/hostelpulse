@@ -1,25 +1,38 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { useRouter } from 'next/router';
 import Container from 'components/Container';
 import Input from 'components/Input';
 import Button from 'components/Button';
 import SectionTitle from 'components/SectionTitle';
+import { supabase } from '../../lib/supabase';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
     setLoading(true);
-    // Wire to Supabase Auth in the next PR
-    setTimeout(() => {
+    
+    try {
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+      
+      if (error) throw error;
+      
+      router.push('/dashboard');
+    } catch (error: any) {
+      setError(error.message || 'Login failed');
+    } finally {
       setLoading(false);
-      setError('Demo only — authentication will be enabled soon.');
-    }, 600);
+    }
   }
 
   return (

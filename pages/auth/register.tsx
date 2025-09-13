@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { useRouter } from 'next/router';
 import Container from 'components/Container';
 import Input from 'components/Input';
 import Button from 'components/Button';
 import SectionTitle from 'components/SectionTitle';
+import { supabase } from '../../lib/supabase';
 
 export default function RegisterPage() {
   const [email, setEmail] = useState('');
@@ -12,14 +14,32 @@ export default function RegisterPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const router = useRouter();
+
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
     setLoading(true);
-    setTimeout(() => {
+    
+    try {
+      const { error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            name,
+          }
+        }
+      });
+      
+      if (error) throw error;
+      
+      router.push('/dashboard');
+    } catch (error: any) {
+      setError(error.message || 'Registration failed');
+    } finally {
       setLoading(false);
-      setError('Demo only — account creation will be enabled soon.');
-    }, 600);
+    }
   }
 
   return (
