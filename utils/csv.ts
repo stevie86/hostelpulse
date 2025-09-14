@@ -72,3 +72,11 @@ export function parseCSV(input: string): string[][] {
   return rows
 }
 
+// Stringify a 2D array of cells into CSV with proper escaping
+// - Wrap every cell in quotes
+// - Double any embedded quotes
+// - Join cells with commas and rows with \n
+export function stringifyCSV(rows: string[][]): string {
+  const esc = (v: string) => `"${String(v ?? '').replace(/"/g, '""')}"`
+  return rows.map(r => r.map(esc).join(',')).join('\n')
+}
