@@ -1,20 +1,24 @@
+import { PropsWithChildren } from 'react';
 import NextImage from 'next/image';
 import styled from 'styled-components';
 
 export interface BasicCardProps {
-  title: string;
-  description: string;
-  imageUrl: string;
+  title?: string;
+  description?: string;
+  imageUrl?: string;
   status?: 'Implemented' | 'Coming Soon';
 }
 
-export default function BasicCard({ title, description, imageUrl, status }: BasicCardProps) {
+export default function BasicCard({ title, description, imageUrl, status, children }: PropsWithChildren<BasicCardProps>) {
   return (
     <Card>
-      <NextImage src={imageUrl} width={128} height={128} alt={title} />
+      {imageUrl && title && (
+        <NextImage src={imageUrl} width={128} height={128} alt={title} />
+      )}
       {status && <Badge data-status={status}>{status}</Badge>}
-      <Title>{title}</Title>
-      <Description>{description}</Description>
+      {title && <Title>{title}</Title>}
+      {description && <Description>{description}</Description>}
+      {!imageUrl && !title && !description && children}
     </Card>
   );
 }

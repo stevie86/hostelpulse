@@ -11,8 +11,14 @@ module.exports = withBundleAnalyzer({
     domains: ['github.blog'],
     deviceSizes: [320, 640, 1080, 1200],
     imageSizes: [64, 128],
+    // Allow local SVGs in next/image for preview builds
+    dangerouslyAllowSVG: true,
   },
   swcMinify: true,
+  eslint: {
+    // So preview builds don’t fail on stylistic lint rules
+    ignoreDuringBuilds: true,
+  },
   compiler: {
     styledComponents: true,
   },

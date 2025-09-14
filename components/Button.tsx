@@ -1,7 +1,7 @@
 import { PropsWithChildren } from 'react';
 import styled from 'styled-components';
 
-type ButtonProps = PropsWithChildren<{ transparent?: boolean }>;
+type ButtonProps = PropsWithChildren<{ transparent?: boolean; disabled?: boolean }>;
 
 const Button = styled.a<ButtonProps>`
   border: none;
@@ -22,6 +22,8 @@ const Button = styled.a<ButtonProps>`
   backface-visibility: hidden;
   will-change: transform;
   cursor: pointer;
+  opacity: ${(p) => (p.disabled ? 0.6 : 1)};
+  pointer-events: ${(p) => (p.disabled ? 'none' : 'auto')};
 
   span {
     margin-left: 2rem;
