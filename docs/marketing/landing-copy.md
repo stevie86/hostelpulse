@@ -10,7 +10,7 @@ Benefits
 - No more double‑bookings: automatic conflict checks for rooms and beds.
 - Spreadsheet‑friendly: import to start, export to share.
 - Ready for staff: printable housekeeping list.
+ - Works with your current setup: keep your channel manager (e.g., Beds24); add Hostelpulse for a 10‑minute day.
 
 Social Proof (after pilots)
 - “Saved us two nights the first month.” — Local Hostel, {city}
-

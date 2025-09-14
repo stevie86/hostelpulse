@@ -30,6 +30,7 @@ Scope covered here: Cloudbeds, Beds24, Sirvoy Pro, FrontDesk Master — and how 
 - Trade‑offs
   - Higher monthly cost and onboarding investment; requires process change/training.
   - Heavy for owners who just need today’s work to be faster.
+  - Pricing note: Cloudbeds is a full suite (PMS + channels + payments). If you’re not ready for a migration, the combined cost of Beds24 (~€15.90) + Hostelpulse (€39) remains well below a suite while delivering channel sync plus a fast daily console. Month‑to‑month and our “one‑night guarantee” reduce risk.
 - Best fit
   - Medium/large properties, multi‑property operators ready to standardize everything.
 - Risks for small hostels
@@ -44,6 +45,8 @@ Scope covered here: Cloudbeds, Beds24, Sirvoy Pro, FrontDesk Master — and how 
   - Owner language is secondary to configuration; staff‑friendliness varies.
 - Best fit
   - Tech‑savvy, budget‑sensitive owners willing to invest time in configuration.
+ - Pricing note
+   - “From €15.90/month, no contract.” That’s excellent for channel management. Hostelpulse complements Beds24: keep your channel sync, add a 10‑minute daily console — often still cheaper than a full PMS suite.
 
 ### Sirvoy Pro
 - Strengths
@@ -101,9 +104,9 @@ Scope covered here: Cloudbeds, Beds24, Sirvoy Pro, FrontDesk Master — and how 
 ## Battlecards (Owner‑Friendly)
 
 - Against Cloudbeds
-  - “If you’re replacing everything, Cloudbeds is great. If you want value this week, Hostelpulse fits on top — import your sheet, go live today, and if it doesn’t save one night this month, we comp your fee.”
+  - “If you’re replacing everything, Cloudbeds is great. If you want value this week without a migration, Hostelpulse fits on top — import your sheet, go live today. Beds24 + Hostelpulse is often far less than a suite, and if we don’t save one paid night this month, we comp the fee.”
 - Against Beds24
-  - “Beds24 is powerful if you love configuration. If you want a ready‑to‑use day‑to‑day console your staff can use immediately, Hostelpulse is faster and simpler.”
+  - “Beds24 is powerful if you love configuration and need channels. Keep Beds24 — add Hostelpulse to make the day take 10 minutes. Together you get channel sync plus a simple daily console.”
 - Against Sirvoy Pro
   - “Sirvoy is a nice PMS. Hostelpulse is simpler: the Today board, housekeeping list, and quick message buttons your team can use right now.”
 - Against FrontDesk Master
@@ -130,4 +133,3 @@ Scope covered here: Cloudbeds, Beds24, Sirvoy Pro, FrontDesk Master — and how 
 
 - “You don’t need to switch systems. Import your sheet, and by tonight your arrivals/departures are one tap away. If we don’t save you one paid night this month, we’ll comp the fee.”
 - “We’re here for the 10‑minute day — housekeeping, quick guest messages, simple exports. Keep your channel manager; we fit on top.”
-

@@ -13,6 +13,9 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+  const showDemo = process.env.NEXT_PUBLIC_SHOW_DEMO_CREDS === '1';
+  const demoEmail = process.env.NEXT_PUBLIC_DEMO_EMAIL || '';
+  const demoNote = process.env.NEXT_PUBLIC_DEMO_NOTE || '';
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -41,6 +44,20 @@ export default function LoginPage() {
         <Card>
           <SectionTitle>Welcome back</SectionTitle>
           <Subtitle>Log in to manage your hostel quickly and safely.</Subtitle>
+          {showDemo && (
+            <DemoBanner>
+              <strong>Demo account</strong>
+              <div>{demoEmail || 'Request demo email'}</div>
+              {demoNote && <small>{demoNote}</small>}
+              {demoEmail && (
+                <DemoRow>
+                  <Button as="button" type="button" onClick={() => setEmail(demoEmail)}>
+                    Autofill email
+                  </Button>
+                </DemoRow>
+              )}
+            </DemoBanner>
+          )}
           <Form onSubmit={onSubmit}>
             <Label htmlFor="email">Email</Label>
             <Input id="email" type="email" placeholder="you@example.com" value={email} onChange={(e) => setEmail(e.target.value)} required />
@@ -118,4 +135,17 @@ const ErrorText = styled.div`
   margin-top: 0.4rem;
   color: #b91c1c; /* red-700 */
   font-size: 1.3rem;
+`;
+
+const DemoBanner = styled.div`
+  border: 1px dashed rgb(var(--border));
+  background: rgba(0,0,0,0.03);
+  border-radius: 0.6rem;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  small { opacity: .8; }
+`;
+
+const DemoRow = styled.div`
+  margin-top: .6rem;
 `;
