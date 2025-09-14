@@ -1,5 +1,5 @@
 {
   "installCommand": "npm ci",
   "buildCommand": "npm run build",
-  "ignoreCommand": "sh -lc \"CHANGED=$(git diff --name-only $VERCEL_GIT_PREVIOUS_SHA $VERCEL_GIT_COMMIT_SHA | egrep -v '^(docs/|sprints/|\\.github/|.*\\.md)$' || true); if [ -z \\\"$CHANGED\\\" ]; then echo 'Skip: docs/ci only'; exit 0; else exit 1; fi\""
+  "ignoreCommand": "sh -lc \"CHANGED=$(git diff --name-only $VERCEL_GIT_PREVIOUS_SHA $VERCEL_GIT_COMMIT_SHA | egrep -v '^(docs/|sprints/|changes/|\\.github/|.*\\.md)$' || true); if [ -z \\\"$CHANGED\\\" ]; then echo 'Skip: docs/ci only'; exit 0; else exit 1; fi\""
 }

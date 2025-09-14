@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react'
+import { format, isToday } from 'date-fns'
+import Link from 'next/link'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import Container from 'components/Container'
 import BasicCard from 'components/BasicCard'
 import Button from 'components/Button'
-import SectionTitle from 'components/SectionTitle'
+import Container from 'components/Container'
 import CSVImportExport from 'components/CSVImportExport'
-import { format, isToday, differenceInCalendarDays } from 'date-fns'
+import SectionTitle from 'components/SectionTitle'
 import { addNightsSaved, getNightsSaved } from '../utils/metrics'
 
 interface Guest {
@@ -106,7 +107,7 @@ export default function DashboardPage() {
         <CardsGrid>
           <BasicCard>
             <CardHeader>
-              <CardTitle>Today's Arrivals</CardTitle>
+              <CardTitle>Today’s Arrivals</CardTitle>
               <CountBadge>{todayArrivals.length}</CountBadge>
             </CardHeader>
             {todayArrivals.length === 0 ? (
@@ -139,7 +140,7 @@ export default function DashboardPage() {
 
           <BasicCard>
             <CardHeader>
-              <CardTitle>Today's Departures</CardTitle>
+              <CardTitle>Today’s Departures</CardTitle>
               <CountBadge>{todayDepartures.length}</CountBadge>
             </CardHeader>
             {todayDepartures.length === 0 ? (
@@ -174,8 +175,8 @@ export default function DashboardPage() {
               <CardTitle>Recent Guests</CardTitle>
               <CountBadge>{guests.length}</CountBadge>
             </CardHeader>
-            {guests.length === 0 ? (
-              <EmptyState>No guests yet. <a href="/guests">Add your first guest</a></EmptyState>
+              {guests.length === 0 ? (
+              <EmptyState>No guests yet. <Link href="/guests">Add your first guest</Link></EmptyState>
             ) : (
               <BookingsList>
                 {guests.slice(0, 5).map(guest => (
@@ -193,10 +194,10 @@ export default function DashboardPage() {
               <CardTitle>Quick Actions</CardTitle>
             </CardHeader>
             <ActionsGrid>
-              <ActionButton href="/guests">Add Guest</ActionButton>
-              <ActionButton href="/bookings">New Booking</ActionButton>
-              <ActionButton href="/rooms">Manage Rooms</ActionButton>
-              <ActionButton href="/housekeeping">Housekeeping List</ActionButton>
+              <Link href="/guests" passHref legacyBehavior><ActionButton>Add Guest</ActionButton></Link>
+              <Link href="/bookings" passHref legacyBehavior><ActionButton>New Booking</ActionButton></Link>
+              <Link href="/rooms" passHref legacyBehavior><ActionButton>Manage Rooms</ActionButton></Link>
+              <Link href="/housekeeping" passHref legacyBehavior><ActionButton>Housekeeping List</ActionButton></Link>
             </ActionsGrid>
           </BasicCard>
 
