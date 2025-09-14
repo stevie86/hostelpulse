@@ -39,7 +39,7 @@ export default withCors(withAuth(async (req: NextApiRequest, res: NextApiRespons
       if (error) return res.status(500).json({ error: error.message })
       
       // Flatten the nested data for CSV
-      rows = (data || []).map(booking => ({
+      rows = (data || []).map((booking: any) => ({
         id: booking.id,
         guest_name: booking.guests?.name || '',
         guest_email: booking.guests?.email || '',
