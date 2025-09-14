@@ -4,6 +4,7 @@ import Container from 'components/Container'
 import BasicCard from 'components/BasicCard'
 import Button from 'components/Button'
 import SectionTitle from 'components/SectionTitle'
+import CSVImportExport from 'components/CSVImportExport'
 import { format, isToday } from 'date-fns'
 
 interface Guest {
@@ -167,7 +168,18 @@ export default function DashboardPage() {
               <ActionButton href="/guests">Add Guest</ActionButton>
               <ActionButton href="/bookings">New Booking</ActionButton>
               <ActionButton href="/rooms">Manage Rooms</ActionButton>
+              <ActionButton href="/housekeeping">Housekeeping List</ActionButton>
             </ActionsGrid>
+          </BasicCard>
+
+          <BasicCard>
+            <CardHeader>
+              <CardTitle>Import & Export (Spreadsheets)</CardTitle>
+            </CardHeader>
+            <div style={{ display: 'grid', gap: '1rem' }}>
+              <CSVImportExport type="guests" onImportSuccess={() => fetchData()} />
+              <CSVImportExport type="bookings" onImportSuccess={() => fetchData()} />
+            </div>
           </BasicCard>
         </CardsGrid>
       </DashboardWrapper>
