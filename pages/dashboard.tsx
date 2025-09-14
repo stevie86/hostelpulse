@@ -5,7 +5,8 @@ import BasicCard from 'components/BasicCard'
 import Button from 'components/Button'
 import SectionTitle from 'components/SectionTitle'
 import CSVImportExport from 'components/CSVImportExport'
-import { format, isToday } from 'date-fns'
+import { format, isToday, differenceInCalendarDays } from 'date-fns'
+import { addNightsSaved, getNightsSaved } from '../utils/metrics'
 
 interface Guest {
   id: string
@@ -29,9 +30,15 @@ export default function DashboardPage() {
   const [guests, setGuests] = useState<Guest[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [nightsSaved, setNightsSaved] = useState(0)
 
   useEffect(() => {
     fetchData()
+    // metrics hydrate + listener
+    setNightsSaved(getNightsSaved())
+    const onUpdate = (e: any) => setNightsSaved(e?.detail?.value ?? getNightsSaved())
+    if (typeof window !== 'undefined') window.addEventListener('nightsSavedUpdated', onUpdate)
+    return () => { if (typeof window !== 'undefined') window.removeEventListener('nightsSavedUpdated', onUpdate) }
   }, [])
 
   async function fetchData() {
@@ -108,7 +115,18 @@ export default function DashboardPage() {
               <BookingsList>
                 {todayArrivals.map(booking => (
                   <BookingItem key={booking.id}>
-                    <GuestName>{booking.guests.name}</GuestName>
+                    <RowTop>
+                      <GuestName>{booking.guests.name}</GuestName>
+                      <QuickActions>
+                        <Action href={`mailto:${booking.guests.email}`}>Email</Action>
+                        <Action href={`https://wa.me/?text=${encodeURIComponent('Hello '+booking.guests.name+', see you today!')}`} target="_blank" rel="noreferrer">WhatsApp</Action>
+                        <ActionButtonSmall onClick={async () => {
+                          await fetch('/api/bookings', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: booking.id, status: 'confirmed', notes: 'checked-in' }) });
+                          addNightsSaved(1)
+                          fetchData()
+                        }}>Check in</ActionButtonSmall>
+                      </QuickActions>
+                    </RowTop>
                     <RoomInfo>
                       {booking.beds ? `Bed: ${booking.beds.name}` : 
                        booking.rooms ? `Room: ${booking.rooms.name}` : 'No room assigned'}
@@ -130,7 +148,17 @@ export default function DashboardPage() {
               <BookingsList>
                 {todayDepartures.map(booking => (
                   <BookingItem key={booking.id}>
-                    <GuestName>{booking.guests.name}</GuestName>
+                    <RowTop>
+                      <GuestName>{booking.guests.name}</GuestName>
+                      <QuickActions>
+                        <Action href={`mailto:${booking.guests.email}`}>Email</Action>
+                        <ActionButtonSmall onClick={async () => {
+                          await fetch('/api/bookings', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: booking.id, status: 'confirmed', notes: 'checked-out' }) });
+                          addNightsSaved(1)
+                          fetchData()
+                        }}>Check out</ActionButtonSmall>
+                      </QuickActions>
+                    </RowTop>
                     <RoomInfo>
                       {booking.beds ? `Bed: ${booking.beds.name}` : 
                        booking.rooms ? `Room: ${booking.rooms.name}` : 'No room assigned'}
@@ -170,6 +198,14 @@ export default function DashboardPage() {
               <ActionButton href="/rooms">Manage Rooms</ActionButton>
               <ActionButton href="/housekeeping">Housekeeping List</ActionButton>
             </ActionsGrid>
+          </BasicCard>
+
+          <BasicCard>
+            <CardHeader>
+              <CardTitle>Nights Saved</CardTitle>
+              <CountBadge>{nightsSaved}</CountBadge>
+            </CardHeader>
+            <div>Tracks productivity actions like quick check-in/out and booking creation.</div>
           </BasicCard>
 
           <BasicCard>
@@ -247,6 +283,10 @@ const BookingItem = styled.div`
   border-radius: 0.6rem;
   border: 1px solid rgb(var(--border));
 `
+const RowTop = styled.div` display:flex; justify-content: space-between; align-items:center; gap:.8rem; `
+const QuickActions = styled.div` display:flex; gap:.6rem; align-items:center; `
+const Action = styled.a` color: rgb(var(--primary)); text-decoration:none; font-size:1.2rem; &:hover{text-decoration:underline;} `
+const ActionButtonSmall = styled.button` border:1px solid rgb(var(--border)); background: rgb(var(--cardBackground)); border-radius:.4rem; padding:.3rem .6rem; cursor:pointer; `
 
 const GuestName = styled.div`
   font-weight: 600;
