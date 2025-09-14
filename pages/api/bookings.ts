@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import { withAuth } from '../../lib/apiAuth'
+import { withCors } from '../../lib/corsHandler'
 import { supabase } from '../../lib/supabase'
 
 function isDateOverlap(start1: string, end1: string, start2: string, end2: string): boolean {
@@ -11,7 +12,7 @@ function isDateOverlap(start1: string, end1: string, start2: string, end2: strin
   return s1 < e2 && s2 < e1
 }
 
-export default withAuth(async (req: NextApiRequest, res: NextApiResponse, auth) => {
+export default withCors(withAuth(async (req: NextApiRequest, res: NextApiResponse, auth) => {
   const { method } = req
   const ownerId = auth.user?.id || 'demo-owner'
 
@@ -146,4 +147,4 @@ export default withAuth(async (req: NextApiRequest, res: NextApiResponse, auth) 
       res.setHeader('Allow', ['GET', 'POST', 'PUT'])
       res.status(405).end(`Method ${method} Not Allowed`)
   }
-})
+}))
