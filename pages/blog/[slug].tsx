@@ -16,7 +16,7 @@ import ShareWidget from 'views/SingleArticlePage/ShareWidget';
 import StructuredDataHead from 'views/SingleArticlePage/StructuredDataHead';
 import { Posts, PostsDocument, Query } from '.tina/__generated__/types';
 
-export default function SingleArticlePage(props: InferGetStaticPropsType<typeof getStaticProps>) {
+export default function SingleArticlePage(props: any) {
   const contentRef = useRef<HTMLDivElement | null>(null);
   const [readTime, setReadTime] = useState('');
 
@@ -79,28 +79,27 @@ export default function SingleArticlePage(props: InferGetStaticPropsType<typeof 
 }
 
 export async function getStaticPaths() {
-  const postsListData = await staticRequest({
-    query: `
-      query PostsSlugs{
-        getPostsList{
-          edges{
-            node{
-              sys{
-                basename
+  let postsListData: any = null;
+  try {
+    postsListData = await staticRequest({
+      query: `
+        query PostsSlugs{
+          getPostsList{
+            edges{
+              node{
+                sys{
+                  basename
+                }
               }
             }
           }
         }
-      }
-    `,
-    variables: {},
-  });
-
-  if (!postsListData) {
-    return {
-      paths: [],
-      fallback: false,
-    };
+      `,
+      variables: {},
+    });
+  } catch (e) {
+    // In Preview builds without Tina configured, skip blog pages
+    return { paths: [], fallback: false };
   }
 
   type NullAwarePostsList = { getPostsList: NonNullableChildrenDeep<Query['getPostsList']> };
@@ -134,14 +133,19 @@ export async function getStaticProps({ params }: GetStaticPropsContext<{ slug: s
     }
   `;
 
-  const data = (await staticRequest({
-    query: query,
-    variables: variables,
-  })) as { getPostsDocument: PostsDocument };
+  try {
+    const data = (await staticRequest({
+      query: query,
+      variables: variables,
+    })) as { getPostsDocument: PostsDocument };
 
-  return {
-    props: { slug, variables, query, data },
-  };
+    return {
+      props: { slug, variables, query, data },
+    };
+  } catch (e) {
+    // Gracefully handle missing CMS during Preview
+    return { notFound: true };
+  }
 }
 
 const CustomContainer = styled(Container)`
