@@ -44,9 +44,34 @@ npm run dev
 
 ## Demo (optional)
 
-- You can create a demo user in Supabase Auth and seed 2 rooms (incl. one dorm), 3 guests, and 2 bookings to showcase the dashboard.
-- For a Preview‑only banner and autofill on /auth/login, set:
-  - `NEXT_PUBLIC_SHOW_DEMO_CREDS=1`, `NEXT_PUBLIC_DEMO_EMAIL=…`
+Enable a Preview‑only banner on `/auth/login` that shows demo credentials and provides an Autofill button, then provision a demo user and seed data.
+
+1) Enable the banner (Vercel env)
+- Preview: set `NEXT_PUBLIC_SHOW_DEMO_CREDS=1`
+- Also set: `NEXT_PUBLIC_DEMO_EMAIL`, `NEXT_PUBLIC_DEMO_PASSWORD`, `NEXT_PUBLIC_DEMO_NOTE`
+- Production: set `NEXT_PUBLIC_SHOW_DEMO_CREDS=0` (or leave unset)
+
+2) Protect admin endpoints (Vercel env)
+- Required: `ADMIN_API_TOKEN`, `SUPABASE_SERVICE_ROLE_KEY`
+- Already present: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+
+3) Create the demo user (returns id)
+```
+curl -X POST https://<your-deploy>/api/admin/createDemoUser \
+  -H 'Content-Type: application/json' \
+  -H 'x-admin-token: YOUR_ADMIN_API_TOKEN' \
+  -d '{"email":"demo@hostelpulse.app","password":"demo123","name":"Demo Owner"}'
+```
+
+4) Seed sample data (rooms, beds, guests, booking)
+```
+curl -X POST https://<your-deploy>/api/admin/seed \
+  -H 'Content-Type: application/json' \
+  -H 'x-admin-token: YOUR_ADMIN_API_TOKEN' \
+  -d '{"owner_id":"<id from previous step>"}'
+```
+
+Now visit `/auth/login` → Autofill → Log in → `/dashboard`.
 
 ## Documentation
 
