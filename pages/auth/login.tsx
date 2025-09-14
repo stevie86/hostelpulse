@@ -15,6 +15,7 @@ export default function LoginPage() {
   const router = useRouter();
   const showDemo = process.env.NEXT_PUBLIC_SHOW_DEMO_CREDS === '1';
   const demoEmail = process.env.NEXT_PUBLIC_DEMO_EMAIL || '';
+  const demoPassword = process.env.NEXT_PUBLIC_DEMO_PASSWORD || '';
   const demoNote = process.env.NEXT_PUBLIC_DEMO_NOTE || '';
 
   async function onSubmit(e: React.FormEvent) {
@@ -48,11 +49,12 @@ export default function LoginPage() {
             <DemoBanner>
               <strong>Demo account</strong>
               <div>{demoEmail || 'Request demo email'}</div>
+              {demoPassword && <div>Password: {demoPassword}</div>}
               {demoNote && <small>{demoNote}</small>}
               {demoEmail && (
                 <DemoRow>
-                  <Button as="button" type="button" onClick={() => setEmail(demoEmail)}>
-                    Autofill email
+                  <Button as="button" type="button" onClick={() => { setEmail(demoEmail); if (demoPassword) setPassword(demoPassword); }}>
+                    Autofill demo
                   </Button>
                 </DemoRow>
               )}
