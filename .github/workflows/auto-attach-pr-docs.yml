@@ -1,0 +1,35 @@
+name: Auto-Attach PR Docs
+
+on:
+  push:
+    branches-ignore:
+      - main
+      - master
+
+jobs:
+  attach-pr-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Make script executable
+        run: chmod +x .github/scripts/attach-pr-docs.sh
+
+      - name: Attach PR docs if relevant
+        env:
+          GITHUB_REF_NAME: ${{ github.ref_name }}
+        run: |
+          .github/scripts/attach-pr-docs.sh || true
+
+      - name: Push changes if any
+        if: ${{ !cancelled() }}
+        run: |
+          if git diff --quiet HEAD^ HEAD 2>/dev/null; then
+            echo "No doc changes to push."
+          else
+            git push
+          fi
+
