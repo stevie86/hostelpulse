@@ -1,97 +1,66 @@
 # Sprint Plan: Path to MVP (Fully Tested, Clearly Documented)
 
+# Sprint Plan: Path to MVP (Fully Tested, Clearly Documented)
+
 ## Sprint Goal
-Ship the hostel-management MVP with import → manage → audit flows working end to end, fully tested, and documented for hand-off. No new polish—only launch-critical gaps.
+Deliver the hostel-management MVP in one week with import → manage → audit flows proven end-to-end, documented, and demo-ready. No new polish—only launch-critical fixes.
 
 ## Sprint Length
-5 working days (single focus sprint).
+5 working days.
 
 ## Outcomes Required
-- Owners can import guests/bookings, resolve duplicates, and manage records (CRUD + archive) without API calls.
-- APIs enforce auth, return reliable errors, and emit audit events (no PII) for every change.
-- UI surfaces booking/guest/room lists and detail drawers with conflict handling.
-- Automated + manual checks cover every launch flow; docs updated to match.
+- Guests/rooms/bookings APIs stable: partial updates, soft archive, audit logging verified.
+- CSV import/export supports dry-run, dedupe, and reliable commits; UI guides owners through the flow.
+- Booking/guest/room management pages exist with CRUD + conflict handling.
+- CI, unit/integration tests, and manual regression checklist cover all launch-critical paths.
 
-## Workstreams & Tasks
+## Day-by-Day Plan
 
-### 1. Platform Hardening (API & Auth)
-1.1 **Bookings PUT regression tests**  
-- Add unit coverage for partial updates/conflict logic.  
-- Verify curl flow: create → update subset → overlap 409.  
-- Output: `__tests__/api/bookings.update.test.ts` green.
+### Day 0 — Baseline & Branch Sync
+- **Cherry-pick fixes**: merge bookings PUT partial-update (stash@{0}), CRUD/archive commit (main), audit log integration.
+- **CI**: ensure `.github/workflows/ci.yml` runs `npm run format:check` + targeted Jest suite; lint to be re-enabled at end.
+- **Manual sanity**: `npm test pages/api/admin/createDemoUser.test.ts --runInBand` and smoke CRUD endpoints with `REQUIRE_API_AUTH=0`.
 
-1.2 **Admin endpoints testable gate**  
-- Restore `integration.test.ts` & `seed.test.ts` (remove `.skip`).  
-- Mock Supabase client per call (no global state).  
-- Tests assert 401/400/500 paths + seeding success.
+### Day 1 — API Hardening & Tests
+- Restore `pages/api/admin/integration.test.ts` and `seed.test.ts` (remove `.skip`), mocking Supabase per test; satisfy auth/token expectations.
+- Add Jest coverage for bookings PUT (success + overlap 409) and audit log helper (no PII, swallow errors).
+- Manual curl script: create/update/archive bookings/guests/rooms and confirm audit rows in `audit_logs`.
 
-1.3 **Audit log smoke**  
-- Add Jest unit verifying `logAudit` suppresses errors, writes minimal payload.  
-- Manual: trigger POST /api/guests (REQUIRE_API_AUTH=0) → row appears in `audit_logs` without PII.
+### Day 2 — Guests CSV Reliability
+- Implement `POST /api/csv/guests?dryRun=1` preview + commit with upsert (owner_id + email).
+- Update `components/CSVImportExport` with Preview → Import flow (counts + errors).
+- Tests: unit for parser dedupe; integration for CSV import (dry-run + commit + duplicate row).
+- Document flow in `docs/import-guide.md` (new).
 
-### 2. CSV Import Experience
-2.1 **Guests dry-run & upsert**  
-- API: `POST /api/csv/guests?dryRun=1` (no write) + commit path with dedupe merge.  
-- UI: update `CSVImportExport` to show preview counts + confirm step.  
-- Tests: unit for parser + API integration (happy path, missing headers, duplicates).
+### Day 3 — Bookings CSV & Wizard
+- Build `POST /api/csv/bookings` with guest/email resolution, room/bed matching, overlap validation.
+- Extend wizard UI for bookings (disable import until valid preview).
+- Tests: fixture CSV covering success, missing guest (auto-create disabled), overlap conflict.
+- Manual QA checklist (desktop + mobile) stored in `docs/testing/mvp-regression.md` (draft).
 
-2.2 **Bookings CSV import**  
-- Resolve guests by email, rooms/beds by name; option to create missing guest.  
-- Overlap detection before commit.  
-- Tests: API unit + fixture CSV covering success, conflict, missing mapping.
+### Day 4 — Management UI & Housekeeping
+- `/bookings`: list + filter, create/edit drawer (reuses API).  
+  - Tests: React Testing Library for success, conflict error banner.
+- `/guests` + `/rooms`: table with archive button; disabled when API returns 400 (active bookings).  
+  - Tests: component-level mocking API responses.
+- Ensure dashboard “Quick Actions” link to new pages; verify housekeeping list pulls same data.
 
-2.3 **Wizard UX**  
-- Replace dashboard widget with stepper (Upload → Preview → Import).  
-- Accessibility: keyboard, focus, error messaging.  
-- Manual QA: follow checklist (desktop + mobile).
-
-### 3. Booking Management UI
-3.1 **Bookings list + drawer**  
-- `/bookings`: filter by status/date; create/edit modal; inline conflict errors.  
-- Tests: React Testing Library for optimistic update + error fallback.
-
-3.2 **Guests & Rooms management**  
-- `/guests`: list, quick add, archive with “has bookings” guard message.  
-- `/rooms`: show beds, allow archive, prevent when active bookings.  
-- Tests: component tests verifying archive button disabled when API returns 400.
-
-3.3 **Housekeeping view parity**  
-- Ensure dashboard widgets pull same sources as new pages.  
-- Smoke: manual sign-off checklist (arrivals/departures, quick actions).
-
-### 4. Quality Gates & Documentation
-4.1 **CI enforcement**  
-- Expand workflow to `npm run lint` (after import-order tidy).  
-- Re-enable full Jest suite (admin, CSV, UI).  
-- Add JUnit artifact upload for diagnostics.
-
-4.2 **Manual regression matrix**  
-- Document test script covering: login, import guests/bookings, CRUD flows, archive logic, audit log check, CSV export.  
-- Store in `docs/testing/mvp-regression.md`.
-
-4.3 **Docs & hand-off**  
-- Update `README` (Quick Start, Auth modes, Import guide).  
-- Update `AGENTS.md` (new workflow steps, audit verification).  
-- Reference roadmap doc for post-MVP backlog.
-
-## Schedule (Suggested)
-- **Day 1**: Platform Hardening (1.1–1.3).  
-- **Day 2**: Guests CSV dry-run/upsert (2.1) + begin bookings import scaffolding.  
-- **Day 3**: Finish bookings CSV (2.2), wizard UX (2.3).  
-- **Day 4**: Booking/Guests/Rooms UI (3.1–3.2) + housekeeping parity (3.3).  
-- **Day 5**: Quality gates (4.1–4.3), full regression, Vercel demo deploy.
+### Day 5 — Quality Gates & Documentation
+- Re-enable `npm run lint` (resolve import-order warnings, Next.js link usage, etc.).
+- Run full test suite (`npm test`) + Prettier + lint; CI must pass green.
+- Finalize `docs/testing/mvp-regression.md`, update README (Quick Start, Auth, Import), AGENTS (CI steps, audit verification), and reference enhancement roadmap.
+- Vercel redeploy with “Clear build cache”; execute regression checklist on preview.
 
 ## Definition of Done
-- All sprint tasks merged to main with green CI (format, lint, full Jest suite).  
-- Manual regression checklist signed off.  
-- Docs updated (README, AGENTS, regression guide).  
-- Vercel Preview validated end-to-end; audit logs verified in Supabase.  
-- One-page demo script prepared for stakeholder walkthrough.
+- Format, lint, full Jest suite green in CI.
+- Manual regression checklist executed and archived.
+- Docs updated (README, AGENTS, import guide, regression guide).
+- Vercel Preview demonstrates import → booking management → audit log, ready for stakeholder demo.
 
-## Risk & Mitigation
-- **Supabase schema gaps**: confirm `archived` columns + `audit_logs` exist before coding; ship SQL migration if missing.  
-- **Import edge cases**: capture fallback “row skipped with reason” to avoid silent failures.  
-- **Time pressure**: avoid feature creep (reports, mobile polish) unless required for MVP acceptance.
+## Risks & Guards
+- **Supabase schema drift**: confirm `archived` fields + `audit_logs` exist; ship SQL migration if missing.
+- **CSV edge cases**: capture row-level errors in preview (no silent skips).
+- **Time pressure**: defer non-critical UX polish to enhancement roadmap.
 
-## Exit Criteria
-MVP is demo-ready: data import → booking management → audit trail is reliable, documented, and repeatable with automation + manual validation.
+## Enhancement Roadmap
+See `docs/enhancement-roadmap.md` for post-MVP items (landing polish, reporting, calendar view, mobile refinements).
