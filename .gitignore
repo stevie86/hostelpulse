@@ -38,3 +38,6 @@ yarn-error.log*
 bun.lock
 pnpm-lock.yaml
 yarn.lock
+
+# tooling caches
+.kilocode/

@@ -1,0 +1,31 @@
+module.exports = {
+  testEnvironment: 'jsdom',
+  setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
+  testPathIgnorePatterns: ['<rootDir>/.next/', '<rootDir>/node_modules/'],
+  moduleNameMapper: {
+    '^@/(.*)$': '<rootDir>/$1',
+    '^@/components/(.*)$': '<rootDir>/components/$1',
+    '^@/pages/(.*)$': '<rootDir>/pages/$1',
+    '^@/lib/(.*)$': '<rootDir>/lib/$1',
+    '^@/utils/(.*)$': '<rootDir>/utils/$1',
+    '^@/hooks/(.*)$': '<rootDir>/hooks/$1',
+    '^@/contexts/(.*)$': '<rootDir>/contexts/$1',
+    '^@/views/(.*)$': '<rootDir>/views/$1',
+  },
+  transform: {
+    '^.+\\.(js|jsx|ts|tsx)$': ['babel-jest', { presets: ['next/babel'] }],
+  },
+  collectCoverageFrom: [
+    'pages/**/*.ts',
+    'pages/**/*.tsx',
+    'components/**/*.ts',
+    'components/**/*.tsx',
+    'lib/**/*.ts',
+    'utils/**/*.ts',
+    'hooks/**/*.ts',
+    'contexts/**/*.tsx',
+    '!pages/_*.tsx',
+    '!pages/api/**/*.ts',
+    '!**/*.d.ts',
+  ],
+};
