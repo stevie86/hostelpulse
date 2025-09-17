@@ -75,13 +75,13 @@
 
 ```
 # run the dev mode
-$ yarn dev
+$ npm run dev
 
 # run the prod mode
-yarn start
+npm start
 
 # build the app
-yarn build
+npm run build
 ```
 
 > Hint: To edit the blog pages go to [/admin](http://localhost:3000/admin) and navigate to a blog page to edit it. To exit editing mode navigate to [/admin/logout](http://localhost:3000/admin/logout)
