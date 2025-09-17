@@ -107,26 +107,50 @@ export default withCors(withAuth(async (req: NextApiRequest, res: NextApiRespons
 
     case 'PUT':
       try {
-        const { id, guest_id, room_id, bed_id, check_in, check_out, status, notes } = req.body
-        
+        const { id, guest_id, room_id, bed_id, check_in, check_out, status, notes } = req.body as {
+          id?: string
+          guest_id?: string
+          room_id?: string | null
+          bed_id?: string | null
+          check_in?: string
+          check_out?: string
+          status?: string
+          notes?: string
+        }
+
         if (!id) {
           return res.status(400).json({ error: 'Booking ID is required' })
         }
 
-        // Check for overlapping bookings (excluding current booking)
-        if (check_in && check_out && (room_id || bed_id)) {
+        const { data: current, error: curErr } = await supabase
+          .from('bookings')
+          .select('id, room_id, bed_id, check_in, check_out')
+          .eq('id', id)
+          .eq('owner_id', ownerId)
+          .single()
+
+        if (curErr || !current) {
+          return res.status(404).json({ error: 'Booking not found' })
+        }
+
+        const nextRoomId = typeof room_id !== 'undefined' ? room_id : current.room_id
+        const nextBedId = typeof bed_id !== 'undefined' ? bed_id : current.bed_id
+        const nextCheckIn = typeof check_in !== 'undefined' ? check_in : current.check_in
+        const nextCheckOut = typeof check_out !== 'undefined' ? check_out : current.check_out
+
+        if (nextCheckIn && nextCheckOut && (nextRoomId || nextBedId)) {
           const { data: existingBookings, error: fetchError } = await supabase
             .from('bookings')
-            .select('*')
+            .select('id, check_in, check_out')
             .eq('owner_id', ownerId)
             .neq('id', id)
             .neq('status', 'cancelled')
-            .or(bed_id ? `bed_id.eq.${bed_id}` : `room_id.eq.${room_id}`)
+            .or(nextBedId ? `bed_id.eq.${nextBedId}` : `room_id.eq.${nextRoomId}`)
 
           if (fetchError) throw fetchError
 
-          const hasOverlap = existingBookings?.some(booking => 
-            isDateOverlap(booking.check_in, booking.check_out, check_in, check_out)
+          const hasOverlap = existingBookings?.some(booking =>
+            isDateOverlap(booking.check_in, booking.check_out, nextCheckIn, nextCheckOut)
           )
 
           if (hasOverlap) {
@@ -134,9 +158,18 @@ export default withCors(withAuth(async (req: NextApiRequest, res: NextApiRespons
           }
         }
 
-        const { data: booking, error } = await supabase
+        const update: Record<string, any> = {}
+        if (typeof guest_id !== 'undefined') update.guest_id = guest_id
+        if (typeof room_id !== 'undefined') update.room_id = room_id
+        if (typeof bed_id !== 'undefined') update.bed_id = bed_id
+        if (typeof check_in !== 'undefined') update.check_in = check_in
+        if (typeof check_out !== 'undefined') update.check_out = check_out
+        if (typeof status !== 'undefined') update.status = status
+        if (typeof notes !== 'undefined') update.notes = notes
+
+        const query = supabase
           .from('bookings')
-          .update({ guest_id, room_id, bed_id, check_in, check_out, status, notes })
+          .update(update)
           .eq('id', id)
           .eq('owner_id', ownerId)
           .select(`
@@ -145,14 +178,16 @@ export default withCors(withAuth(async (req: NextApiRequest, res: NextApiRespons
             rooms(*),
             beds(*)
           `)
-          .single()
+
+        const { data: booking, error } = await query.single()
 
         if (error) throw error
         res.status(200).json(booking)
-        await logAudit(req, auth, { owner_id: ownerId, resource: 'bookings', action: 'update', resource_id: id, fields: Object.keys(req.body || {}), succeeded: true, status_code: 200 })
+        await logAudit(req, auth, { owner_id: ownerId, resource: 'bookings', action: 'update', resource_id: id, fields: Object.keys(update), succeeded: true, status_code: 200 })
       } catch (error) {
-        res.status(500).json({ error: 'Failed to update booking' })
-        await logAudit(req, auth, { owner_id: ownerId, resource: 'bookings', action: 'update', resource_id: (req.body||{}).id, fields: Object.keys(req.body || {}), succeeded: false, status_code: 500 })
+        const statusCode = (error as any)?.code === 'PGRST116' ? 404 : 500
+        res.status(statusCode).json({ error: statusCode === 404 ? 'Booking not found' : 'Failed to update booking' })
+        await logAudit(req, auth, { owner_id: ownerId, resource: 'bookings', action: 'update', resource_id: (req.body || {}).id, fields: Object.keys(req.body || {}), succeeded: false, status_code: statusCode })
       }
       break
 

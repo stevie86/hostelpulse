@@ -1,0 +1,14 @@
+# Generated directories
+.next
+coverage
+node_modules
+.tina
+.vercel
+.kilocode
+
+# Build artifacts / env
+*.log
+
+# Auto-generated test codecs
+pages/api/admin/*.test.skip.ts
+

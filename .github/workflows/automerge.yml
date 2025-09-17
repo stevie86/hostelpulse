@@ -53,4 +53,3 @@ jobs:
           MERGE_REMOVE_LABELS: 'automerge'
           UPDATE_METHOD: rebase
           BLOCK_LABELS: 'hold,do-not-merge,P0,priority: P0,prio: P0'
-
