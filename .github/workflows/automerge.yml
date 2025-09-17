@@ -1,0 +1,56 @@
+name: automerge
+
+on:
+  pull_request:
+    types: [labeled, unlabeled, opened, synchronize, reopened, ready_for_review]
+  check_suite:
+    types: [completed]
+
+permissions:
+  contents: write
+  pull-requests: write
+  checks: read
+
+jobs:
+  automerge:
+    if: github.event.pull_request.draft == false
+    runs-on: ubuntu-latest
+    steps:
+      - name: Block P0 priority PRs
+        id: block
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const pr = context.payload.pull_request
+              ? context.payload.pull_request
+              : (await github.rest.pulls.get({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  pull_number: context.issue.number,
+                })).data
+            const labels = (pr.labels || [])
+              .map((l) => (typeof l === 'string' ? l : l.name))
+              .filter(Boolean)
+              .map((s) => String(s).toLowerCase())
+            const title = String(pr.title || '').toLowerCase()
+            const titleP0 = /(^|\b)P0(\b|:)/i.test(pr.title || '')
+            const hasP0Label = labels.includes('p0') || labels.includes('priority: p0') || labels.includes('prio: p0')
+            if (titleP0 || hasP0Label) {
+              core.notice('Automerge blocked: P0 priority detected by title or label')
+              core.setOutput('skip', 'true')
+            } else {
+              core.setOutput('skip', 'false')
+            }
+
+      - name: Automerge (label=automerge, non-P0 only)
+        if: steps.block.outputs.skip != 'true'
+        uses: pascalgn/automerge-action@v0.16.3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MERGE_METHOD: squash
+          MERGE_DELETE_BRANCH: 'true'
+          MERGE_LABELS: 'automerge'
+          MERGE_REMOVE_LABELS: 'automerge'
+          UPDATE_METHOD: rebase
+          BLOCK_LABELS: 'hold,do-not-merge,P0,priority: P0,prio: P0'
+
