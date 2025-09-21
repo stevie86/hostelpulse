@@ -41,3 +41,6 @@ yarn.lock
 
 # tooling caches
 .kilocode/
+
+# docs (local reference)
+AGENTS.md
