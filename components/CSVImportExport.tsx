@@ -10,8 +10,8 @@ interface CSVImportExportProps {
 type ImportSummary = {
   totalRows: number
   ready: number
-  toInsert: number
-  toUpdate: number
+  toInsert?: number
+  toUpdate?: number
   skipped: number
 }
 
@@ -21,7 +21,7 @@ type ImportIssue = {
   reason: string
 }
 
-type PreviewRow = {
+type GuestPreviewRow = {
   row: number
   name: string
   email: string
@@ -29,6 +29,18 @@ type PreviewRow = {
   notes?: string
   action: 'insert' | 'update'
 }
+
+type BookingPreviewRow = {
+  row: number
+  guestEmail: string
+  guestName?: string
+  room: string
+  checkIn: string
+  checkOut: string
+  status: string
+}
+
+type PreviewRow = GuestPreviewRow | BookingPreviewRow
 
 export default function CSVImportExport({ type, onImportSuccess }: CSVImportExportProps) {
   const [importing, setImporting] = useState(false)
@@ -41,7 +53,7 @@ export default function CSVImportExport({ type, onImportSuccess }: CSVImportExpo
   const [pendingCsv, setPendingCsv] = useState<string | null>(null)
   const [mode, setMode] = useState<'idle' | 'preview' | 'committed'>('idle')
 
-  const isGuestImport = type === 'guests'
+  const supportsDryRun = type === 'guests' || type === 'bookings'
 
   async function handleExport() {
     setExporting(true)
@@ -82,7 +94,7 @@ export default function CSVImportExport({ type, onImportSuccess }: CSVImportExpo
     setPreview([])
     try {
       const text = await file.text()
-      if (isGuestImport) {
+      if (supportsDryRun) {
         const response = await fetch(`/api/csv/${type}?dryRun=1`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -144,18 +156,27 @@ export default function CSVImportExport({ type, onImportSuccess }: CSVImportExpo
     }
   }
 
-  const hasPreview = isGuestImport && preview.length > 0
+  const hasPreview = preview.length > 0
 
   const summaryItems = useMemo(() => {
     if (!summary) return []
+    if (type === 'guests') {
+      return [
+        { label: 'Total rows', value: summary.totalRows },
+        { label: 'Ready to import', value: summary.ready },
+        { label: 'New guests', value: summary.toInsert ?? 0 },
+        { label: 'Updates', value: summary.toUpdate ?? 0 },
+        { label: 'Skipped', value: summary.skipped },
+      ]
+    }
+
     return [
       { label: 'Total rows', value: summary.totalRows },
       { label: 'Ready to import', value: summary.ready },
-      { label: 'New guests', value: summary.toInsert },
-      { label: 'Updates', value: summary.toUpdate },
+      { label: 'New bookings', value: summary.toInsert ?? summary.ready },
       { label: 'Skipped', value: summary.skipped },
     ]
-  }, [summary])
+  }, [summary, type])
 
   return (
     <Container>
@@ -184,30 +205,57 @@ export default function CSVImportExport({ type, onImportSuccess }: CSVImportExpo
         </SummaryGrid>
       )}
       {hasPreview && (
-        <PreviewTable>
-          <thead>
-            <tr>
-              <th>Row</th>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Phone</th>
-              <th>Notes</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {preview.map((row) => (
-              <tr key={row.row}>
-                <td>{row.row}</td>
-                <td>{row.name}</td>
-                <td>{row.email}</td>
-                <td>{row.phone || '—'}</td>
-                <td>{row.notes || '—'}</td>
-                <td>{row.action === 'insert' ? 'New' : 'Update'}</td>
+        type === 'guests' ? (
+          <PreviewTable>
+            <thead>
+              <tr>
+                <th>Row</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Notes</th>
+                <th>Action</th>
               </tr>
-            ))}
-          </tbody>
-        </PreviewTable>
+            </thead>
+            <tbody>
+              {(preview as GuestPreviewRow[]).map((row) => (
+                <tr key={row.row}>
+                  <td>{row.row}</td>
+                  <td>{row.name}</td>
+                  <td>{row.email}</td>
+                  <td>{row.phone || '—'}</td>
+                  <td>{row.notes || '—'}</td>
+                  <td>{row.action === 'insert' ? 'New' : 'Update'}</td>
+                </tr>
+              ))}
+            </tbody>
+          </PreviewTable>
+        ) : (
+          <PreviewTable>
+            <thead>
+              <tr>
+                <th>Row</th>
+                <th>Guest</th>
+                <th>Unit</th>
+                <th>Check-in</th>
+                <th>Check-out</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {(preview as BookingPreviewRow[]).map((row) => (
+                <tr key={row.row}>
+                  <td>{row.row}</td>
+                  <td>{row.guestName ? `${row.guestName} (${row.guestEmail})` : row.guestEmail}</td>
+                  <td>{row.room}</td>
+                  <td>{row.checkIn}</td>
+                  <td>{row.checkOut}</td>
+                  <td>{row.status}</td>
+                </tr>
+              ))}
+            </tbody>
+          </PreviewTable>
+        )
       )}
       {issues.length > 0 && (
         <IssuesPanel>
@@ -221,7 +269,7 @@ export default function CSVImportExport({ type, onImportSuccess }: CSVImportExpo
           </ul>
         </IssuesPanel>
       )}
-      {isGuestImport && mode === 'preview' && (
+      {supportsDryRun && mode === 'preview' && (
         <Button
           onClick={handleConfirmImport}
           disabled={importing || !pendingCsv}
@@ -237,7 +285,11 @@ export default function CSVImportExport({ type, onImportSuccess }: CSVImportExpo
             Columns: <code>name</code>, <code>email</code>, optional <code>phone</code>, <code>notes</code>. Duplicate emails are deduped; missing name/email rows are skipped.
           </div>
         ) : (
-          <div>Export only (import coming soon)</div>
+          <div>
+            Columns: <code>guest_name</code> (optional), <code>guest_email</code>, optional <code>room_name</code> or <code>bed_name</code>,
+            <code>check_in</code>, <code>check_out</code>, optional <code>status</code> (confirmed/pending/cancelled), <code>notes</code>.
+            Guests must already exist. Rows with missing data or conflicts are skipped.
+          </div>
         )}
       </Instructions>
     </Container>
