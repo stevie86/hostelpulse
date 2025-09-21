@@ -1,8 +1,8 @@
+import { isToday } from 'date-fns'
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import Container from 'components/Container'
 import SectionTitle from 'components/SectionTitle'
-import { isToday } from 'date-fns'
 
 type Booking = {
   id: string
@@ -71,4 +71,3 @@ const List = styled.div` display: grid; gap: 0.8rem; `
 const Item = styled.div` border: 1px solid rgb(var(--border)); border-radius: 0.6rem; padding: 1rem; `
 const Name = styled.div` font-weight: 600; `
 const Note = styled.div` opacity: 0.8; font-size: 1.3rem; `
-

@@ -1,9 +1,9 @@
+import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { useRouter } from 'next/router';
+import Button from 'components/Button';
 import Container from 'components/Container';
 import Input from 'components/Input';
-import Button from 'components/Button';
 import SectionTitle from 'components/SectionTitle';
 import { supabase } from '../../lib/supabase';
 

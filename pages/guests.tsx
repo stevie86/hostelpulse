@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
+import Button from 'components/Button'
 import Container from 'components/Container'
 import SectionTitle from 'components/SectionTitle'
-import Button from 'components/Button'
 
 type Guest = {
   id: string

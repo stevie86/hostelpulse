@@ -1,4 +1,4 @@
-import NextLink from 'next/link';
+import Link from 'next/link';
 import { FacebookIcon, LinkedinIcon, TwitterIcon } from 'react-share';
 import styled from 'styled-components';
 import Container from 'components/Container';
@@ -57,23 +57,17 @@ export default function Footer() {
         </ListContainer>
         <BottomBar>
           <ShareBar>
-            <NextLink href="https://www.twitter.com/my-saas-startup" passHref>
-              <a>
-                <TwitterIcon size={50} round={true} />
-              </a>
-            </NextLink>
+            <SocialAnchor href="https://www.twitter.com/my-saas-startup" target="_blank" rel="noreferrer">
+              <TwitterIcon size={50} round={true} />
+            </SocialAnchor>
 
-            <NextLink href="https://www.facebook.com/my-saas-startup" passHref>
-              <a>
-                <FacebookIcon size={50} round={true} />
-              </a>
-            </NextLink>
+            <SocialAnchor href="https://www.facebook.com/my-saas-startup" target="_blank" rel="noreferrer">
+              <FacebookIcon size={50} round={true} />
+            </SocialAnchor>
 
-            <NextLink href="https://www.linkedin.com/my-saas-startup" passHref>
-              <a>
-                <LinkedinIcon size={50} round={true} />
-              </a>
-            </NextLink>
+            <SocialAnchor href="https://www.linkedin.com/my-saas-startup" target="_blank" rel="noreferrer">
+              <LinkedinIcon size={50} round={true} />
+            </SocialAnchor>
           </ShareBar>
           <Copyright>&copy; Copyright 2021 My Saas Startup</Copyright>
         </BottomBar>
@@ -96,9 +90,7 @@ function FooterList({ title, items }: SingleFooterList) {
 function ListItem({ title, href }: SingleFooterListItem) {
   return (
     <ListItemWrapper>
-      <NextLink href={href} passHref>
-        <a>{title}</a>
-      </NextLink>
+      <FooterLink href={href}>{title}</FooterLink>
     </ListItemWrapper>
   );
 }
@@ -146,16 +138,26 @@ const ListWrapper = styled.div`
 
 const ListItemWrapper = styled.p`
   font-size: 1.6rem;
-
-  a {
-    text-decoration: none;
-    color: rgba(var(--textSecondary), 0.75);
-  }
 `;
 
 const ShareBar = styled.div`
   & > *:not(:first-child) {
     margin-left: 1rem;
+  }
+`;
+
+const SocialAnchor = styled.a`
+  display: inline-flex;
+  text-decoration: none;
+  color: inherit;
+`;
+
+const FooterLink = styled(Link)`
+  text-decoration: none;
+  color: rgba(var(--textSecondary), 0.75);
+
+  &:hover {
+    text-decoration: underline;
   }
 `;
 

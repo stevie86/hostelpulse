@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import Button from 'components/Button';
 import Container from 'components/Container';
 import Input from 'components/Input';
-import Button from 'components/Button';
 import SectionTitle from 'components/SectionTitle';
 
 export default function ResetPasswordPage() {
