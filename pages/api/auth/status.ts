@@ -1,6 +1,6 @@
+import { createClient } from '@supabase/supabase-js'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { withCors } from '../../../lib/corsHandler'
-import { createClient } from '@supabase/supabase-js'
 
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!
 const supabaseAdmin = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, supabaseServiceKey)
@@ -30,4 +30,3 @@ export default withCors(async (req: NextApiRequest, res: NextApiResponse) => {
     res.status(500).json({ error: 'Internal server error', authenticated: false })
   }
 })
-
