@@ -150,7 +150,7 @@ export default function DashboardPage() {
             {guests.length === 0 ? (
               <EmptyState>
                 No guests yet.{' '}
-                <Link href="/guests" passHref legacyBehavior>
+                <Link href="/guests" passHref>
                   <InlineLink>Add your first guest</InlineLink>
                 </Link>
               </EmptyState>
@@ -171,16 +171,16 @@ export default function DashboardPage() {
               <CardTitle>Quick Actions</CardTitle>
             </CardHeader>
             <ActionsGrid>
-              <Link href="/guests" passHref legacyBehavior>
+              <Link href="/guests" passHref>
                 <ActionButton>Add Guest</ActionButton>
               </Link>
-              <Link href="/bookings" passHref legacyBehavior>
+              <Link href="/bookings" passHref>
                 <ActionButton>New Booking</ActionButton>
               </Link>
-              <Link href="/rooms" passHref legacyBehavior>
+              <Link href="/rooms" passHref>
                 <ActionButton>Manage Rooms</ActionButton>
               </Link>
-              <Link href="/housekeeping" passHref legacyBehavior>
+              <Link href="/housekeeping" passHref>
                 <ActionButton>Housekeeping List</ActionButton>
               </Link>
             </ActionsGrid>

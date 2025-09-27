@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
+import Button from 'components/Button'
 import Container from 'components/Container'
 import SectionTitle from 'components/SectionTitle'
 
@@ -30,10 +31,25 @@ export default function RoomsPage() {
     }
   }
 
+  const summary = useMemo(() => {
+    if (!rooms.length) return { total: 0, beds: 0 }
+    const totalBeds = rooms.reduce((sum, room) => sum + (room.beds?.length ?? 0), 0)
+    return { total: rooms.length, beds: totalBeds }
+  }, [rooms])
+
   return (
       <Container>
         <Wrapper>
           <SectionTitle>Rooms</SectionTitle>
+          <ActionBar>
+            <Stats>
+              <StatBubble data-tone="ok">Rooms: {summary.total}</StatBubble>
+              <StatBubble data-tone="info">Beds: {summary.beds}</StatBubble>
+            </Stats>
+            <Button type="button" onClick={load} disabled={loading}>
+              {loading ? 'Refreshing…' : 'Refresh list'}
+            </Button>
+          </ActionBar>
           {loading ? (
             <Small>Loading rooms...</Small>
           ) : error ? (
@@ -67,6 +83,15 @@ export default function RoomsPage() {
 
 const Wrapper = styled.div`
   padding: 2rem 0;
+`
+
+const ActionBar = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
 `
 const Small = styled.p`
   opacity: 0.7;
@@ -113,4 +138,28 @@ const BedTag = styled.span`
   border-radius: 0.4rem;
   padding: 0.2rem 0.6rem;
   font-size: 1.2rem;
+`
+
+const Stats = styled.div`
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+`
+
+const StatBubble = styled.span`
+  padding: 0.3rem 0.8rem;
+  border-radius: 999px;
+  font-size: 1.2rem;
+  background: rgba(59, 130, 246, 0.1);
+  color: #1d4ed8;
+
+  &[data-tone='ok'] {
+    background: rgba(16, 185, 129, 0.12);
+    color: #047857;
+  }
+
+  &[data-tone='info'] {
+    background: rgba(59, 130, 246, 0.1);
+    color: #1d4ed8;
+  }
 `

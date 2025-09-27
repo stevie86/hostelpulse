@@ -8,109 +8,109 @@
     <img src="https://i.imgur.com/CxkjHhi.png" alt="Logo" width="49%">
   </a> 
 
-  <h3 align="center">✨ Free Next.js marketing website template for SaaS startups ✨</h3>
+  <h3 align="center">🏨 HostelPulse - Hostel Management System</h3>
 
   <p align="center">
-    Everything you need to build a great landing page / marketing website for your startup. Great SEO metrics, Green WebVitals, 🚀 Performance, Clean & Pragmatic Codebase out of the box.
+    Everything you need to manage your hostel: guests, bookings, rooms, and housekeeping. Built with Next.js, Supabase, and TypeScript.
     <br/>
     <br/>
-    <a href="https://next-saas-starter-ashy.vercel.app/">View Demo</a>
+    <a href="https://your-hostelpulse-demo.vercel.app/">View Demo</a>
     .
-    <a href="https://github.com/Blazity/next-saas-starter/issues">Report Bug</a>
+    <a href="https://github.com/yourusername/hostelpulse/issues">Report Bug</a>
     .
-    <a href="https://github.com/Blazity/next-saas-starter/issues">Request Feature</a>
+    <a href="https://github.com/yourusername/hostelpulse/issues">Request Feature</a>
   </p>
 </p>
 
 <div align="center">
 
-![Contributors](https://img.shields.io/github/contributors/Blazity/next-saas-starter?color=dark-green) ![Issues](https://img.shields.io/github/issues/Blazity/next-saas-starter) ![License](https://img.shields.io/github/license/Blazity/next-saas-starter)
+![Contributors](https://img.shields.io/github/contributors/yourusername/hostelpulse?color=dark-green) ![Issues](https://img.shields.io/github/issues/yourusername/hostelpulse) ![License](https://img.shields.io/github/license/yourusername/hostelpulse)
 
 </div>
 
-<p align="center"><b>Created with :heart: at Blazity </b></p>
-<p align="center"><a href="https://blazity.com/">Blazity</a> is a group of Next.js/Jamstack/Headless experts. Contact us at <a href="mailto:contact@blazity.com">contact@blazity.com</a> if you’d like to talk about your project or just to have a chat with us</p>
-
-<a href="https://discord.gg/fyWtyNKmfX" style="width: 100%; display: flex; justify-content: center;">
-  <img src="https://discordapp.com/api/guilds/1111676875782234175/widget.png?style=banner2" alt="Blazity Discord Banner"/>
-</a>
-<br />
+<p align="center"><b>HostelPulse - The ultimate solution for hostel management</b></p>
 
 ## Table Of Contents
 
+- [About the Project](#about-the-project)
 - [Features](#-features)
 - [Getting Started](#-getting-started)
-- [One click deploy](#one-click-deploy)
+- [Deployment](#deployment)
 - [Built With](#-built-with)
 - [Contributing](#-contributing)
   - [Creating A Pull Request](#creating-a-pull-request)
-- [Acknowledgements](#-acknowledgements)
-- [Contributors](#-contributors)
 - [License](#-license)
+
+## About The Project
+
+HostelPulse is a comprehensive hostel management system that helps hostel owners efficiently manage their daily operations. Built on top of the Next.js SaaS Starter template, it includes all the essential features needed to run a modern hostel.
+
+Key functionalities include:
+- Guest management (create, update, and track guest information)
+- Room management (private rooms and dormitory beds)
+- Booking system with conflict detection
+- Housekeeping management
+- CSV import/export capabilities
+- Responsive dashboard with real-time statistics
 
 ## Features
 
-- ⚡ **Next.js** - React framework for static rendering
-- **Best SEO setup** - Meta Tags, JSON-LD and Open Graph Tags
-- **[Tina CMS](https://tina.io/) integration** - local & (optional) production CMS
-- **Optimized for Web Vitals**
-- **Blog with MDX**
-- **Mailchimp Integration** - for newsletters
-- **Sendgrid Integration** - for sending emails
-- **Dark mode** - and customizable themes!
-- **No UI library** - just styled components, so you don't have to learn any new syntax
-- **One click deployment** - with Vercel or any other serverless deployment environment
-- **Eslint** - with Next.js's recommended settings and imports sorting rule
-- **Prettier**
+- 🏨 **Guest Management** - Add, edit, and track all your guests
+- 🛏️ **Room & Bed Management** - Manage private rooms and dormitory beds
+- 📅 **Booking System** - Create and manage bookings with conflict detection
+- 🧹 **Housekeeping** - Track room cleaning status
+- 📊 **Dashboard** - Real-time statistics and insights
+- 📥 **CSV Import/Export** - Easily import/export guest and booking data
+- 🔐 **User Authentication** - Secure login and registration
+- 🌙 **Dark Mode** - Eye-friendly dark mode option
+- 📱 **Responsive Design** - Works on all devices
+- ⚡ **Fast Performance** - Optimized for speed and SEO
+- 🚀 **Easy Deployment** - Deploy to Vercel with one click
 
 ## 🤓 Getting Started
 
-- Click `Use the template` or [this link](https://github.com/Blazity/next-saas-starter/generate)
-- Setup your [sendgrid](https://sendgrid.com/) API key and add it to environment variables (`SENDGRID_API_KEY` - `.env.local`)
-- Adjust the template to your needs (and checkout `env.ts` file)
-- Deploy the project on [Vercel](https://vercel.com/) **don't forget to add env variables**
-- _(optional)_ Create [Tina Cloud account](https://app.tina.io/), [a project](https://tina.io/docs/tina-cloud/) and fill these `NEXT_PUBLIC_ORGANIZATION_NAME`, `NEXT_PUBLIC_TINA_CLIENT_ID` env vars with proper values
-  > Tina's Content API authenticates directly with GitHub removing the need for users to create GitHub accounts. Access is granted through the dashboard, allowing users to login directly through your site and begin editing! Any changes that are saved by your editors will be commited to the configured branch in your GitHub repository.
-  - For more details [see the docs](https://tina.io/docs/tina-cloud/)
+### Prerequisites
 
-```
-# run the dev mode
-$ yarn dev
+- Node.js 16+
+- npm or yarn
+- A Supabase account
 
-# run the prod mode
-yarn start
+### Installation
 
-# build the app
-yarn build
-```
+1. Clone the repo
+   ```sh
+   git clone https://github.com/yourusername/hostelpulse.git
+   ```
+2. Install NPM packages
+   ```sh
+   npm install
+   ```
+3. Create a `.env.local` file and add your environment variables (see `.env.example`)
+4. Set up your Supabase project and configure the database
+5. Run the development server
+   ```sh
+   npm run dev
+   ```
 
-> Hint: To edit the blog pages go to [/admin](http://localhost:3000/admin) and navigate to a blog page to edit it. To exit editing mode navigate to [/admin/logout](http://localhost:3000/admin/logout)
+## Deployment
 
-## 🚀 One click deploy
+For detailed deployment instructions, please refer to [DEPLOYMENT.md](DEPLOYMENT.md)
 
-Clone the repository and one-click deploy to Vercel for free!
+### Quick Deploy to Vercel
 
-[![Vercel](https://vercel.com/button)](https://vercel.com/new/git/external?repository-url=https://github.com/Blazity/next-saas-starter)
-
-Clone the repository and one-click deploy to Netlify for free!
-
-[![Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/Blazity/next-saas-starter)
+[![Vercel](https://vercel.com/button)](https://vercel.com/new/git/external?repository-url=https://github.com/yourusername/hostelpulse)
 
 ## 🧰 Built With
 
-- Statically generated pages with [**Next.js** ](https://github.com/vercel/next.js)
-- [Styled components](https://github.com/styled-components/styled-components/)
-- [MDX](https://github.com/mdx-js/mdx)
-- [TypeScript](https://github.com/Microsoft/TypeScript)
+- [Next.js](https://nextjs.org/)
+- [Supabase](https://supabase.io/)
+- [Styled Components](https://styled-components.com/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [Date-fns](https://date-fns.org/)
 
 ## 🤲🏻 Contributing
 
 Contributions are what make the open source community such an amazing place to be learn, inspire, and create. Any contributions you make are **greatly appreciated**.
-
-- If you have suggestions for adding or removing projects, feel free to [open an issue](https://github.com/Blazity/next-saas-starter/issues/new) to discuss it, or directly create a pull request after you edit the _README.md_ file with necessary changes.
-- Create individual PR for each suggestion.
-
-### Creating A Pull Request
 
 1. Fork the Project
 2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
@@ -118,31 +118,14 @@ Contributions are what make the open source community such an amazing place to b
 4. Push to the Branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-## 😎 Acknowledgements
-
-Big thanks to authors of these libraries:
-
-- https://github.com/neg4n/next-api-og-image - generating open graph images
-- https://github.com/blazity/nextjs-color-mode - non-flickering dark mode
-- https://github.com/Brew-Brew/css-in-js-media - a convenient way of creating media queries
-
-## Support
-
-If you're looking for help or simply want to share your thoughts about the project, we encourage you to join our Discord community. Here's the link: [https://blazity.com/discord](https://blazity.com/discord). It's a space where we exchange ideas and help one another. Everyone's input is appreciated, and we look forward to welcoming you.
-
-## ✨ Contributors
-
-Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+### Top Contributors
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
 <table>
   <tr>
-    <td align="center"><a href="https://bstefanski.com/"><img src="https://avatars.githubusercontent.com/u/28964599?v=4?s=64" width="64px;" alt=""/><br /><sub><b>Bart Stefanski</b></sub></a><br /><a href="https://github.com/Blazity/next-saas-starter/commits?author=bmstefanski" title="Code">💻</a></td>
-    <td align="center"><a href="https://github.com/ilasota"><img src="https://avatars.githubusercontent.com/u/34578189?v=4?s=64" width="64px;" alt=""/><br /><sub><b>Igor Lasota</b></sub></a><br /><a href="https://github.com/Blazity/next-saas-starter/commits?author=ilasota" title="Code">💻</a></td>
-    <td align="center"><a href="https://github.com/jbryn"><img src="https://avatars.githubusercontent.com/u/52970664?v=4?s=64" width="64px;" alt=""/><br /><sub><b>Jan Bryński</b></sub></a><br /><a href="https://github.com/Blazity/next-saas-starter/commits?author=jbryn" title="Code">💻</a></td>
-    <td align="center"><a href="https://www.logana.dev/"><img src="https://avatars.githubusercontent.com/u/43075109?v=4?s=64" width="64px;" alt=""/><br /><sub><b>Logan Anderson</b></sub></a><br /><a href="https://github.com/Blazity/next-saas-starter/commits?author=logan-anderson" title="Code">💻</a> <a href="https://github.com/Blazity/next-saas-starter/commits?author=logan-anderson" title="Documentation">📖</a> <a href="#mentoring-logan-anderson" title="Mentoring">🧑‍🏫</a></td>
+    <td align="center"><a href="https://yourwebsite.com/"><img src="https://avatars.githubusercontent.com/u/12345678?v=4?s=64" width="64px;" alt=""/><br /><sub><b>Your Name</b></sub></a><br /><a href="https://github.com/yourusername/hostelpulse/commits?author=yourusername" title="Code">💻</a></td>
   </tr>
 </table>
 
@@ -151,8 +134,6 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
-This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
-
 ## 📝 License
 
-Distributed under the MIT License. See [LICENSE](https://github.com/Blazity/next-saas-starter/blob/main/LICENSE.md) for more information.
+Distributed under the MIT License. See `LICENSE` for more information.

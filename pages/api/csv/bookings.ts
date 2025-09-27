@@ -129,7 +129,7 @@ export default withAuth(async (req: NextApiRequest, res: NextApiResponse, auth) 
 
     const issues: ImportIssue[] = []
     const validRows: BookingRow[] = []
-    const pendingInserts: Array<{ roomId?: string | null; bedId?: string | null; checkIn: string; checkOut: string }> = []
+    const pendingInserts: Array<{ room_id?: string | null; bed_id?: string | null; check_in: string; check_out: string }> = []
 
     const totalRows = table.length - 1
 
@@ -211,7 +211,7 @@ export default withAuth(async (req: NextApiRequest, res: NextApiResponse, auth) 
             (b.bed_id && bedId && b.bed_id === bedId) ||
             (!b.bed_id && !bedId && b.room_id === roomId)
           if (!unitMatch) return false
-          return datesOverlap(b.check_in || b.checkIn, b.check_out || b.checkOut, checkInIso, checkOutIso)
+          return datesOverlap(b.check_in, b.check_out, checkInIso, checkOutIso)
         }))
 
       if (hasConflict) {
@@ -235,7 +235,7 @@ export default withAuth(async (req: NextApiRequest, res: NextApiResponse, auth) 
       }
 
       validRows.push(entry)
-      pendingInserts.push({ roomId: roomId ?? null, bedId: bedId ?? null, checkIn: checkInIso, checkOut: checkOutIso })
+      pendingInserts.push({ room_id: roomId ?? null, bed_id: bedId ?? null, check_in: checkInIso, check_out: checkOutIso })
     }
 
     const summary = {

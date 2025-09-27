@@ -67,7 +67,7 @@ export default function Navbar({ items }: NavbarProps) {
   return (
     <NavbarContainer hidden={isNavbarHidden} transparent={isTransparent}>
       <Content>
-        <Link href="/" passHref legacyBehavior>
+        <Link href="/" passHref>
           <LogoWrapper href="/">
             <Logo />
           </LogoWrapper>
@@ -101,7 +101,7 @@ function NavItem({ href, title, outlined }: SingleNavItem) {
 
   return (
     <NavItemWrapper outlined={outlined}>
-      <Link href={href} passHref legacyBehavior>
+      <Link href={href} passHref>
         <a href={href}>{title}</a>
       </Link>
     </NavItemWrapper>
