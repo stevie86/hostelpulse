@@ -13,12 +13,12 @@ export default function Cta() {
     <CtaWrapper>
       <Container>
         <Stack>
-          <OverTitle>Lorem ipsum dolor sit amet</OverTitle>
-          <SectionTitle>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Temporibus delectus?</SectionTitle>
-          <Description>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda beatae accusamus deleniti nihil quas tempora numquam, vitae
-            culpa.
-          </Description>
+          <OverTitle>Ready to Streamline Your Operations?</OverTitle>
+      <SectionTitle>Join Forward-Thinking Hostel Owners</SectionTitle>
+      <Description>
+        Sign up today to experience how HostelPulse can transform your daily operations, 
+        reduce administrative overhead, and increase guest satisfaction through better management.
+      </Description>
           <ButtonGroup>
             <NextLink href="#early-access" passHref>
               <Button>

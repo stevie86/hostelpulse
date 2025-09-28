@@ -134,6 +134,7 @@ export default function GuestsPage() {
                   <GuestMeta>{g.email}</GuestMeta>
                   {g.phone && <GuestMeta>{g.phone}</GuestMeta>}
                   {g.notes && <GuestNotes>{g.notes}</GuestNotes>}
+                  <EditLink href={`/guests/edit/${g.id}`}>Edit</EditLink>
                 </GuestCard>
               ))}
             </Grid>
@@ -225,6 +226,22 @@ const GuestNotes = styled.div`
   margin-top: 0.5rem;
   font-size: 1.3rem;
   opacity: 0.7;
+`
+
+const EditLink = styled.a`
+  display: inline-block;
+  margin-top: 0.8rem;
+  padding: 0.3rem 0.8rem;
+  background: rgba(59, 130, 246, 0.1);
+  color: #1d4ed8;
+  text-decoration: none;
+  border-radius: 999px;
+  font-size: 1.2rem;
+  
+  &:hover {
+    background: rgba(59, 130, 246, 0.2);
+    text-decoration: underline;
+  }
 `
 
 const Stats = styled.div`

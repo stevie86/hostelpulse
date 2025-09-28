@@ -1,4 +1,6 @@
 import { InferGetStaticPropsType } from 'next';
+import { useEffect } from 'react';
+import { useRouter } from 'next/router';
 import Head from 'next/head';
 import styled from 'styled-components';
 import BasicSection from 'components/BasicSection';
@@ -10,34 +12,50 @@ import Hero from 'views/HomePage/Hero';
 import Partners from 'views/HomePage/Partners';
 import ScrollableBlogPosts from 'views/HomePage/ScrollableBlogPosts';
 import Testimonials from 'views/HomePage/Testimonials';
+import { supabase } from '../lib/supabase';
 
 export default function Homepage({ posts }: InferGetStaticPropsType<typeof getStaticProps>) {
+  const router = useRouter();
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session?.user) {
+        router.push('/dashboard');
+      }
+    };
+
+    checkAuth();
+  }, [router]);
+
   return (
     <>
       <Head>
         <title>Hostelpulse — Owner Console</title>
         <meta
           name="description"
-          content="Daily operations for hostel owners: arrivals/departures, guests & bookings, CSV import/export, and EU‑hosted backend."
+          content="Streamline hostel operations with real-time arrivals/departures tracking, smart booking management, and EU-hosted secure backend. Built for modern hostel owners."
         />
       </Head>
       <HomepageWrapper>
         <WhiteBackgroundContainer>
           <Hero />
           <Partners />
-          <BasicSection imageUrl="/demo-illustration-1.svg" title="Arrivals & Departures at a glance" overTitle="Daily ops">
+          <BasicSection imageUrl="/demo-illustration-1.svg" title="Real-Time Arrivals & Departures" overTitle="Daily Operations">
             <p>
-              See today’s check‑ins/outs and update status in seconds. Keep your team aligned across channels without digging through spreadsheets.
+              Instantly see today's check-ins and check-outs with one-click status updates. 
+              Keep your entire team synchronized across all channels without hunting through spreadsheets.
             </p>
           </BasicSection>
-          <BasicSection imageUrl="/demo-illustration-2.svg" title="Guests & Bookings without overlaps" overTitle="Core tasks" reversed>
+          <BasicSection imageUrl="/demo-illustration-2.svg" title="Smart Guest & Booking Management" overTitle="Core Features" reversed>
             <p>
-              Add guests, create/cancel bookings, and prevent double‑bookings with automatic conflict detection for rooms and beds.
+              Effortlessly add guests, create or cancel bookings, and automatically prevent double-bookings 
+              with intelligent conflict detection for both private rooms and dormitory beds.
             </p>
             <ul>
-              <li>Private rooms and dorm beds supported</li>
-              <li>Fast guest create/update</li>
-              <li>Clear empty/error/loading states</li>
+              <li>Support for private rooms and shared dormitory beds</li>
+              <li>Lightning-fast guest creation and updates</li>
+              <li>Clear visual indicators for empty, error, and loading states</li>
             </ul>
           </BasicSection>
         </WhiteBackgroundContainer>

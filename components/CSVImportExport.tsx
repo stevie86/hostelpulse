@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import Button from './Button'
 
 interface CSVImportExportProps {
-  type: 'guests' | 'bookings'
+  type: 'guests' | 'bookings' | 'rooms'
   onImportSuccess?: (result: any) => void
 }
 
@@ -53,7 +53,7 @@ export default function CSVImportExport({ type, onImportSuccess }: CSVImportExpo
   const [pendingCsv, setPendingCsv] = useState<string | null>(null)
   const [mode, setMode] = useState<'idle' | 'preview' | 'committed'>('idle')
 
-  const supportsDryRun = type === 'guests' || type === 'bookings'
+  const supportsDryRun = type === 'guests' || type === 'bookings' || type === 'rooms'
 
   async function handleExport() {
     setExporting(true)
@@ -168,14 +168,23 @@ export default function CSVImportExport({ type, onImportSuccess }: CSVImportExpo
         { label: 'Updates', value: summary.toUpdate ?? 0 },
         { label: 'Skipped', value: summary.skipped },
       ]
+    } else if (type === 'bookings') {
+      return [
+        { label: 'Total rows', value: summary.totalRows },
+        { label: 'Ready to import', value: summary.ready },
+        { label: 'New bookings', value: summary.toInsert ?? summary.ready },
+        { label: 'Skipped', value: summary.skipped },
+      ]
+    } else if (type === 'rooms') {
+      return [
+        { label: 'Total rows', value: summary.totalRows },
+        { label: 'Ready to import', value: summary.ready },
+        { label: 'New rooms', value: summary.toInsert ?? summary.ready },
+        { label: 'Skipped', value: summary.skipped },
+      ]
     }
 
-    return [
-      { label: 'Total rows', value: summary.totalRows },
-      { label: 'Ready to import', value: summary.ready },
-      { label: 'New bookings', value: summary.toInsert ?? summary.ready },
-      { label: 'Skipped', value: summary.skipped },
-    ]
+    return []
   }, [summary, type])
 
   return (
@@ -284,11 +293,16 @@ export default function CSVImportExport({ type, onImportSuccess }: CSVImportExpo
           <div>
             Columns: <code>name</code>, <code>email</code>, optional <code>phone</code>, <code>notes</code>. Duplicate emails are deduped; missing name/email rows are skipped.
           </div>
-        ) : (
+        ) : type === 'bookings' ? (
           <div>
             Columns: <code>guest_name</code> (optional), <code>guest_email</code>, optional <code>room_name</code> or <code>bed_name</code>,
             <code>check_in</code>, <code>check_out</code>, optional <code>status</code> (confirmed/pending/cancelled), <code>notes</code>.
             Guests must already exist. Rows with missing data or conflicts are skipped.
+          </div>
+        ) : (
+          <div>
+            Columns: <code>name</code>, <code>type</code> (private/dorm), <code>max_capacity</code>, optional <code>notes</code>.
+            Missing data rows are skipped.
           </div>
         )}
       </Instructions>

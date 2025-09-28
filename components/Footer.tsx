@@ -11,7 +11,7 @@ type FooterItems = SingleFooterList[];
 
 const footerItems: FooterItems = [
   {
-    title: 'Company',
+    title: 'Legal',
     items: [
       { title: 'Privacy Policy', href: '/privacy-policy' },
       { title: 'Cookies Policy', href: '/cookies-policy' },
@@ -21,13 +21,13 @@ const footerItems: FooterItems = [
     title: 'Product',
     items: [
       { title: 'Features', href: '/features' },
-      { title: 'Something', href: '/something' },
-      { title: 'Something else', href: '/something-else' },
-      { title: 'And something else', href: '/and-something-else' },
+      { title: 'Pricing', href: '/pricing' },
+      { title: 'Documentation', href: '/docs' },
+      { title: 'API Reference', href: '/api' },
     ],
   },
   {
-    title: 'Knowledge',
+    title: 'Resources',
     items: [
       { title: 'Blog', href: '/blog' },
       { title: 'Contact', href: '/contact' },
@@ -36,12 +36,12 @@ const footerItems: FooterItems = [
     ],
   },
   {
-    title: 'Something',
+    title: 'Company',
     items: [
-      { title: 'Features2', href: '/features2' },
-      { title: 'Something2', href: '/something2' },
-      { title: 'Something else2', href: '/something-else2' },
-      { title: 'And something else2', href: '/and-something-else2' },
+      { title: 'About Us', href: '/about' },
+      { title: 'Careers', href: '/careers' },
+      { title: 'Partners', href: '/partners' },
+      { title: 'Press', href: '/press' },
     ],
   },
 ];
@@ -57,19 +57,19 @@ export default function Footer() {
         </ListContainer>
         <BottomBar>
           <ShareBar>
-            <SocialAnchor href="https://www.twitter.com/my-saas-startup" target="_blank" rel="noreferrer">
+            <SocialAnchor href="https://www.twitter.com/hostelpulse" target="_blank" rel="noreferrer">
               <TwitterIcon size={50} round={true} />
             </SocialAnchor>
 
-            <SocialAnchor href="https://www.facebook.com/my-saas-startup" target="_blank" rel="noreferrer">
+            <SocialAnchor href="https://www.facebook.com/hostelpulse" target="_blank" rel="noreferrer">
               <FacebookIcon size={50} round={true} />
             </SocialAnchor>
 
-            <SocialAnchor href="https://www.linkedin.com/my-saas-startup" target="_blank" rel="noreferrer">
+            <SocialAnchor href="https://www.linkedin.com/company/hostelpulse" target="_blank" rel="noreferrer">
               <LinkedinIcon size={50} round={true} />
             </SocialAnchor>
           </ShareBar>
-          <Copyright>&copy; Copyright 2021 My Saas Startup</Copyright>
+          <Copyright>&copy; Copyright {new Date().getFullYear()} HostelPulse</Copyright>
         </BottomBar>
       </Container>
     </FooterWrapper>

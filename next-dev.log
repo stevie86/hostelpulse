@@ -1,0 +1,4 @@
+ready - started server on 0.0.0.0:3000, url: http://localhost:3000
+info  - Loaded env from /home/user/webdev/hostelpulse/.env.local
+warn  - SWC minify release candidate enabled. https://nextjs.org/docs/messages/swc-minify-enabled
+event - compiled client and server successfully in 8.1s (1422 modules)

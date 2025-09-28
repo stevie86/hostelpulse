@@ -43,7 +43,7 @@ export default function NewsletterModal({ onClose }: NewsletterModalProps) {
                 {hasSignedUp && <MailSentState />}
                 {!hasSignedUp && (
                   <>
-                    <Title>Are you ready to enroll to the best newsletter ever?</Title>
+                    <Title>Stay Updated on HostelPulse Features</Title>
                     <Row>
                       <CustomInput
                         value={email}
@@ -52,7 +52,7 @@ export default function NewsletterModal({ onClose }: NewsletterModalProps) {
                         required
                       />
                       <CustomButton as="button" type="submit" disabled={hasSignedUp}>
-                        Submit
+                        Subscribe
                       </CustomButton>
                     </Row>
                     {message && <ErrorMessage dangerouslySetInnerHTML={{ __html: message as string }} />}

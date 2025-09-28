@@ -11,28 +11,28 @@ import { media } from 'utils/media';
 const TESTIMONIALS = [
   {
     companyLogoUrl: '/testimonials/company-logo-1.svg',
-    content: `Really good. I am so pleased with this product. I didn't even need training.`,
+    content: `HostelPulse has transformed how we manage daily operations. We've reduced check-in time by 75% and eliminated double-booking incidents completely.`,
     author: {
-      name: 'Clyde Edwards',
-      title: 'Very Serious Man',
+      name: 'Sarah Johnson',
+      title: 'Manager, Downtown Hostel',
       avatarUrl: '/testimonials/author-photo-1.jpeg',
     },
   },
   {
     companyLogoUrl: '/testimonials/company-logo-2.svg',
-    content: `It's really wonderful. I use saas product often. Thank You! Saas product has really helped our business.`,
+    content: `The CSV import feature saved us hours of manual data entry. Transitioning from our old system was seamless, and the team adopted it immediately.`,
     author: {
-      name: 'Jimmy Hunter',
-      title: 'Sigma Male University Graduate',
+      name: 'Michael Torres',
+      title: 'Operations Director, City Backpackers',
       avatarUrl: '/testimonials/author-photo-2.jpeg',
     },
   },
   {
     companyLogoUrl: '/testimonials/company-logo-3.svg',
-    content: `Since I invested in saas product I made over 100,000 dollars profits. It really saves me time and effort. saas product is exactly what our business has been lacking.`,
+    content: `Since implementing HostelPulse, we've increased our occupancy rate by 15% through better booking management and reduced administrative overhead.`,
     author: {
-      name: 'Marjorie Morgan',
-      title: 'Chief Chad Officer',
+      name: 'Emma Chen',
+      title: 'Owner, Urban Lodge',
       avatarUrl: '/testimonials/author-photo-3.jpeg',
     },
   },

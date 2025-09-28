@@ -1,11 +1,12 @@
 import NextLink from 'next/link'
 import { useRouter } from 'next/router'
-import { PropsWithChildren, useEffect, useRef } from 'react'
+import { PropsWithChildren, useEffect, useRef, useState, useCallback } from 'react'
 import styled from 'styled-components'
 import { NavItems } from 'types'
 import ClientOnly from './ClientOnly'
 import CloseIcon from './CloseIcon'
 import OriginalDrawer from './Drawer'
+import { supabase } from '../lib/supabase'
 
 type NavigationDrawerProps = PropsWithChildren<{ items: NavItems }>
 
@@ -32,6 +33,41 @@ export default function NavigationDrawer({ children, items }: NavigationDrawerPr
 function NavItemsList({ items }: NavigationDrawerProps) {
   const { close } = OriginalDrawer.useDrawer()
   const router = useRouter()
+  const [user, setUser] = useState<any>(null);
+  const [loadingUser, setLoadingUser] = useState(true);
+
+  // Check for user session on mount
+  useEffect(() => {
+    const checkUserSession = async () => {
+      setLoadingUser(true);
+      const { data: { session } } = await supabase.auth.getSession();
+      setUser(session?.user || null);
+      setLoadingUser(false);
+    };
+
+    checkUserSession();
+
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user || null);
+      setLoadingUser(false);
+    });
+
+    return () => {
+      subscription?.unsubscribe();
+    };
+  }, []);
+
+  const handleLogout = useCallback(async () => {
+    try {
+      await supabase.auth.signOut();
+      setUser(null);
+      close(); // Close the drawer after logout
+      router.push('/auth/login');
+    } catch (error) {
+      console.error('Error logging out:', error);
+    }
+  }, [close, router]);
 
   useEffect(() => {
     function handleRouteChangeComplete() {
@@ -51,6 +87,12 @@ function NavItemsList({ items }: NavigationDrawerProps) {
           </NavItem>
         )
       })}
+      {user && (
+        <NavUserSection>
+          <UserEmail>Welcome, {user.email}</UserEmail>
+          <LogoutButton onClick={handleLogout}>Logout</LogoutButton>
+        </NavUserSection>
+      )}
     </ul>
   )
 }
@@ -122,3 +164,36 @@ const NavItem = styled.li`
     text-align: center;
   }
 `
+
+const NavUserSection = styled.li`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  border-top: 1px solid rgb(var(--border));
+  margin-top: 1rem;
+  width: 100%;
+`;
+
+const UserEmail = styled.div`
+  font-size: 1.8rem;
+  text-align: center;
+`;
+
+const LogoutButton = styled.button`
+  background: none;
+  border: 1px solid currentColor;
+  color: currentColor;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 1.8rem;
+  text-transform: uppercase;
+  transition: all 0.2s;
+  
+  &:hover {
+    background: currentColor;
+    color: rgb(var(--background));
+  }
+`;
