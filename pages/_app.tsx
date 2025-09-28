@@ -7,7 +7,7 @@ import { AppProps } from 'next/dist/shared/lib/router/router';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { ColorModeScript } from 'nextjs-color-mode';
-import React, { PropsWithChildren } from 'react';
+import React, { PropsWithChildren, useState, useEffect } from 'react';
 import { TinaEditProvider } from 'tinacms/dist/edit-state';
 
 import Footer from 'components/Footer';
@@ -18,20 +18,61 @@ import NewsletterModal from 'components/NewsletterModal';
 import WaveCta from 'components/WaveCta';
 import { NewsletterModalContextProvider, useNewsletterModalContext } from 'contexts/newsletter-modal.context';
 import { NavItems } from 'types';
+import { supabase } from '../lib/supabase';
 
-const navItems: NavItems = [
-  { title: 'Dashboard', href: '/dashboard' },
-  { title: 'Guests', href: '/guests' },
-  { title: 'Bookings', href: '/bookings' },
-  { title: 'Rooms', href: '/rooms' },
-  { title: 'Features', href: '/features' },
-  { title: 'Pricing', href: '/pricing' },
-  { title: 'Login', href: '/auth/login', outlined: true },
-];
+
 
 const TinaCMS = dynamic(() => import('tinacms'), { ssr: false });
 
 function MyApp({ Component, pageProps }: AppProps) {
+  const [navItems, setNavItems] = useState<NavItems>([
+    { title: 'Dashboard', href: '/dashboard' },
+    { title: 'Guests', href: '/guests' },
+    { title: 'Bookings', href: '/bookings' },
+    { title: 'Rooms', href: '/rooms' },
+    { title: 'Features', href: '/features' },
+    { title: 'Pricing', href: '/pricing' },
+    { title: 'Login', href: '/auth/login', outlined: true },
+  ]);
+
+  // Update navigation items based on authentication status
+  useEffect(() => {
+    const updateNavItems = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      const isLoggedIn = !!session?.user;
+
+      if (isLoggedIn) {
+        setNavItems([
+          { title: 'Dashboard', href: '/dashboard' },
+          { title: 'Guests', href: '/guests' },
+          { title: 'Bookings', href: '/bookings' },
+          { title: 'Rooms', href: '/rooms' },
+          { title: 'Reports', href: '/reports' },
+          { title: 'Housekeeping', href: '/housekeeping' },
+          { title: 'Features', href: '/features' },
+          { title: 'Pricing', href: '/pricing' },
+        ]);
+      } else {
+        setNavItems([
+          { title: 'Features', href: '/features' },
+          { title: 'Pricing', href: '/pricing' },
+          { title: 'Login', href: '/auth/login', outlined: true },
+        ]);
+      }
+    };
+
+    updateNavItems();
+
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(() => {
+      updateNavItems();
+    });
+
+    return () => {
+      subscription?.unsubscribe();
+    };
+  }, []);
+
   return (
     <>
       <Head>
@@ -51,7 +92,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       <ColorModeScript />
       <GlobalStyle />
 
-      <Providers>
+      <Providers navItems={navItems}>
         <Modals />
         <Navbar items={navItems} />
         <TinaEditProvider
@@ -78,7 +119,12 @@ function MyApp({ Component, pageProps }: AppProps) {
   );
 }
 
-function Providers<T>({ children }: PropsWithChildren<T>) {
+type ProvidersProps = {
+  children: React.ReactNode;
+  navItems: NavItems;
+};
+
+function Providers({ children, navItems }: ProvidersProps) {
   return (
     <NewsletterModalContextProvider>
       <NavigationDrawer items={navItems}>{children}</NavigationDrawer>

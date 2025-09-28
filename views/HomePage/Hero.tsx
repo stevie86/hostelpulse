@@ -15,10 +15,11 @@ export default function Hero() {
     <HeroWrapper>
       <Contents>
         <CustomOverTitle>Owner Console</CustomOverTitle>
-        <Heading>Run your hostel day to day</Heading>
+        <Heading>Streamline Your Hostel Operations</Heading>
         <Description>
-          Check arrivals/departures, update check‑in/out, manage guests and bookings, and import/export CSV.
-          Built on an EU‑hosted backend with simple, reliable workflows.
+          Manage arrivals and departures, track guests and bookings, prevent double-bookings, 
+          and import/export data with ease. Built on secure EU infrastructure with intuitive workflows 
+          designed specifically for hostel owners.
         </Description>
         <CustomButtonGroup>
           <NextLink href="/dashboard" passHref>

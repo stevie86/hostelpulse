@@ -8,48 +8,48 @@ import { media } from 'utils/media';
 const FEATURES = [
   {
     imageUrl: '/grid-icons/asset-1.svg',
-    title: 'Arrivals & Departures',
-    description: 'See today’s check‑ins/outs and update status instantly.',
+    title: 'Real-Time Arrivals & Departures',
+    description: 'Instant visibility into check-ins/outs with one-click status updates.',
   },
   {
     imageUrl: '/grid-icons/asset-2.svg',
-    title: 'Guests & Bookings',
-    description: 'Add guests, create/cancel bookings, and prevent overlaps.',
+    title: 'Smart Guest & Booking Management',
+    description: 'Add guests, create/cancel bookings, and automatically prevent double-bookings.',
   },
   {
     imageUrl: '/grid-icons/asset-3.svg',
-    title: 'CSV Import/Export',
-    description: 'Move from spreadsheets in minutes; export snapshots anytime.',
+    title: 'Seamless CSV Import/Export',
+    description: 'Transition from spreadsheets in minutes; export data snapshots anytime.',
   },
   {
     imageUrl: '/grid-icons/asset-4.svg',
-    title: 'EU‑Hosted Backend',
-    description: 'Supabase in the EU with strict server‑side writes.',
+    title: 'EU-Hosted Secure Backend',
+    description: 'Built on Supabase infrastructure hosted in the EU with strict server-side controls.',
   },
   {
     imageUrl: '/grid-icons/asset-5.svg',
-    title: 'API Access',
-    description: 'Use the REST endpoints to integrate your tooling.',
+    title: 'Developer API Access',
+    description: 'RESTful endpoints to integrate with your existing tooling and workflows.',
   },
   {
     imageUrl: '/grid-icons/asset-6.svg',
-    title: 'Keypad Email (Soon)',
-    description: 'Send guests codes and instructions with one click.',
+    title: 'Keypad Email (Coming Soon)',
+    description: 'Automatically send guests door codes and stay instructions with one click.',
   },
   {
     imageUrl: '/grid-icons/asset-7.svg',
-    title: 'Telegram Bot (Soon)',
-    description: 'Manage ops from chat: /today, /checkin, /sendcode.',
+    title: 'Telegram Bot (Coming Soon)',
+    description: 'Manage daily operations from chat with commands like /today, /checkin, /sendcode.',
   },
   {
     imageUrl: '/grid-icons/asset-8.svg',
-    title: 'Multi‑House (Soon)',
-    description: 'Owner scoping + RLS for multiple properties.',
+    title: 'Multi-Property Support (Coming Soon)',
+    description: 'Owner-scoped access with Row Level Security for managing multiple properties.',
   },
   {
     imageUrl: '/grid-icons/asset-9.svg',
-    title: 'Audit & Alerts (Soon)',
-    description: 'Action logs and basic alerts for late arrivals.',
+    title: 'Audit Trail & Alerts (Coming Soon)',
+    description: 'Comprehensive action logs and smart alerts for late arrivals and other events.',
   },
 ];
 

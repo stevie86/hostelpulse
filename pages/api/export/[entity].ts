@@ -36,8 +36,24 @@ export default withAuth(async (req: NextApiRequest, res: NextApiResponse, auth) 
         created_at: b.created_at,
       }))
       headers = ['id', 'guest_name', 'guest_email', 'room_name', 'bed_name', 'check_in', 'check_out', 'status', 'notes', 'created_at']
+    } else if (entity === 'rooms') {
+      const { data, error } = await supabase
+        .from('rooms')
+        .select('id,name,type,max_capacity,created_at,beds(name)')
+        .eq('owner_id', ownerId)
+        .order('name')
+      if (error) return res.status(500).json({ error: error.message })
+      rows = (data || []).map((r: any) => ({
+        id: r.id,
+        name: r.name,
+        type: r.type,
+        max_capacity: r.max_capacity,
+        bed_count: r.beds?.length || 0,
+        created_at: r.created_at,
+      }))
+      headers = ['id', 'name', 'type', 'max_capacity', 'bed_count', 'created_at']
     } else {
-      return res.status(400).json({ error: 'Unsupported entity. Use guests or bookings.' })
+      return res.status(400).json({ error: 'Unsupported entity. Use guests, bookings, or rooms.' })
     }
 
     if (rows.length === 0) {

@@ -1,7 +1,7 @@
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useNewsletterModalContext } from 'contexts/newsletter-modal.context';
 import { ScrollPositionEffectProps, useScrollPosition } from 'hooks/useScrollPosition';
@@ -12,6 +12,7 @@ import Container from './Container';
 import Drawer from './Drawer';
 import { HamburgerIcon } from './HamburgerIcon';
 import Logo from './Logo';
+import { supabase } from '../lib/supabase';
 
 const ColorSwitcher = dynamic(() => import('../components/ColorSwitcher'), { ssr: false });
 
@@ -23,10 +24,69 @@ export default function Navbar({ items }: NavbarProps) {
   const router = useRouter();
   const { toggle } = Drawer.useDrawer();
   const [scrollingDirection, setScrollingDirection] = useState<ScrollingDirections>('none');
+  const [user, setUser] = useState<any>(null); // Store user information
+  const [loadingUser, setLoadingUser] = useState(false); // Start with false to prevent flickering
 
   let lastScrollY = useRef(0);
   const lastRoute = useRef('');
   const stepSize = useRef(50);
+
+  // Check for user session on mount
+  useEffect(() => {
+    let mounted = true;
+    let loadingTimeout: NodeJS.Timeout;
+    
+    const checkUserSession = async () => {
+      // Only show loading indicator if it takes longer than 300ms
+      loadingTimeout = setTimeout(() => {
+        if (mounted) {
+          setLoadingUser(true);
+        }
+      }, 300);
+      
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (mounted) {
+          clearTimeout(loadingTimeout);
+          setUser(session?.user || null);
+          setLoadingUser(false);
+        }
+      } catch (error) {
+        console.error('Error checking user session:', error);
+        if (mounted) {
+          clearTimeout(loadingTimeout);
+          setLoadingUser(false);
+        }
+      }
+    };
+
+    checkUserSession();
+
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (mounted) {
+        clearTimeout(loadingTimeout);
+        setUser(session?.user || null);
+        setLoadingUser(false);
+      }
+    });
+
+    return () => {
+      mounted = false;
+      clearTimeout(loadingTimeout);
+      subscription?.unsubscribe();
+    };
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+      await supabase.auth.signOut();
+      setUser(null);
+      router.push('/auth/login');
+    } catch (error) {
+      console.error('Error logging out:', error);
+    }
+  };
 
   useScrollPosition(scrollPositionCallback, [router.asPath], undefined, undefined, 50);
 
@@ -67,7 +127,7 @@ export default function Navbar({ items }: NavbarProps) {
   return (
     <NavbarContainer hidden={isNavbarHidden} transparent={isTransparent}>
       <Content>
-        <Link href="/" passHref legacyBehavior>
+        <Link href="/" passHref>
           <LogoWrapper href="/">
             <Logo />
           </LogoWrapper>
@@ -77,6 +137,20 @@ export default function Navbar({ items }: NavbarProps) {
             <NavItem key={singleItem.href} {...singleItem} />
           ))}
         </NavItemList>
+        <AuthSection>
+          {loadingUser ? (
+            <span>Loading...</span>
+          ) : user ? (
+            <UserMenu>
+              <span>Welcome, {user.email}</span>
+              <LogoutButton onClick={handleLogout}>Logout</LogoutButton>
+            </UserMenu>
+          ) : (
+            <Link href="/auth/login" passHref>
+              <LoginLink>Login</LoginLink>
+            </Link>
+          )}
+        </AuthSection>
         <ColorSwitcherContainer>
           <ColorSwitcher />
         </ColorSwitcherContainer>
@@ -101,7 +175,7 @@ function NavItem({ href, title, outlined }: SingleNavItem) {
 
   return (
     <NavItemWrapper outlined={outlined}>
-      <Link href={href} passHref legacyBehavior>
+      <Link href={href} passHref>
         <a href={href}>{title}</a>
       </Link>
     </NavItemWrapper>
@@ -185,9 +259,50 @@ const Content = styled(Container)`
   display: flex;
   justify-content: flex-end;
   align-items: center;
+
+  ${NavItemList} {
+    margin-right: auto;
+  }
 `;
 
 const ColorSwitcherContainer = styled.div`
   width: 4rem;
   margin: 0 1rem;
+`;
+
+const AuthSection = styled.div`
+  display: flex;
+  align-items: center;
+  margin-right: 1rem;
+`;
+
+const UserMenu = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 1.3rem;
+`;
+
+const LogoutButton = styled.button`
+  background: none;
+  border: none;
+  color: rgb(var(--text));
+  cursor: pointer;
+  font-size: inherit;
+  text-decoration: underline;
+  padding: 0;
+  
+  &:hover {
+    opacity: 0.7;
+  }
+`;
+
+const LoginLink = styled.a`
+  color: rgb(var(--text));
+  text-decoration: none;
+  font-size: 1.3rem;
+  
+  &:hover {
+    text-decoration: underline;
+  }
 `;

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import Button from 'components/Button'
 import Container from 'components/Container'
@@ -38,6 +38,12 @@ export default function GuestsPage() {
     }
   }
 
+  const summary = useMemo(() => {
+    const total = guests.length
+    const withNotes = guests.filter((guest) => guest.notes).length
+    return { total, withNotes }
+  }, [guests])
+
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault()
     if (!form.name || !form.email) return
@@ -67,6 +73,16 @@ export default function GuestsPage() {
             <SectionTitle>Guests</SectionTitle>
             <Small>Manage your guest list</Small>
           </Header>
+
+          <ActionBar>
+            <Stats>
+              <StatBubble data-tone="ok">Total guests: {summary.total}</StatBubble>
+              <StatBubble data-tone="info">With notes: {summary.withNotes}</StatBubble>
+            </Stats>
+            <Button type="button" onClick={load} disabled={loading}>
+              {loading ? 'Refreshing…' : 'Refresh list'}
+            </Button>
+          </ActionBar>
 
           <Card>
             <CardTitle>Add Guest</CardTitle>
@@ -118,6 +134,7 @@ export default function GuestsPage() {
                   <GuestMeta>{g.email}</GuestMeta>
                   {g.phone && <GuestMeta>{g.phone}</GuestMeta>}
                   {g.notes && <GuestNotes>{g.notes}</GuestNotes>}
+                  <EditLink href={`/guests/edit/${g.id}`}>Edit</EditLink>
                 </GuestCard>
               ))}
             </Grid>
@@ -132,6 +149,15 @@ const Wrapper = styled.div`
 `
 
 const Header = styled.div`
+  margin-bottom: 1.5rem;
+`
+
+const ActionBar = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
   margin-bottom: 1.5rem;
 `
 
@@ -200,4 +226,44 @@ const GuestNotes = styled.div`
   margin-top: 0.5rem;
   font-size: 1.3rem;
   opacity: 0.7;
+`
+
+const EditLink = styled.a`
+  display: inline-block;
+  margin-top: 0.8rem;
+  padding: 0.3rem 0.8rem;
+  background: rgba(59, 130, 246, 0.1);
+  color: #1d4ed8;
+  text-decoration: none;
+  border-radius: 999px;
+  font-size: 1.2rem;
+  
+  &:hover {
+    background: rgba(59, 130, 246, 0.2);
+    text-decoration: underline;
+  }
+`
+
+const Stats = styled.div`
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+`
+
+const StatBubble = styled.span`
+  padding: 0.3rem 0.8rem;
+  border-radius: 999px;
+  font-size: 1.2rem;
+  background: rgba(59, 130, 246, 0.1);
+  color: #1d4ed8;
+
+  &[data-tone='ok'] {
+    background: rgba(16, 185, 129, 0.12);
+    color: #047857;
+  }
+
+  &[data-tone='info'] {
+    background: rgba(59, 130, 246, 0.1);
+    color: #1d4ed8;
+  }
 `

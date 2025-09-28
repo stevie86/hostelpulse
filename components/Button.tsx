@@ -1,7 +1,7 @@
 import { PropsWithChildren } from 'react';
 import styled from 'styled-components';
 
-type ButtonProps = PropsWithChildren<{ transparent?: boolean; disabled?: boolean }>;
+type ButtonProps = PropsWithChildren<{ transparent?: boolean; disabled?: boolean; small?: boolean }>;
 
 const Button = styled.a<ButtonProps>`
   border: none;
@@ -10,8 +10,8 @@ const Button = styled.a<ButtonProps>`
   text-decoration: none;
   text-align: center;
   background: ${(p) => (p.transparent ? 'transparent' : 'rgb(var(--primary))')};
-  padding: 1.75rem 2.25rem;
-  font-size: 1.2rem;
+  padding: ${(p) => (p.small ? '1rem 1.5rem' : '1.75rem 2.25rem')};
+  font-size: ${(p) => (p.small ? '1rem' : '1.2rem')};
   color: ${(p) => (p.transparent ? 'rgb(var(--text))' : 'rgb(var(--textSecondary))')};
   text-transform: uppercase;
   font-family: var(--font);
@@ -26,7 +26,7 @@ const Button = styled.a<ButtonProps>`
   pointer-events: ${(p) => (p.disabled ? 'none' : 'auto')};
 
   span {
-    margin-left: 2rem;
+    margin-left: ${(p) => (p.small ? '1.5rem' : '2rem')};
   }
 
   &:hover {

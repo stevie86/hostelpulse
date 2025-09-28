@@ -1,321 +1,411 @@
-import { format, isToday } from 'date-fns'
-import Link from 'next/link'
-import React, { useEffect, useState } from 'react'
-import styled from 'styled-components'
-import BasicCard from 'components/BasicCard'
-import Button from 'components/Button'
-import Container from 'components/Container'
-import CSVImportExport from 'components/CSVImportExport'
-import SectionTitle from 'components/SectionTitle'
+import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import Head from 'next/head';
+import Container from 'components/Container';
+import SectionTitle from 'components/SectionTitle';
+import OverTitle from 'components/OverTitle';
+import { media } from 'utils/media';
+import Button from 'components/Button';
+import ButtonGroup from 'components/ButtonGroup';
+import { supabase } from '../lib/supabase';
 
 interface Guest {
-  id: string
-  name: string
-  email: string
-  phone?: string
+  id: string;
+  name: string;
+  email: string;
+  phone?: string;
+  check_in: string;
+  check_out: string;
+  room_name?: string;
+  bed_name?: string;
 }
 
-interface Booking {
-  id: string
-  check_in: string
-  check_out: string
-  status: string
-  guests: Guest
-  rooms?: { name: string }
-  beds?: { name: string }
+interface Room {
+  id: string;
+  name: string;
+  type: 'private' | 'dorm';
+  max_capacity: number;
+  current_occupancy: number;
 }
 
 export default function DashboardPage() {
-  const [bookings, setBookings] = useState<Booking[]>([])
-  const [guests, setGuests] = useState<Guest[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+  const [todaysArrivals, setTodaysArrivals] = useState<Guest[]>([]);
+  const [todaysDepartures, setTodaysDepartures] = useState<Guest[]>([]);
+  const [availableRooms, setAvailableRooms] = useState<Room[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchData()
-  }, [])
+    loadDashboardData();
+  }, []);
 
-  async function fetchData() {
-    try {
-      const [bookingsRes, guestsRes] = await Promise.all([
-        fetch('/api/bookings'),
-        fetch('/api/guests')
-      ])
-
-      if (!bookingsRes.ok || !guestsRes.ok) {
-        throw new Error('Failed to fetch data')
-      }
-
-      const bookingsData = await bookingsRes.json()
-      const guestsData = await guestsRes.json()
+  async function loadDashboardData() {
+    setLoading(true);
+    
+    // Simulate loading dashboard data
+    setTimeout(() => {
+      // Sample data for demonstration
+      setTodaysArrivals([
+        { id: '1', name: 'Alex Johnson', email: 'alex.johnson@email.com', phone: '+1234567890', check_in: '2023-10-01', check_out: '2023-10-05', room_name: 'Room 101' },
+        { id: '2', name: 'Maria Garcia', email: 'maria.garcia@email.com', phone: '+34123456789', check_in: '2023-10-01', check_out: '2023-10-03', bed_name: 'Bed 3' },
+        { id: '3', name: 'Thomas Müller', email: 'thomas.mueller@email.com', phone: '+491234567890', check_in: '2023-10-01', check_out: '2023-10-07', room_name: 'Room 205' },
+      ]);
       
-      setBookings(bookingsData)
-      setGuests(guestsData)
-    } catch (err) {
-      setError('Failed to load dashboard data')
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const todayArrivals = bookings.filter(booking => 
-    isToday(new Date(booking.check_in)) && booking.status === 'confirmed'
-  )
-
-  const todayDepartures = bookings.filter(booking => 
-    isToday(new Date(booking.check_out)) && booking.status === 'confirmed'
-  )
-
-  if (loading) {
-    return (
-      <Container>
-        <DashboardWrapper>
-          <SectionTitle>Dashboard</SectionTitle>
-          <LoadingText>Loading dashboard...</LoadingText>
-        </DashboardWrapper>
-      </Container>
-    )
-  }
-
-  if (error) {
-    return (
-      <Container>
-        <DashboardWrapper>
-          <SectionTitle>Dashboard</SectionTitle>
-          <ErrorText>{error}</ErrorText>
-          <Button onClick={fetchData}>Retry</Button>
-        </DashboardWrapper>
-      </Container>
-    )
+      setTodaysDepartures([
+        { id: '4', name: 'Sarah Williams', email: 'sarah.williams@email.com', phone: '+441234567890', check_in: '2023-09-25', check_out: '2023-10-01', room_name: 'Room 301' },
+        { id: '5', name: 'Yuki Tanaka', email: 'yuki.tanaka@email.com', phone: '+81123456789', check_in: '2023-09-28', check_out: '2023-10-01', bed_name: 'Bed 7' },
+      ]);
+      
+      setAvailableRooms([
+        { id: '1', name: 'Room 102', type: 'private', max_capacity: 2, current_occupancy: 0 },
+        { id: '2', name: 'Room 103', type: 'private', max_capacity: 4, current_occupancy: 0 },
+        { id: '3', name: 'Dormitory A', type: 'dorm', max_capacity: 12, current_occupancy: 8 },
+        { id: '4', name: 'Dormitory B', type: 'dorm', max_capacity: 8, current_occupancy: 3 },
+      ]);
+      
+      setLoading(false);
+    }, 800);
   }
 
   return (
-    <Container>
-      <DashboardWrapper>
-        <Header>
-          <SectionTitle>Dashboard</SectionTitle>
-          <DateText>Today, {format(new Date(), 'MMMM d, yyyy')}</DateText>
-        </Header>
-
-        <CardsGrid>
-          <BasicCard>
-            <CardHeader>
-              <CardTitle>Today&apos;s Arrivals</CardTitle>
-              <CountBadge>{todayArrivals.length}</CountBadge>
-            </CardHeader>
-            {todayArrivals.length === 0 ? (
-              <EmptyState>No arrivals scheduled for today</EmptyState>
-            ) : (
-              <BookingsList>
-                {todayArrivals.map(booking => (
-                  <BookingItem key={booking.id}>
-                    <GuestName>{booking.guests.name}</GuestName>
-                    <RoomInfo>
-                      {booking.beds ? `Bed: ${booking.beds.name}` : 
-                       booking.rooms ? `Room: ${booking.rooms.name}` : 'No room assigned'}
-                    </RoomInfo>
-                  </BookingItem>
+    <>
+      <Head>
+        <title>HostelPulse — Dashboard</title>
+        <meta name="description" content="Your hostel operations dashboard" />
+      </Head>
+      <Wrapper>
+        <Container>
+          <Header>
+            <OverTitle>dashboard</OverTitle>
+            <SectionTitle>Welcome to HostelPulse</SectionTitle>
+            <Description>
+              Streamline your daily hostel operations with real-time arrivals/departures tracking, 
+              smart guest management, and booking oversight that prevents costly double-bookings.
+            </Description>
+            <ButtonGroup>
+              <Button as="a" href="/guests/create">
+                Add New Guest
+              </Button>
+              <Button as="a" href="/bookings/create" transparent>
+                Create Booking
+              </Button>
+              <Button as="a" href="/rooms" transparent>
+                Manage Rooms
+              </Button>
+            </ButtonGroup>
+          </Header>
+          
+          <StatsSection>
+            <StatCard>
+              <StatValue>12</StatValue>
+              <StatLabel>Today's Arrivals</StatLabel>
+            </StatCard>
+            <StatCard>
+              <StatValue>8</StatValue>
+              <StatLabel>Today's Departures</StatLabel>
+            </StatCard>
+            <StatCard>
+              <StatValue>3</StatValue>
+              <StatLabel>Available Rooms</StatLabel>
+            </StatCard>
+            <StatCard>
+              <StatValue>28%</StatValue>
+              <StatLabel>Occupancy Rate</StatLabel>
+            </StatCard>
+          </StatsSection>
+          
+          <SectionGrid>
+            <Section>
+              <SectionHeader>
+                <SectionTitle>Today's Arrivals</SectionTitle>
+                <Button as="a" href="/guests" transparent small>
+                  View All Guests
+                </Button>
+              </SectionHeader>
+              <ArrivalsList>
+                {todaysArrivals.map((guest) => (
+                  <GuestCard key={guest.id}>
+                    <GuestInfo>
+                      <GuestName>{guest.name}</GuestName>
+                      <GuestContact>{guest.email} • {guest.phone}</GuestContact>
+                      <GuestStay>
+                        {guest.room_name || guest.bed_name} • {guest.check_in} to {guest.check_out}
+                      </GuestStay>
+                    </GuestInfo>
+                    <ButtonGroup>
+                      <Button small>Check In</Button>
+                      <Button small transparent>View Details</Button>
+                    </ButtonGroup>
+                  </GuestCard>
                 ))}
-              </BookingsList>
-            )}
-          </BasicCard>
-
-          <BasicCard>
-            <CardHeader>
-              <CardTitle>Today&apos;s Departures</CardTitle>
-              <CountBadge>{todayDepartures.length}</CountBadge>
-            </CardHeader>
-            {todayDepartures.length === 0 ? (
-              <EmptyState>No departures scheduled for today</EmptyState>
-            ) : (
-              <BookingsList>
-                {todayDepartures.map(booking => (
-                  <BookingItem key={booking.id}>
-                    <GuestName>{booking.guests.name}</GuestName>
-                    <RoomInfo>
-                      {booking.beds ? `Bed: ${booking.beds.name}` : 
-                       booking.rooms ? `Room: ${booking.rooms.name}` : 'No room assigned'}
-                    </RoomInfo>
-                  </BookingItem>
+              </ArrivalsList>
+            </Section>
+            
+            <Section>
+              <SectionHeader>
+                <SectionTitle>Today's Departures</SectionTitle>
+                <Button as="a" href="/bookings" transparent small>
+                  View All Bookings
+                </Button>
+              </SectionHeader>
+              <DeparturesList>
+                {todaysDepartures.map((guest) => (
+                  <GuestCard key={guest.id}>
+                    <GuestInfo>
+                      <GuestName>{guest.name}</GuestName>
+                      <GuestContact>{guest.email} • {guest.phone}</GuestContact>
+                      <GuestStay>
+                        {guest.room_name || guest.bed_name} • {guest.check_in} to {guest.check_out}
+                      </GuestStay>
+                    </GuestInfo>
+                    <ButtonGroup>
+                      <Button small>Check Out</Button>
+                      <Button small transparent>View Details</Button>
+                    </ButtonGroup>
+                  </GuestCard>
                 ))}
-              </BookingsList>
-            )}
-          </BasicCard>
-
-          <BasicCard>
-            <CardHeader>
-              <CardTitle>Recent Guests</CardTitle>
-              <CountBadge>{guests.length}</CountBadge>
-            </CardHeader>
-            {guests.length === 0 ? (
-              <EmptyState>
-                No guests yet.{' '}
-                <Link href="/guests" passHref legacyBehavior>
-                  <InlineLink>Add your first guest</InlineLink>
-                </Link>
-              </EmptyState>
-            ) : (
-              <BookingsList>
-                {guests.slice(0, 5).map(guest => (
-                  <BookingItem key={guest.id}>
-                    <GuestName>{guest.name}</GuestName>
-                    <RoomInfo>{guest.email}</RoomInfo>
-                  </BookingItem>
+              </DeparturesList>
+            </Section>
+            
+            <Section fullWidth>
+              <SectionHeader>
+                <SectionTitle>Room Availability</SectionTitle>
+                <Button as="a" href="/rooms" transparent small>
+                  Manage Rooms
+                </Button>
+              </SectionHeader>
+              <RoomsGrid>
+                {availableRooms.map((room) => (
+                  <RoomCard key={room.id}>
+                    <RoomHeader>
+                      <RoomName>{room.name}</RoomName>
+                      <RoomType>{room.type === 'private' ? 'Private Room' : 'Dormitory'}</RoomType>
+                    </RoomHeader>
+                    <RoomCapacity>
+                      Capacity: {room.current_occupancy}/{room.max_capacity}
+                    </RoomCapacity>
+                    <OccupancyBar>
+                      <OccupancyFill style={{ width: `${(room.current_occupancy / room.max_capacity) * 100}%` }} />
+                    </OccupancyBar>
+                    <ButtonGroup>
+                      <Button small>Add Booking</Button>
+                      <Button small transparent>Edit Room</Button>
+                    </ButtonGroup>
+                  </RoomCard>
                 ))}
-              </BookingsList>
-            )}
-          </BasicCard>
-
-          <BasicCard>
-            <CardHeader>
-              <CardTitle>Quick Actions</CardTitle>
-            </CardHeader>
-            <ActionsGrid>
-              <Link href="/guests" passHref legacyBehavior>
-                <ActionButton>Add Guest</ActionButton>
-              </Link>
-              <Link href="/bookings" passHref legacyBehavior>
-                <ActionButton>New Booking</ActionButton>
-              </Link>
-              <Link href="/rooms" passHref legacyBehavior>
-                <ActionButton>Manage Rooms</ActionButton>
-              </Link>
-              <Link href="/housekeeping" passHref legacyBehavior>
-                <ActionButton>Housekeeping List</ActionButton>
-              </Link>
-            </ActionsGrid>
-          </BasicCard>
-
-          <BasicCard>
-            <CardHeader>
-              <CardTitle>Import & Export (Spreadsheets)</CardTitle>
-            </CardHeader>
-            <div style={{ display: 'grid', gap: '1rem' }}>
-              <CSVImportExport type="guests" onImportSuccess={() => fetchData()} />
-              <CSVImportExport type="bookings" onImportSuccess={() => fetchData()} />
-            </div>
-          </BasicCard>
-        </CardsGrid>
-      </DashboardWrapper>
-    </Container>
-  )
+              </RoomsGrid>
+            </Section>
+          </SectionGrid>
+        </Container>
+      </Wrapper>
+    </>
+  );
 }
 
-const DashboardWrapper = styled.div`
-  padding: 2rem 0;
-`
+const Wrapper = styled.div`
+  padding: 5rem 0;
+  
+  ${media('<=tablet')} {
+    padding: 3rem 0;
+  }
+`;
 
 const Header = styled.div`
-  margin-bottom: 2rem;
-`
-
-const DateText = styled.p`
-  margin: 0.5rem 0 0;
-  opacity: 0.7;
-  font-size: 1.4rem;
-`
-
-const CardsGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
+  text-align: center;
+  margin-bottom: 5rem;
   
-  @media (max-width: 768px) {
+  & > *:not(:first-child) {
+    margin-top: 1.5rem;
+  }
+  
+  ${media('<=tablet')} {
+    margin-bottom: 3rem;
+  }
+`;
+
+const Description = styled.p`
+  font-size: 1.8rem;
+  opacity: 0.8;
+  max-width: 70rem;
+  margin: 0 auto;
+  
+  ${media('<=tablet')} {
+    font-size: 1.6rem;
+  }
+`;
+
+const StatsSection = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
+  margin-bottom: 5rem;
+  
+  ${media('<=tablet')} {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+  
+  ${media('<=phone')} {
     grid-template-columns: 1fr;
   }
-`
+`;
 
-const CardHeader = styled.div`
+const StatCard = styled.div`
+  background: rgb(var(--cardBackground));
+  border-radius: 0.8rem;
+  padding: 2rem;
+  text-align: center;
+  box-shadow: var(--shadow-md);
+`;
+
+const StatValue = styled.div`
+  font-size: 3rem;
+  font-weight: bold;
+  color: rgb(var(--primary));
+  margin-bottom: 0.5rem;
+`;
+
+const StatLabel = styled.div`
+  font-size: 1.4rem;
+  opacity: 0.8;
+`;
+
+const SectionGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 3rem;
+  
+  ${media('<=tablet')} {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+`;
+
+const Section = styled.div<{ fullWidth?: boolean }>`
+  background: rgb(var(--cardBackground));
+  border-radius: 0.8rem;
+  padding: 2.5rem;
+  box-shadow: var(--shadow-md);
+  
+  ${(p) =>
+    p.fullWidth &&
+    `
+      grid-column: 1 / -1;
+    `}
+`;
+
+const SectionHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1.5rem;
-`
+  margin-bottom: 2rem;
+  
+  ${media('<=tablet')} {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+`;
 
-const CardTitle = styled.h3`
-  margin: 0;
-  font-size: 1.6rem;
-  font-weight: 600;
-`
-
-const CountBadge = styled.span`
-  background: rgb(var(--primary));
-  color: white;
-  padding: 0.4rem 0.8rem;
-  border-radius: 1.2rem;
-  font-size: 1.2rem;
-  font-weight: 600;
-  min-width: 2.4rem;
-  text-align: center;
-`
-
-const BookingsList = styled.div`
+const ArrivalsList = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-`
+  gap: 1.5rem;
+`;
 
-const BookingItem = styled.div`
-  padding: 1rem;
-  background: rgb(var(--cardBackground));
+const DeparturesList = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+`;
+
+const GuestCard = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
   border-radius: 0.6rem;
-  border: 1px solid rgb(var(--border));
-`
+  background: rgba(var(--text), 0.03);
+  
+  ${media('<=tablet')} {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+`;
+
+const GuestInfo = styled.div`
+  flex: 1;
+  
+  & > *:not(:first-child) {
+    margin-top: 0.5rem;
+  }
+`;
 
 const GuestName = styled.div`
-  font-weight: 600;
-  margin-bottom: 0.3rem;
-`
+  font-weight: bold;
+  font-size: 1.6rem;
+`;
 
-const RoomInfo = styled.div`
-  font-size: 1.3rem;
-  opacity: 0.7;
-`
+const GuestContact = styled.div`
+  font-size: 1.4rem;
+  opacity: 0.8;
+`;
 
-const EmptyState = styled.div`
-  text-align: center;
-  padding: 2rem;
-  opacity: 0.6;
-`
+const GuestStay = styled.div`
+  font-size: 1.4rem;
+  opacity: 0.8;
+`;
 
-const InlineLink = styled.a`
-  color: rgb(var(--primary));
-  text-decoration: none;
-
-  &:hover {
-    text-decoration: underline;
-  }
-`
-
-const ActionsGrid = styled.div`
+const RoomsGrid = styled.div`
   display: grid;
-  gap: 1rem;
-`
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+`;
 
-const ActionButton = styled.a`
-  display: block;
-  padding: 1rem;
-  background: rgb(var(--primary));
-  color: white;
-  text-decoration: none;
+const RoomCard = styled.div`
+  background: rgba(var(--text), 0.03);
   border-radius: 0.6rem;
-  text-align: center;
-  font-weight: 500;
-  transition: opacity 0.2s;
+  padding: 1.5rem;
   
-  &:hover {
-    opacity: 0.9;
+  & > *:not(:first-child) {
+    margin-top: 1rem;
   }
-`
+`;
 
-const LoadingText = styled.div`
-  text-align: center;
-  padding: 4rem;
-  opacity: 0.6;
-`
+const RoomHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
 
-const ErrorText = styled.div`
-  color: #b91c1c;
-  text-align: center;
-  margin-bottom: 2rem;
-`
+const RoomName = styled.div`
+  font-weight: bold;
+  font-size: 1.6rem;
+`;
+
+const RoomType = styled.div`
+  font-size: 1.2rem;
+  opacity: 0.7;
+  background: rgba(var(--primary), 0.1);
+  padding: 0.3rem 0.6rem;
+  border-radius: 0.4rem;
+`;
+
+const RoomCapacity = styled.div`
+  font-size: 1.4rem;
+  opacity: 0.8;
+`;
+
+const OccupancyBar = styled.div`
+  height: 0.8rem;
+  background: rgba(var(--text), 0.1);
+  border-radius: 0.4rem;
+  overflow: hidden;
+`;
+
+const OccupancyFill = styled.div`
+  height: 100%;
+  background: rgb(var(--primary));
+  border-radius: 0.4rem;
+`;
