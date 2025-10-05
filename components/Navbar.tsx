@@ -146,9 +146,14 @@ export default function Navbar({ items }: NavbarProps) {
               <LogoutButton onClick={handleLogout}>Logout</LogoutButton>
             </UserMenu>
           ) : (
-            <Link href="/auth/login" passHref>
-              <LoginLink>Login</LoginLink>
-            </Link>
+            <>
+              <Link href="/auth/login" passHref>
+                <LoginLink>Sign in</LoginLink>
+              </Link>
+              <Link href="/auth/register" passHref>
+                <SignupLink>Sign up</SignupLink>
+              </Link>
+            </>
           )}
         </AuthSection>
         <ColorSwitcherContainer>
@@ -301,8 +306,25 @@ const LoginLink = styled.a`
   color: rgb(var(--text));
   text-decoration: none;
   font-size: 1.3rem;
+  margin-right: 1rem;
   
   &:hover {
     text-decoration: underline;
+  }
+`;
+
+const SignupLink = styled.a`
+  color: rgb(var(--text));
+  text-decoration: none;
+  font-size: 1.3rem;
+  padding: 0.5rem 1rem;
+  border: 2px solid rgb(var(--primary));
+  border-radius: 0.5rem;
+  background-color: rgb(var(--primary));
+  color: rgb(var(--textSecondary));
+  
+  &:hover {
+    background-color: transparent;
+    color: rgb(var(--text));
   }
 `;

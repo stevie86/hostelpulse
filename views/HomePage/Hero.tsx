@@ -22,9 +22,9 @@ export default function Hero() {
           designed specifically for hostel owners.
         </Description>
         <CustomButtonGroup>
-          <NextLink href="/dashboard" passHref>
+          <NextLink href="/auth/register" passHref>
             <Button>
-              Open Dashboard <span>&rarr;</span>
+              Get Started <span>&rarr;</span>
             </Button>
           </NextLink>
           <NextLink href="/auth/login" passHref>

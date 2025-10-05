@@ -20,14 +20,14 @@ export default function Cta() {
         reduce administrative overhead, and increase guest satisfaction through better management.
       </Description>
           <ButtonGroup>
-            <NextLink href="#early-access" passHref>
+            <NextLink href="/auth/register" passHref>
               <Button>
-                Subscribe to the newsletter <span>&rarr;</span>
+                Start Free Trial <span>&rarr;</span>
               </Button>
             </NextLink>
-            <NextLink href="#whitepaper" passHref>
+            <NextLink href="/auth/login" passHref>
               <OutlinedButton transparent>
-                Features <span>&rarr;</span>
+                Sign in <span>&rarr;</span>
               </OutlinedButton>
             </NextLink>
           </ButtonGroup>
