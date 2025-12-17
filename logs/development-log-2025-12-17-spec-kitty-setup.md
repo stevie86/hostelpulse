@@ -35,3 +35,28 @@ This tool isolates features into git worktrees, ensuring that when we work on "R
 
 **User:** "Yes and configure it to interface with codex and gemini."
 **Gemini:** Initialized the project with `--ai codex,gemini`. The tool is now live.
+
+**User:** "Populate with all tasks we previously covered."
+**Gemini:** 
+- Implemented **Feature 001: Restore Room Management**.
+  - Created `RoomForm` (Client Component) and `RoomList` (Server Component).
+  - Implemented Server Actions (`create`, `update`, `delete`, `get`).
+  - Added specific Unit Tests (`rooms.test.ts`).
+  - **MERGED** Feature 001 into `main` after resolving conflicts in `eslint.config.cjs`.
+- **Planned Remaining Roadmap:**
+  - `002-booking-management` (Core Conflict Logic).
+  - `003-guest-management` (CRM).
+  - `004-csv-import-export` (Migration).
+  - `005-realtime-dashboard` (UI).
+
+**User:** "Constitution in my browser displays only [placeholders]... that's unacceptable."
+**Gemini:** 
+- Identified that the dashboard was reading a template file.
+- Discovered a critical issue where the root `.kittify` directory contained broken symlinks pointing to nowhere (`../../../`).
+- **FIX:** Removed broken symlinks, restored real directories (`.kittify/memory`), and populated the actual `constitution.md`.
+- Restarted the dashboard.
+
+**User:** "How would you prioritize the features?"
+**Gemini:** 
+- Recommended switching to **Feature 003: Guest Management** immediately.
+- **Reasoning:** Booking Management (002) depends on Guests. Building Guests first allows for a complete Booking implementation without mocking.
