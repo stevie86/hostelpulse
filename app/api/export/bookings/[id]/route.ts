@@ -3,7 +3,7 @@ import prisma from '@/lib/db';
 
 export const dynamic = 'force-dynamic'; // Ensure this API route is dynamic
 
-export async function GET(request: NextRequest, context: any) {
+export async function GET(request: NextRequest, { params }: { params: { id: string | string[] } }) {
   const propertyId = context.params.id;
 
   try {
