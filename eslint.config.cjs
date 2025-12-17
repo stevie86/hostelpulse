@@ -33,7 +33,7 @@ module.exports = [
     },
     plugins: {
       '@typescript-eslint': typescriptEslint,
-      'react-hooks': reactHooks,
+      // 'react-hooks': reactHooks, // Already defined by next/core-web-vitals
     },
     rules: {
       'react-hooks/rules-of-hooks': 'error',
