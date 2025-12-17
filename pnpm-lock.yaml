@@ -20,6 +20,9 @@ importers:
       bcryptjs:
         specifier: ^3.0.3
         version: 3.0.3
+      date-fns:
+        specifier: ^4.1.0
+        version: 4.1.0
       dotenv:
         specifier: ^17.2.3
         version: 17.2.3
@@ -1539,6 +1542,9 @@ packages:
     resolution: {integrity: sha512-BS8PfmtDGnrgYdOonGZQdLZslWIeCGFP9tpan0hi1Co2Zr2NKADsvGYA8XxuG/4UWgJ6Cjtv+YJnB6MM69QGlQ==}
     engines: {node: '>= 0.4'}
 
+  date-fns@4.1.0:
+    resolution: {integrity: sha512-Ukq0owbQXxa/U3EGtsdVBkR1w7KOQ5gIBqdH2hkvknzZPYvBxb/aa6E8L7tmjFtkwZBu3UXBbjIgPo/Ez4xaNg==}
+
   debug@3.2.7:
     resolution: {integrity: sha512-CFjzYYAi4ThfiQvizrFQevTTXHtnCqWfe7x1AhgEscTz6ZbLbfoLRLPugTQyBth6f8ZERVUSyWHFD/7Wu4t1XQ==}
     peerDependencies:
@@ -1559,8 +1565,8 @@ packages:
   decimal.js@10.6.0:
     resolution: {integrity: sha512-YpgQiITW3JXGntzdUmyUR1V812Hn8T1YVXhCu+wO3OpS4eU9l4YdD3qjyiKdV6mvV29zapkMeD390UVEf2lkUg==}
 
-  dedent@1.7.0:
-    resolution: {integrity: sha512-HGFtf8yhuhGhqO07SV79tRp+br4MnbdjeVxotpn1QBl30pcLLCQjX5b2295ll0fv8RKDKsmWYrl05usHM9CewQ==}
+  dedent@1.7.1:
+    resolution: {integrity: sha512-9JmrhGZpOlEgOLdQgSm0zxFaYoQon408V1v49aqTWuXENVlnCuY9JBZcXZiCsZQWDjTm5Qf/nIvAy77mXDAjEg==}
     peerDependencies:
       babel-plugin-macros: ^3.1.0
     peerDependenciesMeta:
@@ -4867,6 +4873,8 @@ snapshots:
       es-errors: 1.3.0
       is-data-view: 1.0.2
 
+  date-fns@4.1.0: {}
+
   debug@3.2.7:
     dependencies:
       ms: 2.1.3
@@ -4877,7 +4885,7 @@ snapshots:
 
   decimal.js@10.6.0: {}
 
-  dedent@1.7.0: {}
+  dedent@1.7.1: {}
 
   deep-is@0.1.4: {}
 
@@ -5741,7 +5749,7 @@ snapshots:
       '@types/node': 20.19.26
       chalk: 4.1.2
       co: 4.6.0
-      dedent: 1.7.0
+      dedent: 1.7.1
       is-generator-fn: 2.1.0
       jest-each: 30.2.0
       jest-matcher-utils: 30.2.0

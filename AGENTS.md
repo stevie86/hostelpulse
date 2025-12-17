@@ -54,5 +54,5 @@ Refer to `docs/SAAS_BUILDER_SETUP.md` for multi-tenancy logic.
 *   **E2E:** Playwright for critical user flows (Booking, Login).
 
 ## 7. Commit Guidelines
-*   Format: `feat:`, `fix:`, `chore:`, `docs:`.
+*   Format: `feat:`, `fix:`, `chore:`.
 *   Scope: Keep changes specific to the active `spec-kitty` feature.
