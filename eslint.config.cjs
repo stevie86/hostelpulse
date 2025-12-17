@@ -14,7 +14,7 @@ const compat = new FlatCompat({
 
 module.exports = [
   {
-    ignores: ['.next', '**/node_modules'],
+    ignores: ['.next', '**/node_modules', 'playwright-report', 'test-results', 'logs', '.kittify', '.venv-speckitty'],
   },
   // Convert the legacy next/core-web-vitals config to flat config format
   ...compat.extends('next/core-web-vitals'),
@@ -38,7 +38,7 @@ module.exports = [
     rules: {
       'react-hooks/rules-of-hooks': 'error',
       'react-hooks/exhaustive-deps': 'warn',
-      '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/no-explicit-any': 'error',
       // Any custom rules not covered by nextVitals
     },
   },
