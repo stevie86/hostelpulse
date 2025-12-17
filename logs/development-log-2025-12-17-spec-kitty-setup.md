@@ -60,3 +60,22 @@ This tool isolates features into git worktrees, ensuring that when we work on "R
 **Gemini:** 
 - Recommended switching to **Feature 003: Guest Management** immediately.
 - **Reasoning:** Booking Management (002) depends on Guests. Building Guests first allows for a complete Booking implementation without mocking.
+
+**User:** "Can you autonomously run through a sprint2mvp?"
+**Gemini:** 
+- **Implemented Feature 003 (Guest Management).**
+  - Created Zod Schema & Server Actions (CRUD).
+  - Built `GuestList` and `GuestForm` UI.
+  - Resolved merge conflicts ("Unrelated Histories") with `main`.
+  - Fixed `package.json` corruption (reverted to `main` version).
+  - **MERGED** Feature 003 into `main`.
+- **CI/CD Improvements:**
+  - Setup GitHub Repository `hostelpulse` (Private).
+  - Configured Branch Protection for `main`.
+  - Updated CI Workflow to use `pnpm`.
+  - Switched project to strict `pnpm` usage.
+
+**User:** "Protect me from scope-creep... keep @AGENTS.md updated."
+**Gemini:** 
+- Updated `AGENTS.md` to reference `docs/SAAS_BUILDER_SETUP.md` but warn against premature optimization (AWS Lambda).
+- Confirmed strict adherence to Vercel/Next.js MVP stack.
