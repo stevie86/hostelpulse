@@ -1,64 +1,125 @@
-'use server';
+"use server";
 
-import { z } from 'zod';
-import prisma from '@/lib/db';
-import { revalidatePath } from 'next/cache';
-import { redirect } from 'next/navigation';
-import { Guest } from '@prisma/client'; // Import Guest type from Prisma
+import { auth } from "@/auth";
+import prisma from "@/lib/db";
+import { GuestSchema } from "@/lib/schemas/guest";
+import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
-const GuestSchema = z.object({
-  firstName: z.string().min(1, 'First Name is required'),
-  lastName: z.string().min(1, 'Last Name is required'),
-  email: z.string().email().optional().or(z.literal('')),
-  phone: z.string().optional(),
-  nationality: z.string().optional(),
-  documentId: z.string().optional(),
-});
-
-type GuestForExport = Pick<Guest, 'firstName' | 'lastName' | 'email' | 'phone' | 'nationality' | 'documentId'> & {
-  [key: string]: string | boolean | Date | null | undefined; // Add index signature
+export type ActionState = {
+  errors?: {
+    firstName?: string[];
+    lastName?: string[];
+    email?: string[];
+    _form?: string[];
+  };
+  message?: string | null;
 };
 
-export async function createGuest(propertyId: string, prevState: any, formData: FormData) {
-  const validatedFields = GuestSchema.safeParse({
-    firstName: formData.get('firstName'),
-    lastName: formData.get('lastName'),
-    email: formData.get('email'),
-    phone: formData.get('phone'),
-    nationality: formData.get('nationality'),
-    documentId: formData.get('documentId'),
-  });
+export async function createGuest(
+  propertyId: string,
+  prevState: ActionState,
+  formData: FormData
+): Promise<ActionState> {
+  const session = await auth();
+  if (!session?.user?.email) {
+    return { message: "Unauthorized" };
+  }
+
+  const rawData = {
+    firstName: formData.get("firstName"),
+    lastName: formData.get("lastName"),
+    email: formData.get("email") || "",
+    phone: formData.get("phone") || undefined,
+    nationality: formData.get("nationality") || undefined,
+    documentType: formData.get("documentType") || undefined,
+    documentId: formData.get("documentId") || undefined,
+    notes: formData.get("notes") || undefined,
+  };
+
+  const validatedFields = GuestSchema.safeParse(rawData);
 
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,
-      message: 'Validation Error',
+      message: "Missing Fields. Failed to Create Guest.",
     };
   }
-
-  const { firstName, lastName, email, phone, nationality, documentId } = validatedFields.data;
 
   try {
     await prisma.guest.create({
       data: {
         propertyId,
-        firstName,
-        lastName,
-        email: email || null,
-        phone: phone || null,
-        nationality: nationality || null,
-        documentId: documentId || null,
+        ...validatedFields.data,
       },
     });
-
-    revalidatePath(`/properties/${propertyId}/guests`);
   } catch (error) {
-    console.error('Create Guest Error:', error);
-    return { message: 'Database Error: Failed to create guest.' };
+    return { message: "Database Error: Failed to Create Guest." };
   }
 
+  revalidatePath(`/properties/${propertyId}/guests`);
   redirect(`/properties/${propertyId}/guests`);
 }
 
+export async function updateGuest(
+  guestId: string,
+  propertyId: string,
+  prevState: ActionState,
+  formData: FormData
+): Promise<ActionState> {
+  const session = await auth();
+  if (!session?.user?.email) {
+    return { message: "Unauthorized" };
+  }
 
+  const rawData = {
+    firstName: formData.get("firstName"),
+    lastName: formData.get("lastName"),
+    email: formData.get("email") || "",
+    phone: formData.get("phone") || undefined,
+    nationality: formData.get("nationality") || undefined,
+    documentType: formData.get("documentType") || undefined,
+    documentId: formData.get("documentId") || undefined,
+    notes: formData.get("notes") || undefined,
+  };
 
+  const validatedFields = GuestSchema.safeParse(rawData);
+
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: "Missing Fields. Failed to Update Guest.",
+    };
+  }
+
+  try {
+    await prisma.guest.update({
+      where: { id: guestId },
+      data: validatedFields.data,
+    });
+  } catch (error) {
+    return { message: "Database Error: Failed to Update Guest." };
+  }
+
+  revalidatePath(`/properties/${propertyId}/guests`);
+  redirect(`/properties/${propertyId}/guests`);
+}
+
+export async function getGuests(propertyId: string, query?: string) {
+  const session = await auth();
+  if (!session?.user?.email) return [];
+
+  return prisma.guest.findMany({
+    where: {
+      propertyId,
+      OR: query
+        ? [
+            { firstName: { contains: query, mode: "insensitive" } },
+            { lastName: { contains: query, mode: "insensitive" } },
+            { email: { contains: query, mode: "insensitive" } },
+          ]
+        : undefined,
+    },
+    orderBy: { lastName: "asc" },
+  });
+}
