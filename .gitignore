@@ -47,3 +47,23 @@ next-env.d.ts
 /hostelpulse-reference/
 .aider*
 .env*.local
+
+# spec-kitty (Local AI Tools)
+.venv-speckitty/
+.kittify/
+.spec-kitty/
+
+# Added by Spec Kitty CLI (auto-managed)
+.claude/
+.codex/
+.opencode/
+.windsurf/
+.gemini/
+.cursor/
+.qwen/
+.kilocode/
+.augment/
+.roo/
+.amazonq/
+.github/copilot/
+.worktrees/

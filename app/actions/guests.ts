@@ -5,6 +5,7 @@ import prisma from '@/lib/db';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { Guest } from '@prisma/client'; // Import Guest type from Prisma
+import { normalizeCurrencyCode, DEFAULT_CURRENCY } from '@/lib/currency';
 
 const GuestSchema = z.object({
   firstName: z.string().min(1, 'First Name is required'),
@@ -13,9 +14,10 @@ const GuestSchema = z.object({
   phone: z.string().optional(),
   nationality: z.string().optional(),
   documentId: z.string().optional(),
+  currency: z.string().length(3, 'Currency must be a 3-letter code').optional().or(z.literal('')),
 });
 
-type GuestForExport = Pick<Guest, 'firstName' | 'lastName' | 'email' | 'phone' | 'nationality' | 'documentId'> & {
+type GuestForExport = Pick<Guest, 'firstName' | 'lastName' | 'email' | 'phone' | 'nationality' | 'documentId' | 'currency'> & {
   [key: string]: string | boolean | Date | null | undefined; // Add index signature
 };
 
@@ -27,6 +29,7 @@ export async function createGuest(propertyId: string, prevState: any, formData: 
     phone: formData.get('phone'),
     nationality: formData.get('nationality'),
     documentId: formData.get('documentId'),
+    currency: formData.get('currency'),
   });
 
   if (!validatedFields.success) {
@@ -36,7 +39,18 @@ export async function createGuest(propertyId: string, prevState: any, formData: 
     };
   }
 
-  const { firstName, lastName, email, phone, nationality, documentId } = validatedFields.data;
+  const { firstName, lastName, email, phone, nationality, documentId, currency } = validatedFields.data;
+
+  const property = await prisma.property.findUnique({
+    where: { id: propertyId },
+    select: { currency: true },
+  });
+
+  if (!property) {
+    return { message: 'Property not found.' };
+  }
+
+  const normalizedCurrency = normalizeCurrencyCode(currency, normalizeCurrencyCode(property.currency, DEFAULT_CURRENCY));
 
   try {
     await prisma.guest.create({
@@ -48,6 +62,7 @@ export async function createGuest(propertyId: string, prevState: any, formData: 
         phone: phone || null,
         nationality: nationality || null,
         documentId: documentId || null,
+        currency: normalizedCurrency,
       },
     });
 
@@ -59,6 +74,5 @@ export async function createGuest(propertyId: string, prevState: any, formData: 
 
   redirect(`/properties/${propertyId}/guests`);
 }
-
 
 

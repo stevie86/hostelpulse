@@ -58,6 +58,9 @@ export default async function GuestDetailPage({ params }: { params: Promise<{ id
             <span className="font-medium">Nationality:</span> {guest.nationality || 'N/A'}
           </div>
           <div>
+            <span className="font-medium">Currency:</span> {guest.currency || 'N/A'}
+          </div>
+          <div>
             <span className="font-medium">Document ID:</span> {guest.documentId || 'N/A'}
           </div>
           <div>

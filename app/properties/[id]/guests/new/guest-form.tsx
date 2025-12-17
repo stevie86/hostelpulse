@@ -3,11 +3,16 @@
 import { useActionState } from 'react';
 import { createGuest } from '@/app/actions/guests';
 import Link from 'next/link';
+import { TOP_CURRENCIES } from '@/lib/currency';
 
-export default function GuestForm({ propertyId }: { propertyId: string }) {
+export default function GuestForm({ propertyId, defaultCurrency }: { propertyId: string; defaultCurrency: string }) {
   const initialState = { message: '', errors: {} };
   const createGuestWithId = createGuest.bind(null, propertyId);
   const [state, dispatch] = useActionState(createGuestWithId, initialState);
+  const normalizedDefaultCurrency = (defaultCurrency || '').toUpperCase();
+  const hasDefaultCurrencyOption = TOP_CURRENCIES.some(
+    (currency) => currency.code === normalizedDefaultCurrency
+  );
 
   return (
     <form action={dispatch} className="space-y-4 max-w-lg bg-white p-6 rounded-lg shadow">
@@ -76,6 +81,27 @@ export default function GuestForm({ propertyId }: { propertyId: string }) {
             className="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-blue-500 focus:ring-blue-500"
           />
         </div>
+      </div>
+
+      <div>
+        <label htmlFor="currency" className="block text-sm font-medium text-gray-700">Preferred Currency</label>
+        <select
+          id="currency"
+          name="currency"
+          defaultValue={normalizedDefaultCurrency || defaultCurrency}
+          className="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+        >
+          {!hasDefaultCurrencyOption && normalizedDefaultCurrency && (
+            <option value={normalizedDefaultCurrency}>{normalizedDefaultCurrency} — Property currency</option>
+          )}
+          {TOP_CURRENCIES.map((currency) => (
+            <option key={currency.code} value={currency.code}>
+              {currency.code} — {currency.name}
+            </option>
+          ))}
+        </select>
+        {state.errors?.currency && <p className="text-sm text-red-500 mt-1">{state.errors.currency}</p>}
+        <p className="text-xs text-gray-500 mt-2">More currencies coming soon—currently limited to the top 20.</p>
       </div>
 
       <div className="flex gap-4 items-center pt-4">

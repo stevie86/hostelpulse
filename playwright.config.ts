@@ -17,15 +17,16 @@ const config: PlaywrightTestConfig = {
   ],
   reporter: 'html',
   webServer: {
-    command: 'pnpm run dev',
-    url: 'http://localhost:3000',
+    // Run dev server on 4002 to avoid clashing with other local apps
+    command: 'pnpm run dev -- --port 4002',
+    url: 'http://localhost:4002',
     reuseExistingServer: !process.env.CI,
   },
   retries: 1,
   use: {
     headless: true,
     ignoreHTTPSErrors: true,
-    baseURL: 'http://localhost:3000',
+    baseURL: 'http://localhost:4002',
     trace: 'retain-on-first-failure',
     navigationTimeout: 60 * 1000, // New: Add navigation timeout
   },

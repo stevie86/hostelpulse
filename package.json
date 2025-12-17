@@ -22,7 +22,9 @@
     "test": "jest",
     "test:e2e": "playwright test",
     "test:all": "pnpm test && pnpm test:e2e",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "spec": ".venv-speckitty/bin/spec-kitty",
+    "spec:setup": "python3 -m venv .venv-speckitty && .venv-speckitty/bin/pip install spec-kitty-cli"
   },
   "prisma": {
     "seed": "node prisma/seed.mjs"

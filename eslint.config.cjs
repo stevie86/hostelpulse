@@ -14,7 +14,7 @@ const compat = new FlatCompat({
 
 module.exports = [
   {
-    ignores: ['.next', '**/node_modules'],
+    ignores: ['.next', '**/node_modules', 'playwright-report'],
   },
   // Convert the legacy next/core-web-vitals config to flat config format
   ...compat.extends('next/core-web-vitals'),
@@ -43,5 +43,4 @@ module.exports = [
     },
   },
 ];
-
 

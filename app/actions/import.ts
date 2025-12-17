@@ -3,6 +3,7 @@
 import prisma from '@/lib/db';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
+import { normalizeCurrencyCode, DEFAULT_CURRENCY } from '@/lib/currency';
 
 export async function importGuests(propertyId: string, prevState: any, formData: FormData) {
   const file = formData.get('file') as File;
@@ -10,6 +11,17 @@ export async function importGuests(propertyId: string, prevState: any, formData:
   if (!file || file.size === 0) {
     return { message: 'No file selected.' };
   }
+
+  const property = await prisma.property.findUnique({
+    where: { id: propertyId },
+    select: { currency: true },
+  });
+
+  if (!property) {
+    return { message: 'Property not found.' };
+  }
+
+  const defaultCurrency = normalizeCurrencyCode(property.currency, DEFAULT_CURRENCY);
 
   const text = await file.text();
   const lines = text.split(/\r?\n/);
@@ -43,7 +55,12 @@ export async function importGuests(propertyId: string, prevState: any, formData:
       if (header === 'email') guest.email = value || null;
       if (header === 'phone') guest.phone = value || null;
       if (header === 'nationality') guest.nationality = value || null;
+      if (header === 'currency') guest.currency = normalizeCurrencyCode(value, defaultCurrency);
     });
+
+    if (!guest.currency) {
+      guest.currency = defaultCurrency;
+    }
 
     if (guest.firstName && guest.lastName) {
       guestsToCreate.push(guest);

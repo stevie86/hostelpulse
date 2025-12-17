@@ -44,12 +44,19 @@ export default async function GuestsPage({ params }: { params: Promise<{ id: str
         </div>
       </div>
 
+      <div className="alert alert-info mb-4 shadow-sm">
+        <div>
+          <span className="font-semibold">More currencies coming soon.</span> We currently support the top 20 currencies for guest preferences and conversions.
+        </div>
+      </div>
+
       <div className="bg-white rounded-lg shadow overflow-hidden">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Contact</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Currency</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nationality</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Bookings</th>
             </tr>
@@ -73,6 +80,9 @@ export default async function GuestsPage({ params }: { params: Promise<{ id: str
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     <div>{guest.email}</div>
                     <div>{guest.phone}</div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    {guest.currency || '-'}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     {guest.nationality || '-'}

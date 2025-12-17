@@ -1,8 +1,13 @@
 import GuestForm from './guest-form';
 import Link from 'next/link';
+import prisma from '@/lib/db';
 
 export default async function NewGuestPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
+  const property = await prisma.property.findUnique({
+    where: { id },
+    select: { currency: true },
+  });
 
   return (
     <div className="container mx-auto p-4">
@@ -12,7 +17,7 @@ export default async function NewGuestPage({ params }: { params: Promise<{ id: s
         </Link>
         <h1 className="text-2xl font-bold">New Guest</h1>
       </div>
-      <GuestForm propertyId={id} />
+      <GuestForm propertyId={id} defaultCurrency={property?.currency || 'EUR'} />
     </div>
   );
 }
