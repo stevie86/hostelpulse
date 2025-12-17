@@ -1,144 +1,270 @@
-// __tests__/actions/import.test.ts
-import { importGuests } from '@/app/actions/import';
-import prisma from '@/lib/db';
+import { importRooms, importBookings } from "@/app/actions/import";
+import prisma from "@/lib/db";
+import Papa from "papaparse"; // To mock file parsing
+import { parseISO } from "date-fns";
 
-// Mock Next.js functions
-jest.mock('next/cache', () => ({
+// Mock auth
+jest.mock("@/auth", () => ({
+  auth: jest.fn(() => Promise.resolve({ user: { email: "test@example.com" } }))
+}));
+
+// Mock next/cache and next/navigation
+jest.mock("next/cache", () => ({
   revalidatePath: jest.fn(),
 }));
-jest.mock('next/navigation', () => ({
+jest.mock("next/navigation", () => ({
   redirect: jest.fn(),
 }));
 
-// Mock Prisma Client
-jest.mock('@/lib/db', () => ({
-  guest: {
-    createMany: jest.fn(),
-  },
-}));
+// Mock the parseCsv helper function to control its return value
+// jest.mock("papaparse", () => ({
+//   parse: jest.fn(), // Mock the default export of papaparse
+// }));
 
-const mockPrisma = prisma as jest.Mocked<typeof prisma>;
-const mockRevalidatePath = require('next/cache').revalidatePath as jest.Mock;
-const mockRedirect = require('next/navigation').redirect as jest.Mock;
+describe("Import Actions", () => {
+  const propertyId = "prop-csv-test";
+  const teamId = "team-csv-test";
 
-// Helper to create a mock File object that has a .text() method
-const createMockFile = (content: string, filename: string, mimeType: string) => {
-    const file = new Blob([content], { type: mimeType }) as any; // Cast to any to add properties
-    file.name = filename;
-    file.text = jest.fn().mockResolvedValue(content);
-    return file;
-};
+  // Use a longer timeout for import tests
+  jest.setTimeout(10000);
 
-// Mock FormData globally for this test suite
-// NOTE: This might interfere with other tests if not carefully scoped.
-// A more targeted approach would be to mock it per test case if needed.
-const mockFormData = jest.fn(() => ({
-    get: jest.fn(),
-    append: jest.fn(),
-    // Add other FormData methods if your action uses them
-}));
+  beforeEach(async () => {
+    // Cleanup
+    await prisma.bookingBed.deleteMany();
+    await prisma.booking.deleteMany();
+    await prisma.room.deleteMany();
+    await prisma.guest.deleteMany();
+    await prisma.property.deleteMany();
+    await prisma.team.deleteMany();
 
-// Jest will use this mock instead of the real FormData for this test file
-global.FormData = mockFormData as unknown as typeof FormData;
-
-
-describe('Import Server Actions', () => {
-  const PROPERTY_ID = 'test-property-id';
-
-  beforeEach(() => {
-    jest.clearAllMocks();
+    // Setup base data
+    await prisma.team.create({ data: { id: teamId, name: "Test Team", slug: "csv-test-team" } });
+    await prisma.property.create({ data: { id: propertyId, teamId, name: "CSV Test Prop", city: "Test City" } });
   });
 
-  describe('importGuests', () => {
-    it('should return an error if no file is selected', async () => {
-      const formDataInstance = new FormData();
-      // Ensure formData.get('file') returns null for this test
-      (formDataInstance.get as jest.Mock).mockReturnValueOnce(null);
+  describe("importRooms", () => {
+    it("should import rooms successfully", async () => {
+      const csvContent = `name,type,beds,pricePerNight,maxOccupancy,description
+Room A,private,1,5000,1,Single Room
+Room B,dormitory,4,2000,4,Shared Dorm`;
 
-      const result = await importGuests(PROPERTY_ID, null, formDataInstance);
+      // Mock the file object and its text() method
+      const mockFile = new Blob([csvContent], { type: "text/csv" }) as File;
+      mockFile.text = jest.fn().mockResolvedValue(csvContent);
 
-      expect(result).toEqual({ message: 'No file selected.' });
-      expect(mockPrisma.guest.createMany).not.toHaveBeenCalled();
-    });
+      const formData = new FormData();
+      formData.append("file", mockFile);
 
-    it('should return an error for invalid CSV format (missing headers)', async () => {
-      const csvContent = 'email,phone\njane.doe@example.com,12345';
-      const file = createMockFile(csvContent, 'guests.csv', 'text/csv');
-      const formDataInstance = new FormData();
-      // Ensure formData.get('file') returns our mock file for this test
-      (formDataInstance.get as jest.Mock).mockReturnValueOnce(file);
-
-      const result = await importGuests(PROPERTY_ID, null, formDataInstance);
-
-      expect(result).toEqual({ message: 'Invalid CSV format. Header must contain firstName and lastName.' });
-      expect(mockPrisma.guest.createMany).not.toHaveBeenCalled();
-    });
-
-    it('should import guests successfully and redirect', async () => {
-      const csvContent = 'firstName,lastName,email,phone\nJohn,Doe,john.doe@example.com,111\nJane,Smith,jane.smith@example.com,222';
-      const file = createMockFile(csvContent, 'guests.csv', 'text/csv');
-      const formDataInstance = new FormData();
-      (formDataInstance.get as jest.Mock).mockReturnValueOnce(file); // Mock file selected
-
-      mockPrisma.guest.createMany.mockResolvedValueOnce({ count: 2 }); // Prisma returns count
-
-      await importGuests(PROPERTY_ID, null, formDataInstance);
-
-      expect(mockPrisma.guest.createMany).toHaveBeenCalledWith({
-        data: [
-          expect.objectContaining({
-            propertyId: PROPERTY_ID,
-            firstName: 'John',
-            lastName: 'Doe',
-            email: 'john.doe@example.com',
-            phone: '111',
-          }),
-          expect.objectContaining({
-            propertyId: PROPERTY_ID,
-            firstName: 'Jane',
-            lastName: 'Smith',
-            email: 'jane.smith@example.com',
-            phone: '222',
-          }),
-        ],
-      });
-      expect(mockRevalidatePath).toHaveBeenCalledWith(`/properties/${PROPERTY_ID}/guests`);
-      expect(mockRedirect).toHaveBeenCalledWith(`/properties/${PROPERTY_ID}/guests`);
-    });
-
-    it('should handle database error during import', async () => {
-      const csvContent = 'firstName,lastName\nJohn,Doe';
-      const file = createMockFile(csvContent, 'guests.csv', 'text/csv');
-      const formDataInstance = new FormData();
-      (formDataInstance.get as jest.Mock).mockReturnValueOnce(file); // Mock file selected
-
-      mockPrisma.guest.createMany.mockRejectedValueOnce(new Error('DB import failed'));
-
-      const result = await importGuests(PROPERTY_ID, null, formDataInstance);
-
-      expect(result).toEqual({ message: 'Database Error during import.' });
-      expect(mockPrisma.guest.createMany).toHaveBeenCalled();
-      expect(mockRevalidatePath).not.toHaveBeenCalled();
-      expect(mockRedirect).not.toHaveBeenCalled();
-    });
-
-    it('should skip invalid rows and create valid ones', async () => {
-        const csvContent = 'firstName,lastName,email\nValid,User,valid@example.com\nMissing,,empty@example.com';
-        const file = createMockFile(csvContent, 'guests.csv', 'text/csv');
-        const formDataInstance = new FormData();
-        (formDataInstance.get as jest.Mock).mockReturnValueOnce(file); // Mock file selected
-
-        mockPrisma.guest.createMany.mockResolvedValueOnce({ count: 1 });
-
-        await importGuests(PROPERTY_ID, null, formDataInstance);
-
-        expect(mockPrisma.guest.createMany).toHaveBeenCalledWith({
-            data: [
-                expect.objectContaining({ firstName: 'Valid', lastName: 'User', email: 'valid@example.com' }),
-            ],
+      jest.spyOn(Papa, 'parse').mockImplementationOnce((file, options) => {
+        const rows = csvContent.split('\n');
+        const headers = rows[0].split(',').map(h => h.trim());
+        const data = rows.slice(1).map(row => {
+          const values = row.split(',').map(v => v.trim());
+          return headers.reduce((obj: any, header, index) => {
+            obj[header] = values[index];
+            return obj;
+          }, {});
         });
-        expect(mockRevalidatePath).toHaveBeenCalledWith(`/properties/${PROPERTY_ID}/guests`);
-        expect(mockRedirect).toHaveBeenCalledWith(`/properties/${PROPERTY_ID}/guests`);
+        return { data, errors: [], meta: {} };
+      });
+
+      jest.spyOn(Papa, 'parse').mockImplementationOnce((file, options) => {
+        const rows = csvContent.split('\n');
+        const headers = rows[0].split(',').map(h => h.trim());
+        const data = rows.slice(1).map(row => {
+          const values = row.split(',').map(v => v.trim());
+          return headers.reduce((obj: any, header, index) => {
+            obj[header] = values[index];
+            return obj;
+          }, {});
+        });
+        return { data, errors: [], meta: {} };
+      });
+
+      jest.spyOn(Papa, 'parse').mockImplementationOnce((file, options) => {
+        const rows = csvContent.split('\n');
+        const headers = rows[0].split(',').map(h => h.trim());
+        const data = rows.slice(1).map(row => {
+          const values = row.split(',').map(v => v.trim());
+          return headers.reduce((obj: any, header, index) => {
+            obj[header] = values[index];
+            return obj;
+          }, {});
+        });
+        return { data, errors: [], meta: {} };
+      });
+
+      (Papa.parse as jest.Mock).mockImplementationOnce((file, options) => {
+        const rows = csvContent.split('\n');
+        const headers = rows[0].split(',').map(h => h.trim());
+        const data = rows.slice(1).map(row => {
+          const values = row.split(',').map(v => v.trim());
+          return headers.reduce((obj: any, header, index) => {
+            obj[header] = values[index];
+            return obj;
+          }, {});
+        });
+        return { data, errors: [], meta: {} };
+      });
+
+      (Papa.parse as jest.Mock).mockImplementationOnce((file, options) => {
+        const rows = csvContent.split('\n');
+        const headers = rows[0].split(',').map(h => h.trim());
+        const data = rows.slice(1).map(row => {
+          const values = row.split(',').map(v => v.trim());
+          return headers.reduce((obj: any, header, index) => {
+            obj[header] = values[index];
+            return obj;
+          }, {});
+        });
+        return { data, errors: [], meta: {} };
+      });
+
+      // Mock Papa.parse to return the data we expect from parsing csvContent
+      (Papa.parse as jest.Mock).mockImplementationOnce((file, options) => {
+        const rows = csvContent.split('\n');
+        const headers = rows[0].split(',').map(h => h.trim());
+        const data = rows.slice(1).map(row => {
+          const values = row.split(',').map(v => v.trim());
+          return headers.reduce((obj: any, header, index) => {
+            obj[header] = values[index];
+            return obj;
+          }, {});
+        });
+        return { data, errors: [], meta: {} };
+      });
+
+      const result = await importRooms(propertyId, {}, formData);
+
+      expect(result.message).toBe("Import complete.");
+      expect(result.results?.successCount).toBe(2);
+      expect(result.results?.failCount).toBe(0);
+
+      const rooms = await prisma.room.findMany({ where: { propertyId } });
+      expect(rooms.length).toBe(2);
+      expect(rooms.some((r) => r.name === "Room A" && r.type === "private")).toBe(true);
+      expect(rooms.some((r) => r.name === "Room B" && r.beds === 4)).toBe(true);
+    });
+
+    it("should handle invalid room data", async () => {
+      const csvContent = `name,type,beds,pricePerNight,maxOccupancy
+Invalid Room,,1,5000,1`; // Missing type
+
+      const mockFile = new Blob([csvContent], { type: "text/csv" }) as File;
+      mockFile.text = jest.fn().mockResolvedValue(csvContent);
+
+      const formData = new FormData(); // Define formData here
+      formData.append("file", mockFile);
+
+      (Papa.parse as jest.Mock).mockImplementationOnce((file, options) => {
+        const rows = csvContent.split('\n');
+        const headers = rows[0].split(',').map(h => h.trim());
+        const data = rows.slice(1).map(row => {
+          const values = row.split(',').map(v => v.trim());
+          return headers.reduce((obj: any, header, index) => {
+            obj[header] = values[index];
+            return obj;
+          }, {});
+        });
+        return { data, errors: [], meta: {} };
+      });
+
+      const result = await importRooms(propertyId, {}, formData);
+
+      expect(result.results?.successCount).toBe(0);
+      expect(result.results?.failCount).toBe(1);
+      expect(result.results?.failedRows[0].reason).toContain("type");
+    });
+  });
+
+  describe("importBookings", () => {
+    let roomId1: string;
+    let guestId1: string;
+
+    beforeEach(async () => {
+      // Create a room and guest for booking imports
+      const room = await prisma.room.create({ data: { id: "room-imp-1", propertyId, name: "Import Room 1", type: "private", beds: 1, pricePerNight: 5000, maxOccupancy: 1 } });
+      const guest = await prisma.guest.create({ data: { id: "guest-imp-1", propertyId, firstName: "Import", lastName: "Guest", email: "import@example.com" } });
+      roomId1 = room.id;
+      guestId1 = guest.id;
+    });
+
+    it("should import bookings successfully", async () => {
+      const csvContent = `guestFirstName,guestLastName,roomName,checkIn,checkOut,status,email
+New,Booking,Import Room 1,2025-02-01,2025-02-05,confirmed,new@example.com`;
+
+      const mockFile = new Blob([csvContent], { type: "text/csv" }) as File;
+      mockFile.text = jest.fn().mockResolvedValue(csvContent);
+
+      const formData = new FormData(); // Define formData here
+      formData.append("file", mockFile);
+
+      (Papa.parse as jest.Mock).mockImplementationOnce((file, options) => {
+        const rows = csvContent.split('\n');
+        const headers = rows[0].split(',').map(h => h.trim());
+        const data = rows.slice(1).map(row => {
+          const values = row.split(',').map(v => v.trim());
+          return headers.reduce((obj: any, header, index) => {
+            obj[header] = values[index];
+            return obj;
+          }, {});
+        });
+        return { data, errors: [], meta: {} };
+      });
+
+      const result = await importBookings(propertyId, {}, formData);
+
+      expect(result.message).toBe("Import complete.");
+      expect(result.results?.successCount).toBe(1);
+      expect(result.results?.failCount).toBe(0);
+
+      const bookings = await prisma.booking.findMany({ where: { propertyId }, include: { guest: true } });
+      expect(bookings.length).toBe(1);
+      expect(bookings[0].guest?.firstName).toBe("New");
+      expect(bookings[0].status).toBe("confirmed");
+    });
+
+    it("should fail to import booking if room is unavailable", async () => {
+      // Create an existing booking that fills the room
+      const existingBooking = await prisma.booking.create({
+        data: {
+          propertyId,
+          guestId: guestId1,
+          checkIn: parseISO("2025-02-01"),
+          checkOut: parseISO("2025-02-05"),
+          status: "confirmed",
+          totalAmount: 10000,
+        },
+      });
+      await prisma.bookingBed.create({ data: { bookingId: existingBooking.id, roomId: roomId1, bedLabel: "1", pricePerNight: 5000 } });
+
+      const csvContent = `guestFirstName,guestLastName,roomName,checkIn,checkOut
+Conflict,Guest,Import Room 1,2025-02-02,2025-02-04`; // Overlapping dates
+
+      const mockFile = new Blob([csvContent], { type: "text/csv" }) as File;
+      mockFile.text = jest.fn().mockResolvedValue(csvContent);
+
+      const formData = new FormData(); // Define formData here
+      formData.append("file", mockFile);
+
+      (Papa.parse as jest.Mock).mockImplementationOnce((file, options) => {
+        const rows = csvContent.split('\n');
+        const headers = rows[0].split(',').map(h => h.trim());
+        const data = rows.slice(1).map(row => {
+          const values = row.split(',').map(v => v.trim());
+          return headers.reduce((obj: any, header, index) => {
+            obj[header] = values[index];
+            return obj;
+          }, {});
+        });
+        return { data, errors: [], meta: {} };
+      });
+
+      const result = await importBookings(propertyId, {}, formData);
+
+      expect(result.results?.successCount).toBe(0);
+      expect(result.results?.failCount).toBe(1);
+      expect(result.results?.failedRows[0].reason).toContain("Room fully booked");
     });
   });
 });

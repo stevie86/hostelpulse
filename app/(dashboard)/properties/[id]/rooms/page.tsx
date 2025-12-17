@@ -14,7 +14,7 @@ export default async function RoomsPage({
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-2xl font-bold">Rooms</h1>
-          <p className="text-gray-500">Manage your property's inventory.</p>
+          <p className="text-gray-500">Manage your property&apos;s inventory.</p>
         </div>
         <Link
           href={`/properties/${propertyId}/rooms/new`}

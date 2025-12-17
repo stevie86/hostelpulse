@@ -1,0 +1,3 @@
+guestFirstName,guestLastName,roomName,checkIn,checkOut,status,email,phone
+John,Doe,Single Room,2025-01-10,2025-01-15,confirmed,john.doe@example.com,+123456789
+Jane,Smith,Dormitory Bed,2025-01-12,2025-01-14,pending,jane.smith@example.com,+987654321
