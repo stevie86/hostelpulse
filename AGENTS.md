@@ -28,14 +28,15 @@ All feature work is managed by `spec-kitty`.
 *   `.worktrees/`: Active development workspaces (Git ignored).
 
 ## 3. Commands
-*   **Install:** `pnpm install`
-*   **Dev:** `pnpm run dev`
-*   **Build:** `pnpm run build`
-*   **Lint:** `pnpm run lint`
-*   **Test (Unit):** `pnpm run test`
-*   **Test (E2E):** `pnpm run test:e2e`
-*   **DB Push:** `npx prisma db push` (Prototyping)
-*   **Spec Kitty:** `npm run spec -- <command>`
+*   **Install:** `mise run -- pnpm install`
+*   **Dev:** `mise run -- pnpm run dev`
+*   **Build:** `mise run -- pnpm run build`
+*   **Lint:** `mise run -- pnpm run lint`
+*   **Format:** `mise run -- pnpm run format`
+*   **Test (Unit):** `mise run -- pnpm run test`
+*   **Test (E2E):** `mise run -- pnpm run test:e2e`
+*   **DB Push:** `mise run -- npx prisma db push` (Prototyping)
+*   **Spec Kitty:** `mise run -- pnpm run spec -- <command>`
 
 ## 4. Coding Standards
 *   **Strict Types:** Zero tolerance for `any`. Define Zod schemas in `lib/schemas/`.
@@ -56,3 +57,15 @@ Refer to `docs/SAAS_BUILDER_SETUP.md` for multi-tenancy logic.
 ## 7. Commit Guidelines
 *   Format: `feat:`, `fix:`, `chore:`.
 *   Scope: Keep changes specific to the active `spec-kitty` feature.
+
+## 8. Interaction Logging
+To keep a record of our interactions, all commands should be piped to a timestamped log file in the `logs/` directory.
+
+**Example:**
+```bash
+# General command logging
+some_command | tee -a logs/interaction-$(date +%Y-%m-%d).log
+
+# Spec-kitty command logging
+pnpm run spec -- <command> | tee -a logs/interaction-$(date +%Y-%m-%d).log
+```

@@ -1,80 +1,70 @@
 "use server";
 
 import { auth } from "@/auth";
-import prisma from "@/lib/db";
-import { endOfDay, startOfDay } from "date-fns";
+import prisma from "@/lib/db"; // Corrected: default import
+import { startOfDay, endOfDay } from "date-fns";
+import { toZonedTime } from 'date-fns-tz/toZonedTime'; // Corrected: deep import
+import { fromZonedTime } from 'date-fns-tz/fromZonedTime'; // Corrected: deep import
+import { revalidatePath } from 'next/cache';
 
 export async function getDashboardStats(propertyId: string) {
   const session = await auth();
   if (!session?.user?.email) return null;
 
-  const today = new Date();
-  const startOfToday = startOfDay(today);
-  const endOfToday = endOfDay(today);
-
-  // Total Rooms
-  const totalRooms = await prisma.room.count({
-    where: { propertyId },
+  const property = await prisma.property.findUnique({
+    where: { id: propertyId },
+    select: { timezone: true },
   });
 
-  // Total Beds (sum of beds in all rooms)
-  const totalBedsResult = await prisma.room.aggregate({
-    _sum: {
-      beds: true,
-    },
-    where: { propertyId },
-  });
-  const totalBeds = totalBedsResult._sum.beds || 0;
+  if (!property) {
+    throw new Error('Property not found');
+  }
 
-  // Occupied Beds Today (based on active bookings today)
-  const occupiedBedsResult = await prisma.bookingBed.count({
+  const zonedNow = toZonedTime(new Date(), property.timezone); // Corrected: function name
+
+  const startOfToday = fromZonedTime(startOfDay(zonedNow), property.timezone); // Corrected: function name
+  const endOfToday = fromZonedTime(endOfDay(zonedNow), property.timezone); // Corrected: function name
+
+  // Occupancy: Count of bookings with status 'checked_in'
+  const occupancyCount = await prisma.booking.count({
     where: {
-      room: { propertyId },
-      booking: {
-        status: { in: ["confirmed", "checked_in"] },
-        checkIn: { lte: endOfToday }, // Check-in is today or before
-        checkOut: { gte: startOfToday }, // Check-out is today or after
-      },
+      propertyId,
+      status: 'checked_in',
     },
   });
-  const occupiedBeds = occupiedBedsResult || 0;
 
-  // Arrivals Today
-  const arrivalsToday = await prisma.booking.count({
+  // Arrivals: Count of bookings checking in today in the property's timezone
+  const arrivalsCount = await prisma.booking.count({
     where: {
       propertyId,
       checkIn: {
         gte: startOfToday,
         lte: endOfToday,
       },
-      status: { notIn: ["cancelled", "checked_out", "no_show"] },
+      status: {
+        in: ['pending', 'confirmed'], // Only count pending or confirmed arrivals
+      },
     },
   });
 
-  // Departures Today
-  const departuresToday = await prisma.booking.count({
+  // Departures: Count of bookings checking out today in the property's timezone
+  const departuresCount = await prisma.booking.count({
     where: {
       propertyId,
       checkOut: {
         gte: startOfToday,
         lte: endOfToday,
       },
-      status: { in: ["confirmed", "checked_in"] },
+      status: {
+        in: ['checked_in'], // Only count currently checked-in guests scheduled to depart
+      },
     },
   });
 
-  // Current Occupancy %
-  const currentOccupancyPercentage =
-    totalBeds > 0 ? (occupiedBeds / totalBeds) * 100 : 0;
-
   return {
-    totalRooms,
-    totalBeds,
-    occupiedBeds,
-    availableBeds: totalBeds - occupiedBeds,
-    arrivalsToday,
-    departuresToday,
-    currentOccupancyPercentage,
+    occupancy: occupancyCount,
+    arrivals: arrivalsCount,
+    departures: departuresCount,
   };
 }
 
@@ -82,10 +72,21 @@ export async function getDailyActivity(propertyId: string) {
   const session = await auth();
   if (!session?.user?.email) return { arrivals: [], departures: [] };
 
-  const today = new Date();
-  const startOfToday = startOfDay(today);
-  const endOfToday = endOfDay(today);
+  const property = await prisma.property.findUnique({
+    where: { id: propertyId },
+    select: { timezone: true },
+  });
 
+  if (!property) {
+    throw new Error('Property not found');
+  }
+
+  const zonedNow = toZonedTime(new Date(), property.timezone); // Corrected: function name
+
+  const startOfToday = fromZonedTime(startOfDay(zonedNow), property.timezone); // Corrected: function name
+  const endOfToday = fromZonedTime(endOfDay(zonedNow), property.timezone); // Corrected: function name
+
+  // Fetch bookings for arrivals today
   const arrivals = await prisma.booking.findMany({
     where: {
       propertyId,
@@ -93,15 +94,30 @@ export async function getDailyActivity(propertyId: string) {
         gte: startOfToday,
         lte: endOfToday,
       },
-      status: { notIn: ["cancelled", "checked_out", "no_show"] },
+      status: {
+        in: ['pending', 'confirmed'],
+      },
     },
     include: {
-      guest: true,
-      beds: { include: { room: true } },
+      guest: {
+        select: {
+          firstName: true,
+          lastName: true,
+        },
+      },
+      beds: {
+        include: {
+          room: {
+            select: {
+              name: true, // Room name
+            },
+          },
+        },
+      },
     },
-    orderBy: { checkIn: "asc" },
   });
 
+  // Fetch bookings for departures today
   const departures = await prisma.booking.findMany({
     where: {
       propertyId,
@@ -109,17 +125,66 @@ export async function getDailyActivity(propertyId: string) {
         gte: startOfToday,
         lte: endOfToday,
       },
-      status: { in: ["confirmed", "checked_in"] },
+      status: {
+        in: ['checked_in'],
+      },
     },
     include: {
-      guest: true,
-      beds: { include: { room: true } },
+      guest: {
+        select: {
+          firstName: true,
+          lastName: true,
+        },
+      },
+      beds: {
+        include: {
+          room: {
+            select: {
+              name: true, // Room name
+            },
+          },
+        },
+      },
     },
-    orderBy: { checkOut: "asc" },
   });
 
-  return {
-    arrivals,
-    departures,
-  };
+  return { arrivals, departures };
+}
+
+export async function checkIn(bookingId: string) {
+  const session = await auth();
+  if (!session?.user?.email) {
+    throw new Error('Unauthorized');
+  }
+
+  try {
+    await prisma.booking.update({
+      where: { id: bookingId },
+      data: { status: 'checked_in' },
+    });
+    revalidatePath('/dashboard');
+    return { success: true };
+  } catch (error) {
+    console.error('Error checking in booking:', error);
+    throw new Error('Failed to check in booking.');
+  }
+}
+
+export async function checkOut(bookingId: string) {
+  const session = await auth();
+  if (!session?.user?.email) {
+    throw new Error('Unauthorized');
+  }
+
+  try {
+    await prisma.booking.update({
+      where: { id: bookingId },
+      data: { status: 'checked_out' },
+    });
+    revalidatePath('/dashboard');
+    return { success: true };
+  } catch (error) {
+    console.error('Error checking out booking:', error);
+    throw new Error('Failed to check out booking.');
+  }
 }
