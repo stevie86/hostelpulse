@@ -65,4 +65,4 @@ next-env.d.ts
 .roo/
 .amazonq/
 .github/copilot/
-.worktrees/
+.worktrees/.kittify/AGENTS.md
