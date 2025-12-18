@@ -1,22 +1,18 @@
-import type { Role } from '@prisma/client';
-import type { DefaultSession } from 'next-auth';
+import NextAuth from "next-auth";
 
-declare module 'next-auth' {
-  /**
-   * Returned by `useSession`, `getSession` and received as a prop on the `SessionProvider` React Context
-   */
+declare module "next-auth" {
   interface Session {
-    user: DefaultSession['user'] & {
-      id: string;
-      roles: { teamId: string; role: Role }[];
-    };
+    user: {
+      /** The user's postal address. */
+      propertyId?: string;
+      propertyName?: string;
+    } & Session["user"];
   }
+}
 
-  interface Profile {
-    requested: {
-      tenant: string;
-    };
-    roles: string[];
-    groups: string[];
+declare module "next-auth/jwt" {
+  interface JWT {
+    propertyId?: string;
+    propertyName?: string;
   }
 }

@@ -211,3 +211,27 @@ export async function getBookings(propertyId: string) {
     orderBy: { checkIn: "desc" },
   });
 }
+
+export async function checkInBooking(propertyId: string, bookingId: string) {
+  const session = await auth();
+  if (!session?.user?.email) throw new Error("Unauthorized");
+
+  await prisma.booking.update({
+    where: { id: bookingId },
+    data: { status: "checked_in" },
+  });
+
+  revalidatePath(`/properties/${propertyId}/dashboard`);
+}
+
+export async function checkOutBooking(propertyId: string, bookingId: string) {
+  const session = await auth();
+  if (!session?.user?.email) throw new Error("Unauthorized");
+
+  await prisma.booking.update({
+    where: { id: bookingId },
+    data: { status: "checked_out" },
+  });
+
+  revalidatePath(`/properties/${propertyId}/dashboard`);
+}

@@ -23,9 +23,7 @@ export type ImportActionState = {
 
 const RoomImportSchema = z.object({
   name: z.string().min(1, "Name is required"),
-  type: z.enum(["dormitory", "private", "suite"], {
-    errorMap: () => ({ message: "Invalid room type" }),
-  }),
+  type: z.enum(["dormitory", "private", "suite"]),
   beds: z.coerce.number().int().min(1, "Min 1 bed"),
   pricePerNight: z.coerce.number().int().min(0, "Min 0 price"),
   maxOccupancy: z.coerce.number().int().min(1, "Min 1 occupancy"),
@@ -45,9 +43,9 @@ const BookingImportSchema = z.object({
 
 // --- Helper for CSV Parsing ---
 
-async function parseCsv(file: File): Promise<{ data: Record<string, string>[]; errors: z.ZodIssue[] }> {
+async function parseCsv(file: File): Promise<{ data: Record<string, string>[]; errors: Papa.ParseError[] }> {
   return new Promise((resolve, reject) => {
-    Papa.parse(file, {
+    Papa.parse<Record<string, string>>(file, {
       header: true,
       skipEmptyLines: true,
       transformHeader: (header) => header.trim(),

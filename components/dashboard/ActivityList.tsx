@@ -54,7 +54,7 @@ export function ActivityList({ arrivals, departures }: ActivityListProps) {
                 {booking.status !== 'checked_in' && (
                   <button
                     className="btn btn-primary btn-sm mt-2"
-                    onClick={() => startTransition(() => checkIn(booking.id))}
+                    onClick={() => startTransition(async () => { await checkIn(booking.id); })}
                     disabled={isPending}
                   >
                     {isPending ? 'Checking In...' : 'Check In'}
@@ -85,7 +85,7 @@ export function ActivityList({ arrivals, departures }: ActivityListProps) {
                 {booking.status !== 'checked_out' && (
                   <button
                     className="btn btn-secondary btn-sm mt-2"
-                    onClick={() => startTransition(() => checkOut(booking.id))}
+                    onClick={() => startTransition(async () => { await checkOut(booking.id); })}
                     disabled={isPending}
                   >
                     {isPending ? 'Checking Out...' : 'Check Out'}

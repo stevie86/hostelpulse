@@ -9,7 +9,6 @@ import { ActionState } from "@/app/actions/rooms";
 interface RoomFormProps {
   propertyId: string;
   action: (
-    propertyId: string, // or whatever the binding requires
     prevState: ActionState,
     formData: FormData
   ) => Promise<ActionState>;
@@ -49,7 +48,7 @@ export function RoomForm({
     register,
     handleSubmit, // We can use this if we want fully controlled submit, but with Server Actions we can just use action={formAction}
     formState: { errors: clientErrors },
-  } = useForm<RoomFormValues>({
+  } = useForm({
     resolver: zodResolver(RoomSchema),
     defaultValues: {
       name: initialValues?.name || "",

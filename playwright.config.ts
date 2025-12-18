@@ -30,7 +30,7 @@ const config: PlaywrightTestConfig = {
     trace: 'retain-on-first-failure',
     navigationTimeout: 60 * 1000, // New: Add navigation timeout
   },
-  testDir: './tests/e2e/auth', // Point to the specific test directory
+  testDir: './tests/e2e', // Point to the generic E2E test directory
 };
 
 export default config;

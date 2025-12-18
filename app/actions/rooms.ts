@@ -13,6 +13,7 @@ export type ActionState = {
     beds?: string[];
     pricePerNight?: string[];
     maxOccupancy?: string[];
+    description?: string[];
     _form?: string[];
   };
   message?: string | null;

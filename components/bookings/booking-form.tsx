@@ -11,7 +11,6 @@ type Guest = { id: string; firstName: string; lastName: string; email: string | 
 interface BookingFormProps {
   propertyId: string;
   action: (
-    propertyId: string,
     prevState: ActionState,
     formData: FormData
   ) => Promise<ActionState>;

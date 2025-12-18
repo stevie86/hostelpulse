@@ -9,7 +9,6 @@ import { ActionState } from "@/app/actions/guests";
 interface GuestFormProps {
   propertyId: string;
   action: (
-    propertyId: string, // Bound externally
     prevState: ActionState,
     formData: FormData
   ) => Promise<ActionState>;

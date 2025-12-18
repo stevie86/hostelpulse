@@ -3,8 +3,7 @@
 import { auth } from "@/auth";
 import prisma from "@/lib/db"; // Corrected: default import
 import { startOfDay, endOfDay } from "date-fns";
-import { toZonedTime } from 'date-fns-tz/toZonedTime'; // Corrected: deep import
-import { fromZonedTime } from 'date-fns-tz/fromZonedTime'; // Corrected: deep import
+import { toZonedTime, fromZonedTime } from 'date-fns-tz';
 import { revalidatePath } from 'next/cache';
 
 export async function getDashboardStats(propertyId: string) {
@@ -26,12 +25,28 @@ export async function getDashboardStats(propertyId: string) {
   const endOfToday = fromZonedTime(endOfDay(zonedNow), property.timezone); // Corrected: function name
 
   // Occupancy: Count of bookings with status 'checked_in'
-  const occupancyCount = await prisma.booking.count({
+  // Note: Ideally we count occupied *beds*, but for now assume 1 booking = 1 bed usage unless we join.
+  // Better: Count beds in checked_in bookings.
+  const occupiedBeds = await prisma.bookingBed.count({
     where: {
-      propertyId,
-      status: 'checked_in',
+      booking: {
+        propertyId,
+        status: 'checked_in',
+      },
     },
   });
+
+  const totalBeds = await prisma.room.aggregate({
+    where: { propertyId },
+    _sum: { beds: true },
+  });
+  const totalBedCount = totalBeds._sum.beds || 0;
+
+  const totalRooms = await prisma.room.count({
+    where: { propertyId },
+  });
+
+  const occupancyPercentage = totalBedCount > 0 ? Math.round((occupiedBeds / totalBedCount) * 100) : 0;
 
   // Arrivals: Count of bookings checking in today in the property's timezone
   const arrivalsCount = await prisma.booking.count({
@@ -62,9 +77,16 @@ export async function getDashboardStats(propertyId: string) {
   });
 
   return {
-    occupancy: occupancyCount,
+    occupancy: occupancyPercentage, // Renamed to match logic, but UI expects 'currentOccupancyPercentage'
+    currentOccupancyPercentage: occupancyPercentage, // Adding explicit field
+    totalRooms,
+    totalBeds: totalBedCount,
+    occupiedBeds,
+    availableBeds: totalBedCount - occupiedBeds,
     arrivals: arrivalsCount,
+    arrivalsToday: arrivalsCount,
     departures: departuresCount,
+    departuresToday: departuresCount,
   };
 }
 

@@ -7,7 +7,6 @@ interface ImportFormProps {
   propertyId: string;
   type: "rooms" | "bookings";
   action: (
-    propertyId: string,
     prevState: ImportActionState,
     formData: FormData
   ) => Promise<ImportActionState>;
@@ -17,7 +16,7 @@ export function ImportForm({ propertyId, type, action }: ImportFormProps) {
   const [state, formAction, isPending] = useActionState(action, {
     message: null,
     errors: [],
-    results: null,
+    results: undefined,
   });
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);

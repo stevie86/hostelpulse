@@ -15,8 +15,9 @@ type SelectedRoomFields = {
   [key: string]: string | number | boolean | Date | null | undefined; // Add index signature
 };
 
-export async function GET(request: NextRequest, context: any) {
-  const propertyId = context.params.id;
+export async function GET(request: NextRequest, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
+  const propertyId = params.id;
 
   try {
     const rooms: SelectedRoomFields[] = await prisma.room.findMany({
