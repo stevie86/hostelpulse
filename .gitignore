@@ -51,6 +51,7 @@ next-env.d.ts
 .venv-speckitty/
 .kittify/
 .spec-kitty/
+.worktrees/
 
 # Added by Spec Kitty CLI (auto-managed)
 .claude/
