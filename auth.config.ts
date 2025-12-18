@@ -36,18 +36,26 @@ export const authConfig: NextAuthConfig = {
       const isLoggedIn = !!auth?.user;
       const isOnDashboard = nextUrl.pathname.startsWith('/properties') || nextUrl.pathname === '/'; // Treat root as part of dashboard
       
-      if (isOnDashboard) {
-        if (isLoggedIn) {
-          // If logged in and on the root, redirect to the first property's dashboard
-          if (nextUrl.pathname === '/' && auth.user?.propertyId) {
+      if (isLoggedIn) {
+        if (nextUrl.pathname === '/' && auth.user?.propertyId) {
+            // Redirect to the first property's dashboard if on root after login
             return Response.redirect(new URL(`/properties/${auth.user.propertyId}/dashboard`, nextUrl));
-          }
-          return true; // Allow access to properties or root if logged in
         }
-        return false; // Redirect unauthenticated users to login page
+        // If logged in and on a protected page or already on a property dashboard
+        return true; 
       }
-      return true; // Allow access to other pages (e.g., login, static)
+      
+      // If not logged in, allow access to public pages like login, otherwise redirect to login
+      return !isOnDashboard;
     },
+    redirect({ url, baseUrl }) {
+        // Allows for login to redirect to previous page, or dashboard if none
+        if (url.startsWith(baseUrl)) {
+            return url;
+        }
+        // Fallback to dashboard if a specific redirect isn't provided (e.g., direct login)
+        return baseUrl;
+    }
   },
   providers: [], // Configured in auth.ts
 };
