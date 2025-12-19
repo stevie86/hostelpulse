@@ -4,6 +4,17 @@
 .venv-speckitty/
 .kittify/
 .spec-kitty/
+.worktrees/
+.cleanup-temp/
+.git/
+.next/
+node_modules/
 tests/
 playwright-report/
+test-results/
+tmp/
+*.log
+*.tgz
+*.zip
 dev_debug.log
+
