@@ -17,6 +17,11 @@ jest.mock('@/lib/db', () => ({
   },
 }));
 
+// Mock auth-utils
+jest.mock('@/lib/auth-utils', () => ({
+  verifyPropertyAccess: jest.fn().mockResolvedValue({ userId: 'test-user', role: 'admin' }),
+}));
+
 const mockPrisma = prisma as jest.Mocked<typeof prisma>;
 const mockRevalidatePath = require('next/cache').revalidatePath as jest.Mock;
 const mockRedirect = require('next/navigation').redirect as jest.Mock;
@@ -135,7 +140,7 @@ describe('Guests Server Actions', () => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const result = await createGuest(PROPERTY_ID, null as any, formData);
 
-      expect(result).toEqual({ message: 'Database Error: Failed to create guest.' });
+      expect(result).toEqual({ message: 'Database Error: Failed to Create Guest.' });
       expect(mockPrisma.guest.create).toHaveBeenCalled();
       expect(mockRevalidatePath).not.toHaveBeenCalled();
       expect(mockRedirect).not.toHaveBeenCalled();

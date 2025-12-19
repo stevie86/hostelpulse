@@ -5,6 +5,30 @@ import { TextEncoder, TextDecoder } from 'util';
 global.TextEncoder = TextEncoder;
 global.TextDecoder = TextDecoder as any;
 
+// Mock next-auth globally to prevent ESM parsing issues in auth.ts
+jest.mock('next-auth', () => ({
+    __esModule: true,
+    default: jest.fn(() => ({
+        auth: jest.fn(),
+        signIn: jest.fn(),
+        signOut: jest.fn(),
+        handlers: {},
+    })),
+}));
+
+// Mock @/auth globally
+jest.mock('@/auth', () => ({
+    auth: jest.fn(() => Promise.resolve({ user: { id: 'test-user', email: 'test@example.com' } })),
+    signIn: jest.fn(),
+    signOut: jest.fn(),
+    handlers: {},
+}));
+
+// Mock auth-utils globally to bypass RBAC in unit tests
+jest.mock('@/lib/auth-utils', () => ({
+    verifyPropertyAccess: jest.fn().mockResolvedValue({ userId: 'test-user', role: 'admin' }),
+}));
+
 if (typeof global.Request === 'undefined') {
     global.Request = class Request {
         url: string;

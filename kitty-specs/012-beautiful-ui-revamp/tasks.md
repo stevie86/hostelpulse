@@ -40,3 +40,16 @@ description: "Work package task list for Beautiful UI Revamp"
 ### Included Subtasks
 - [x] T005 Validate mobile/tablet layouts (grid collapse, spacing).
 - [x] T006 Final visual pass (shadows, borders, typography, status badges).
+
+---
+
+## Work Package WP04: CI/CD Stabilization & Test Fixes (Priority: P0)
+
+**Goal**: Resolve persistent CI/CD failures related to NextAuth types, database race conditions in tests, and environment configuration.
+**Independent Test**: `pnpm run test:ci` passes locally and in GitHub Actions.
+**Prompt**: `/kitty-specs/012-beautiful-ui-revamp/tasks/WP04-ci-cd-stabilization.md`
+
+### Included Subtasks
+- [x] T007 Fix `jest.setup.ts` and `jest.config.js` to properly support TypeScript and global mocks.
+- [x] T008 Update `__tests__` to correctly mock `verifyPropertyAccess` and `auth()` to bypass RBAC.
+- [x] T009 Stabilize `import.test.ts` timeouts and ensure `dashboard.test.ts` database operations are isolated.

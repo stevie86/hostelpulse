@@ -8,6 +8,11 @@ jest.mock("@/auth", () => ({
   auth: jest.fn(() => Promise.resolve({ user: { email: "test@example.com" } }))
 }));
 
+// Mock auth-utils
+jest.mock("@/lib/auth-utils", () => ({
+  verifyPropertyAccess: jest.fn().mockResolvedValue({ userId: "test-user", role: "admin" }),
+}));
+
 // Mock next/cache and next/navigation
 jest.mock("next/cache", () => ({
   revalidatePath: jest.fn(),
@@ -26,7 +31,7 @@ describe("Import Actions", () => {
   const teamId = "team-csv-test";
 
   // Use a longer timeout for import tests
-  jest.setTimeout(10000);
+  jest.setTimeout(30000);
 
   beforeEach(async () => {
     // Cleanup

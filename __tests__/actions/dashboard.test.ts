@@ -4,7 +4,12 @@ import { endOfDay, startOfDay } from "date-fns";
 
 // Mock auth
 jest.mock("@/auth", () => ({
-  auth: jest.fn(() => Promise.resolve({ user: { email: "test@example.com" } })),
+  auth: jest.fn(() => Promise.resolve({ user: { id: "test-user", email: "test@example.com" } })),
+}));
+
+// Mock auth-utils
+jest.mock('@/lib/auth-utils', () => ({
+  verifyPropertyAccess: jest.fn().mockResolvedValue({ userId: 'test-user', role: 'admin' }),
 }));
 
 describe("Dashboard Actions", () => {
