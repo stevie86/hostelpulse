@@ -1,6 +1,7 @@
 import NextAuth from 'next-auth';
 import { authConfig } from './auth.config';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const proxy = (NextAuth as any)(authConfig).auth;
 
 export const config = {

@@ -25,12 +25,14 @@ export default function Home() {
           // Handle case where user has no property (e.g., show a setup page)
           router.push('/no-property-setup'); 
         }
+      } else if (status === 'unauthenticated') {
+        router.push('/login');
       }
     }
     handleRedirect();
   }, [session, status, router, redirectAttempted]);
 
-  if (status === 'loading') {
+  if (status === 'loading' || status === 'unauthenticated') {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <span className="loading loading-spinner loading-lg"></span>
@@ -47,20 +49,5 @@ export default function Home() {
     );
   }
 
-  // If not authenticated or redirect already attempted, show a default landing page
-  // For MVP, this might be a simple "Login" button or marketing text.
-  // Or if no property found, a setup page.
-  return (
-    <div className="min-h-screen hero bg-base-200">
-      <div className="hero-content text-center">
-        <div className="max-w-md">
-          <h1 className="text-5xl font-bold">Welcome to HostelPulse</h1>
-          <p className="py-6">Your modern property management system for hostels.</p>
-          <button onClick={() => router.push('/login')} className="btn btn-primary">
-            Get Started
-          </button>
-        </div>
-      </div>
-    </div>
-  );
+  return null;
 }

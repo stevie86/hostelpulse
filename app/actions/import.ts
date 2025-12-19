@@ -2,12 +2,11 @@
 
 import { auth } from "@/auth";
 import prisma from "@/lib/db";
-import { RoomSchema } from "@/lib/schemas/room";
-import { GuestSchema } from "@/lib/schemas/guest"; // Assuming GuestSchema from Feature 003
-import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import Papa from "papaparse";
-import { checkAvailability } from "./bookings"; // Reusing availability logic
+import { AvailabilityService } from "@/lib/availability"; // Use service directly
+import { GuestSchema } from "@/lib/schemas/guest";
+import { revalidatePath } from "next/cache";
 
 export type ImportActionState = {
   message?: string | null;
@@ -270,12 +269,13 @@ export async function importBookings(
       }
 
       // Check Availability using our service
-      const { isAvailable } = await checkAvailability(room.id, checkIn, checkOut);
-      if (!isAvailable) {
+      const availableBeds = await AvailabilityService.getAvailableBeds(room.id, { checkIn, checkOut });
+      if (availableBeds.length === 0) {
         failCount++;
         failedRows.push({ row: rowNumber, reason: "Room fully booked for these dates." });
         continue;
       }
+      const bedLabel = availableBeds[0];
 
       // Create Booking in a transaction
       await prisma.$transaction(async (tx) => {
@@ -299,7 +299,7 @@ export async function importBookings(
           data: {
             bookingId: booking.id,
             roomId: room.id,
-            bedLabel: "Auto-Assigned",
+            bedLabel,
             pricePerNight: room.pricePerNight,
           },
         });

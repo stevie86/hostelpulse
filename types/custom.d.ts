@@ -14,8 +14,11 @@ declare module 'react-daisyui/dist/types' {
 }
 
 declare module 'next-auth' {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   export type AuthOptions = any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   export type Account = any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   export type Profile = any;
   interface Session {
     user: {

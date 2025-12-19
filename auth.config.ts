@@ -13,14 +13,14 @@ interface AuthConfig {
     newUser?: string;
   };
   callbacks?: {
-    signIn?: (params: { user: User | any; account: any; profile?: any; email?: { verificationRequest?: boolean }; credentials?: Record<string, any> }) => Promise<boolean | string> | boolean | string;
-    signOut?: (params: { session: Session; token: any }) => Promise<void> | void;
+    signIn?: (params: { user: User | unknown; account: unknown; profile?: unknown; email?: { verificationRequest?: boolean }; credentials?: Record<string, unknown> }) => Promise<boolean | string> | boolean | string;
+    signOut?: (params: { session: Session; token: unknown }) => Promise<void> | void;
     redirect?: (params: { url: string; baseUrl: string }) => Promise<string> | string;
-    session?: (params: { session: Session; token: any; user: User }) => Promise<Session> | Session;
-    jwt?: (params: { token: any; user?: User | any; account?: any; profile?: any; trigger?: 'signIn' | 'signUp' | 'update'; isNewUser?: boolean; session?: any }) => Promise<any> | any;
+    session?: (params: { session: Session; token: unknown; user: User }) => Promise<Session> | Session;
+    jwt?: (params: { token: unknown; user?: User | unknown; account?: unknown; profile?: unknown; trigger?: 'signIn' | 'signUp' | 'update'; isNewUser?: boolean; session?: unknown }) => Promise<unknown> | unknown;
     authorized?: (params: { auth: Session | null; request: NextRequest }) => boolean | Promise<boolean> | Response | Promise<Response>;
   };
-  providers: any[];
+  providers: unknown[];
 }
 
 export const authConfig: AuthConfig = {
