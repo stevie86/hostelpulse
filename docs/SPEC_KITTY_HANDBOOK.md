@@ -142,6 +142,14 @@ Open `http://localhost:9237` in your browser.
 - **Helpers**: `.kittify/scripts/bash/common.sh`
 
 **Command Aliases** (in `package.json`):
+| Alias | Action |
+| :--- | :--- |
+| `npm run spec:specify` | Create a new feature with the `hostelpulse-mvp` mission. |
+| `npm run spec:plan` | Generate technical plan for the current worktree. |
+| `npm run spec:accept` | Run validation before merge. |
+| `npm run spec:merge` | Merge branch and delete worktree. |
+| `npm run spec:setup` | Reinstall the Python environment if broken. |
+
 ## 6. Using Spec-Kitty with Codex
 
 Spec-Kitty is fully configured for **Codex** as well as Gemini.

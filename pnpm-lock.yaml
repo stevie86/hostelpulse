@@ -15,7 +15,7 @@ importers:
         specifier: ^5.2.2
         version: 5.2.2(react-hook-form@7.68.0(react@19.0.0))
       '@prisma/client':
-        specifier: ^5.22.0
+        specifier: 5.22.0
         version: 5.22.0(prisma@5.22.0)
       bcryptjs:
         specifier: ^3.0.3
@@ -1416,8 +1416,8 @@ packages:
   balanced-match@1.0.2:
     resolution: {integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==}
 
-  baseline-browser-mapping@2.9.8:
-    resolution: {integrity: sha512-Y1fOuNDowLfgKOypdc9SPABfoWXuZHBOyCS4cD52IeZBhr4Md6CLLs6atcxVrzRmQ06E7hSlm5bHHApPKR/byA==}
+  baseline-browser-mapping@2.9.10:
+    resolution: {integrity: sha512-2VIKvDx8Z1a9rTB2eCkdPE5nSe28XnA+qivGnWHoB40hMMt/h1hSz0960Zqsn6ZyxWXUie0EBdElKv8may20AA==}
     hasBin: true
 
   bcryptjs@3.0.3:
@@ -4782,7 +4782,7 @@ snapshots:
 
   balanced-match@1.0.2: {}
 
-  baseline-browser-mapping@2.9.8: {}
+  baseline-browser-mapping@2.9.10: {}
 
   bcryptjs@3.0.3: {}
 
@@ -4803,7 +4803,7 @@ snapshots:
 
   browserslist@4.28.1:
     dependencies:
-      baseline-browser-mapping: 2.9.8
+      baseline-browser-mapping: 2.9.10
       caniuse-lite: 1.0.30001760
       electron-to-chromium: 1.5.267
       node-releases: 2.0.27
@@ -6315,7 +6315,7 @@ snapshots:
     dependencies:
       '@next/env': 16.1.0
       '@swc/helpers': 0.5.15
-      baseline-browser-mapping: 2.9.8
+      baseline-browser-mapping: 2.9.10
       caniuse-lite: 1.0.30001760
       postcss: 8.4.31
       react: 19.0.0

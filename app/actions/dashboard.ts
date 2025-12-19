@@ -5,10 +5,16 @@ import prisma from "@/lib/db"; // Corrected: default import
 import { startOfDay, endOfDay } from "date-fns";
 import { toZonedTime, fromZonedTime } from 'date-fns-tz';
 import { revalidatePath } from 'next/cache';
+import { verifyPropertyAccess } from "@/lib/auth-utils";
 
-export async function getDashboardStats(propertyId: string) {
-  const session = await auth();
-  if (!session?.user?.email) return null;
+import { DashboardStats } from "@/types/dashboard";
+
+export async function getDashboardStats(propertyId: string): Promise<DashboardStats | null> {
+  try {
+    await verifyPropertyAccess(propertyId);
+  } catch (error) {
+    return null;
+  }
 
   const property = await prisma.property.findUnique({
     where: { id: propertyId },
@@ -91,8 +97,11 @@ export async function getDashboardStats(propertyId: string) {
 }
 
 export async function getDailyActivity(propertyId: string) {
-  const session = await auth();
-  if (!session?.user?.email) return { arrivals: [], departures: [] };
+  try {
+    await verifyPropertyAccess(propertyId);
+  } catch (error) {
+    return { arrivals: [], departures: [] };
+  }
 
   const property = await prisma.property.findUnique({
     where: { id: propertyId },
@@ -175,11 +184,18 @@ export async function getDailyActivity(propertyId: string) {
 
 export async function checkIn(bookingId: string) {
   const session = await auth();
-  if (!session?.user?.email) {
-    throw new Error('Unauthorized');
-  }
+  if (!session?.user?.id) throw new Error('Unauthorized');
 
   try {
+    // Verify booking belongs to a property the user has access to
+    const booking = await prisma.booking.findUnique({
+      where: { id: bookingId },
+      select: { propertyId: true },
+    });
+
+    if (!booking) throw new Error('Booking not found');
+    await verifyPropertyAccess(booking.propertyId);
+
     await prisma.booking.update({
       where: { id: bookingId },
       data: { status: 'checked_in' },
@@ -188,17 +204,24 @@ export async function checkIn(bookingId: string) {
     return { success: true };
   } catch (error) {
     console.error('Error checking in booking:', error);
-    throw new Error('Failed to check in booking.');
+    throw new Error(error instanceof Error ? error.message : 'Failed to check in booking.');
   }
 }
 
 export async function checkOut(bookingId: string) {
   const session = await auth();
-  if (!session?.user?.email) {
-    throw new Error('Unauthorized');
-  }
+  if (!session?.user?.id) throw new Error('Unauthorized');
 
   try {
+    // Verify booking belongs to a property the user has access to
+    const booking = await prisma.booking.findUnique({
+      where: { id: bookingId },
+      select: { propertyId: true },
+    });
+
+    if (!booking) throw new Error('Booking not found');
+    await verifyPropertyAccess(booking.propertyId);
+
     await prisma.booking.update({
       where: { id: bookingId },
       data: { status: 'checked_out' },
@@ -207,6 +230,6 @@ export async function checkOut(bookingId: string) {
     return { success: true };
   } catch (error) {
     console.error('Error checking out booking:', error);
-    throw new Error('Failed to check out booking.');
+    throw new Error(error instanceof Error ? error.message : 'Failed to check out booking.');
   }
 }

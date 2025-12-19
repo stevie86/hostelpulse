@@ -163,6 +163,8 @@ model Booking {
   amountPaid   Int       @default(0) // in cents
   paymentStatus String   @default("pending") // "pending", "partial", "paid", "refunded"
   notes        String?
+  rating       Int?      @default(0) // 1-5 star rating
+  feedback     String?   // Guest written feedback
   confirmationCode String? @unique
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @default(now())

@@ -1,7 +1,14 @@
 // __tests__/actions/auth.test.ts
 import { authenticate } from '@/app/actions/auth';
 import prisma from '@/lib/db';
-import { AuthError } from 'next-auth'; // Need to import it if exists
+
+class MockAuthError extends Error {
+  type: string;
+  constructor(type: string) {
+    super(type);
+    this.type = type;
+  }
+}
 
 // Mock NextAuth's signIn function
 jest.mock('@/auth', () => ({
@@ -29,7 +36,7 @@ describe('Auth Server Actions', () => {
       formData.append('email', 'admin@hostelpulse.com');
       formData.append('password', 'password');
 
-      mockPrisma.user.findUnique.mockResolvedValueOnce({
+      (mockPrisma.user.findUnique as jest.Mock).mockResolvedValueOnce({
         id: 'admin-id',
         email: 'admin@hostelpulse.com',
         name: 'Admin User',
@@ -51,7 +58,7 @@ describe('Auth Server Actions', () => {
       formData.append('password', 'wrong');
 
       // Mock signIn to throw AuthError with CredentialsSignin type
-      mockSignIn.mockRejectedValueOnce(new AuthError('CredentialsSignin', { cause: 'Invalid' }));
+      mockSignIn.mockRejectedValueOnce(new MockAuthError('CredentialsSignin'));
 
       const result = await authenticate(undefined, formData);
 
@@ -65,9 +72,9 @@ describe('Auth Server Actions', () => {
       formData.append('password', 'other');
 
       // Mock signIn to throw another AuthError type
-      mockSignIn.mockRejectedValueOnce(new AuthError('CallbackError', { cause: 'Other' }));
+      mockSignIn.mockRejectedValueOnce(new MockAuthError('CallbackError'));
 
-      await expect(authenticate(undefined, formData)).rejects.toThrow(AuthError);
+      await expect(authenticate(undefined, formData)).rejects.toThrow(MockAuthError);
       expect(mockSignIn).toHaveBeenCalledWith('credentials', formData);
     });
 

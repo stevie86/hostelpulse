@@ -5,13 +5,7 @@ import { useRouter } from 'next/navigation';
 import { getDashboardStats, getDailyActivity } from '@/app/actions/dashboard';
 import { OccupancyCard } from '@/components/dashboard/OccupancyCard';
 import { ActivityList } from '@/components/dashboard/ActivityList';
-
-// Define types for the data to be fetched
-type DashboardStats = {
-  occupancy: number;
-  arrivals: number;
-  departures: number;
-} | null;
+import { DashboardStats } from '@/types/dashboard';
 
 interface BookingDetails {
   id: string;
@@ -36,7 +30,7 @@ interface DailyActivity {
 
 export default function DashboardPage() {
   const router = useRouter();
-  const [stats, setStats] = useState<DashboardStats>(null);
+  const [stats, setStats] = useState<DashboardStats | null>(null);
   const [activity, setActivity] = useState<DailyActivity>({ arrivals: [], departures: [] });
   const [isLoading, setIsLoading] = useState(true);
 

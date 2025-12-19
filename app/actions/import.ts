@@ -61,6 +61,66 @@ async function parseCsv(file: File): Promise<{ data: Record<string, string>[]; e
 
 // --- Import Actions ---
 
+export async function importGuests(
+  propertyId: string,
+  prevState: ImportActionState,
+  formData: FormData
+): Promise<ImportActionState> {
+  const session = await auth();
+  if (!session?.user?.email) {
+    return { message: "Unauthorized", errors: ["Authentication required."] };
+  }
+
+  const file = formData.get("file") as File;
+  if (!file || file.size === 0) {
+    return { message: "No file selected.", errors: ["Please upload a CSV file."] };
+  }
+
+  const { data, errors: parseErrors } = await parseCsv(file);
+  if (parseErrors.length > 0) {
+    return { message: "CSV Parse Error", errors: parseErrors.map((e) => e.message) };
+  }
+
+  let successCount = 0;
+  let failCount = 0;
+  const failedRows: { row: number; reason: string }[] = [];
+
+  for (let i = 0; i < data.length; i++) {
+    const row = data[i];
+    const rowNumber = i + 2;
+
+    const validated = GuestSchema.safeParse(row);
+
+    if (!validated.success) {
+      failCount++;
+      failedRows.push({
+        row: rowNumber,
+        reason: JSON.stringify(validated.error.flatten().fieldErrors),
+      });
+      continue;
+    }
+
+    try {
+      await prisma.guest.create({
+        data: {
+          propertyId,
+          ...validated.data,
+        },
+      });
+      successCount++;
+    } catch (error: unknown) {
+      failCount++;
+      failedRows.push({ row: rowNumber, reason: error instanceof Error ? error.message : "Database error." });
+    }
+  }
+
+  revalidatePath(`/properties/${propertyId}/guests`);
+  return {
+    message: "Import complete.",
+    results: { successCount, failCount, failedRows },
+  };
+}
+
 export async function importRooms(
   propertyId: string,
   prevState: ImportActionState,

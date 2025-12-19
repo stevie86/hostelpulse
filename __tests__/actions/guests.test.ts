@@ -38,8 +38,7 @@ describe('Guests Server Actions', () => {
       formData.append('nationality', 'US');
       formData.append('documentId', 'ABC12345');
 
-      mockPrisma.guest.create.mockResolvedValueOnce({
-        id: 'new-guest-id',
+      (mockPrisma.guest.create as jest.Mock).mockResolvedValueOnce({
         propertyId: PROPERTY_ID,
         firstName: 'Jane',
         lastName: 'Doe',
@@ -57,7 +56,7 @@ describe('Guests Server Actions', () => {
         updatedAt: new Date(),
       });
 
-      await createGuest(PROPERTY_ID, null, formData);
+      await createGuest(PROPERTY_ID, null as any, formData);
 
       expect(mockPrisma.guest.create).toHaveBeenCalledWith({
         data: {
@@ -83,7 +82,7 @@ describe('Guests Server Actions', () => {
       formData.append('nationality', '');
       formData.append('documentId', '');
 
-      mockPrisma.guest.create.mockResolvedValueOnce({
+      (mockPrisma.guest.create as jest.Mock).mockResolvedValueOnce({
         id: 'new-guest-id-2',
         propertyId: PROPERTY_ID,
         firstName: 'John',
@@ -93,7 +92,7 @@ describe('Guests Server Actions', () => {
         createdAt: new Date(), updatedAt: new Date(),
       });
 
-      await createGuest(PROPERTY_ID, null, formData);
+      await createGuest(PROPERTY_ID, null as any, formData);
 
       expect(mockPrisma.guest.create).toHaveBeenCalledWith({
         data: {
@@ -111,7 +110,7 @@ describe('Guests Server Actions', () => {
     it('should return errors for invalid form data', async () => {
       const formData = new FormData(); // Empty form data
 
-      const result = await createGuest(PROPERTY_ID, null, formData);
+      const result = await createGuest(PROPERTY_ID, null as any, formData);
 
       expect(result).toHaveProperty('errors');
       expect(result?.errors).toHaveProperty('firstName');
@@ -128,9 +127,9 @@ describe('Guests Server Actions', () => {
       formData.append('nationality', '');
       formData.append('documentId', '');
 
-      mockPrisma.guest.create.mockRejectedValueOnce(new Error('DB creation failed'));
+      (mockPrisma.guest.create as jest.Mock).mockRejectedValueOnce(new Error('DB creation failed'));
 
-      const result = await createGuest(PROPERTY_ID, null, formData);
+      const result = await createGuest(PROPERTY_ID, null as any, formData);
 
       expect(result).toEqual({ message: 'Database Error: Failed to create guest.' });
       expect(mockPrisma.guest.create).toHaveBeenCalled();

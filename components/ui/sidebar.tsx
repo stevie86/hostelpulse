@@ -73,6 +73,7 @@ export default function Sidebar() {
     { icon: <Bed size={20} />, label: 'Rooms', href: `/properties/${pid}/rooms` },
     { icon: <CalendarDays size={20} />, label: 'Bookings', href: `/properties/${pid}/bookings` },
     { icon: <Users size={20} />, label: 'Guests', href: `/properties/${pid}/guests` },
+    { icon: <Settings size={20} />, label: 'Data Hub', href: `/properties/${pid}/data` },
   ];
 
   return (

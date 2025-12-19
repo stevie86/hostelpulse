@@ -5,7 +5,7 @@ import { ImportActionState } from "@/app/actions/import";
 
 interface ImportFormProps {
   propertyId: string;
-  type: "rooms" | "bookings";
+  type: "rooms" | "bookings" | "guests";
   action: (
     prevState: ImportActionState,
     formData: FormData
@@ -36,7 +36,7 @@ export function ImportForm({ propertyId, type, action }: ImportFormProps) {
     formAction(formData);
   };
 
-  const templateLink = type === "rooms" ? "/templates/rooms.csv" : "/templates/bookings.csv";
+  const templateLink = `/templates/${type}.csv`;
 
   return (
     <form action={handleFormAction} className="space-y-4 max-w-lg">

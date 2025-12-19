@@ -1,7 +1,8 @@
-# Feature Specification: Real-time Dashboard
+# Feature Specification: Real-time Dashboard (Status: Deferred / Nice-to-Have)
 
 ## 1. Executive Summary
 **Intent:** Provide an operational "Mission Control" for the front desk.
+**Priority:** Low (Deferred in favor of core features)
 **Value:** Staff need to know "Who is arriving today?" at a glance.
 **Scope:**
 *   Arrivals Widget (List of check-ins today).

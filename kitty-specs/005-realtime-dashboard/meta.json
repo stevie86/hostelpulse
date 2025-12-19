@@ -2,7 +2,7 @@
   "feature_number": "005",
   "slug": "005-realtime-dashboard",
   "friendly_name": "Realtime Dashboard",
-  "source_description": "Real-time Dashboard - View Check-ins, Check-outs, and Occupancy for the current day. Auto-refresh.",
-  "created_at": "2025-12-17T07:55:12Z",
-  "mission": "software-dev"
+  "source_description": "Real-time Dashboard - Auto-refreshing Arrivals/Departures widget. One-click check-in.",
+  "created_at": "2025-12-17T07:55:07Z",
+  "status": "deferred"
 }

@@ -1,5 +1,6 @@
 import { getDailyActivity } from "@/app/actions/dashboard";
 import Link from "next/link";
+import { CheckInButton, CheckOutButton } from "./activity-buttons";
 
 export async function DailyActivity({ propertyId }: { propertyId: string }) {
   const { arrivals, departures } = await getDailyActivity(propertyId);
@@ -15,10 +16,13 @@ export async function DailyActivity({ propertyId }: { propertyId: string }) {
             <ul className="menu bg-base-200 w-full rounded-box">
               {arrivals.map((booking) => (
                 <li key={booking.id}>
-                  <a>
-                    Guest: {booking.guest?.firstName} {booking.guest?.lastName} <br />
-                    Room: {booking.beds[0]?.room.name || "N/A"}
-                  </a>
+                  <div className="flex justify-between items-center">
+                    <span>
+                      Guest: {booking.guest?.firstName} {booking.guest?.lastName} <br />
+                      Room: {booking.beds[0]?.room.name || "N/A"}
+                    </span>
+                    <CheckInButton bookingId={booking.id} />
+                  </div>
                 </li>
               ))}
             </ul>
@@ -35,10 +39,13 @@ export async function DailyActivity({ propertyId }: { propertyId: string }) {
             <ul className="menu bg-base-200 w-full rounded-box">
               {departures.map((booking) => (
                 <li key={booking.id}>
-                  <a>
-                    Guest: {booking.guest?.firstName} {booking.guest?.lastName} <br />
-                    Room: {booking.beds[0]?.room.name || "N/A"}
-                  </a>
+                  <div className="flex justify-between items-center">
+                    <span>
+                      Guest: {booking.guest?.firstName} {booking.guest?.lastName} <br />
+                      Room: {booking.beds[0]?.room.name || "N/A"}
+                    </span>
+                    <CheckOutButton bookingId={booking.id} />
+                  </div>
                 </li>
               ))}
             </ul>

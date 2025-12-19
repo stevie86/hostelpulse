@@ -243,11 +243,10 @@
 *Based on original project user research*
 
 ### Must-Have (Week 1-2)
-1. **Real-time Dashboard** ✅ - Already implemented
-2. **Room/Bed Status Updates** - One-click check-in/out
-3. **Booking Conflict Detection** - Prevent double-bookings
-4. **CSV Import/Export** - Spreadsheet migration path
-5. **Mobile-Responsive Interface** ✅ - Already implemented
+1. **Room/Bed Status Updates** - One-click check-in/out
+2. **Booking Conflict Detection** - Prevent double-bookings
+3. **Data Management Hub** ✅ - Decoupled utility UI for bulk import/export
+4. **Mobile-Responsive Interface** ✅ - Already implemented
 
 ### Should-Have (Week 3-4)
 1. **Guest Database** - Contact info, preferences, history
@@ -257,11 +256,13 @@
 5. **Offline Mode** - Work without internet connection
 
 ### Could-Have (Month 2)
-1. **Channel Manager Integration** - Booking.com, Airbnb sync
-2. **Automated Emails** - Confirmation, check-in instructions
-3. **Payment Processing** - Stripe integration for deposits
-4. **Multi-Property Support** - Hostel chain management
-5. **Advanced Analytics** - Revenue optimization insights
+1. **Real-time Dashboard** ✅ - Basic version implemented, advanced features deferred
+2. **CSV Import/Export (UI)** - User-facing spreadsheet migration path
+3. **Channel Manager Integration** - Booking.com, Airbnb sync
+3. **Automated Emails** - Confirmation, check-in instructions
+4. **Payment Processing** - Stripe integration for deposits
+5. **Multi-Property Support** - Hostel chain management
+6. **Advanced Analytics** - Revenue optimization insights
 
 ### Won't-Have (Future)
 1. **Complex PMS Features** - Keep it simple for hostels

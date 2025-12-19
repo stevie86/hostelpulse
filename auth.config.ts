@@ -1,61 +1,55 @@
-import type { NextAuthConfig } from 'next-auth';
-import prisma from '@/lib/db'; // Import prisma client
+// auth.config.ts
+import type { Session, User } from 'next-auth';
+import type { NextRequest } from 'next/server';
 
-export const authConfig: NextAuthConfig = {
+// Manually defining the configuration interface to avoid resolution issues with next-auth v5 beta types
+// while maintaining strict type safety for our callbacks.
+interface AuthConfig {
+  pages?: {
+    signIn?: string;
+    signOut?: string;
+    error?: string;
+    verifyRequest?: string;
+    newUser?: string;
+  };
+  callbacks?: {
+    signIn?: (params: { user: User | any; account: any; profile?: any; email?: { verificationRequest?: boolean }; credentials?: Record<string, any> }) => Promise<boolean | string> | boolean | string;
+    signOut?: (params: { session: Session; token: any }) => Promise<void> | void;
+    redirect?: (params: { url: string; baseUrl: string }) => Promise<string> | string;
+    session?: (params: { session: Session; token: any; user: User }) => Promise<Session> | Session;
+    jwt?: (params: { token: any; user?: User | any; account?: any; profile?: any; trigger?: 'signIn' | 'signUp' | 'update'; isNewUser?: boolean; session?: any }) => Promise<any> | any;
+    authorized?: (params: { auth: Session | null; request: NextRequest }) => boolean | Promise<boolean> | Response | Promise<Response>;
+  };
+  providers: any[];
+}
+
+export const authConfig: AuthConfig = {
   pages: {
     signIn: '/login',
   },
   callbacks: {
-    async session({ session, token, user }: any) {
-      if (session?.user) {
-        // Find the user's first property
-        const userWithTeams = await prisma.user.findUnique({
-          where: { id: session.user.id },
-          include: {
-            teamMembers: {
-              include: {
-                team: {
-                  include: {
-                    property: true,
-                  },
-                },
-              },
-            },
-          },
-        });
-
-        const firstProperty = userWithTeams?.teamMembers[0]?.team?.property;
-        if (firstProperty) {
-          session.user.propertyId = firstProperty.id;
-          session.user.propertyName = firstProperty.name;
-        }
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      if (token?.id && session.user) {
+        session.user.id = token.id as string;
       }
       return session;
     },
-    authorized({ auth, request: { nextUrl } }: any) {
+    authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user;
-      const isOnDashboard = nextUrl.pathname.startsWith('/properties') || nextUrl.pathname === '/'; // Treat root as part of dashboard
+      const isOnDashboard = nextUrl.pathname.startsWith('/properties');
       
-      if (isLoggedIn) {
-        if (nextUrl.pathname === '/' && auth.user?.propertyId) {
-            // Redirect to the first property's dashboard if on root after login
-            return Response.redirect(new URL(`/properties/${auth.user.propertyId}/dashboard`, nextUrl));
-        }
-        // If logged in and on a protected page or already on a property dashboard
-        return true; 
+      if (isOnDashboard) {
+        if (isLoggedIn) return true;
+        return false;
       }
-      
-      // If not logged in, allow access to public pages like login, otherwise redirect to login
-      return !isOnDashboard;
+      return true;
     },
-    redirect({ url, baseUrl }) {
-        // Allows for login to redirect to previous page, or dashboard if none
-        if (url.startsWith(baseUrl)) {
-            return url;
-        }
-        // Fallback to dashboard if a specific redirect isn't provided (e.g., direct login)
-        return baseUrl;
-    }
   },
-  providers: [], // Configured in auth.ts
+  providers: [],
 };

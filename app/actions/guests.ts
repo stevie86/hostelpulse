@@ -5,6 +5,7 @@ import prisma from "@/lib/db";
 import { GuestSchema } from "@/lib/schemas/guest";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { verifyPropertyAccess } from "@/lib/auth-utils";
 
 export type ActionState = {
   errors?: {
@@ -21,9 +22,10 @@ export async function createGuest(
   prevState: ActionState,
   formData: FormData
 ): Promise<ActionState> {
-  const session = await auth();
-  if (!session?.user?.email) {
-    return { message: "Unauthorized" };
+  try {
+    await verifyPropertyAccess(propertyId);
+  } catch (error) {
+    return { message: error instanceof Error ? error.message : "Unauthorized" };
   }
 
   const rawData = {
@@ -67,9 +69,10 @@ export async function updateGuest(
   prevState: ActionState,
   formData: FormData
 ): Promise<ActionState> {
-  const session = await auth();
-  if (!session?.user?.email) {
-    return { message: "Unauthorized" };
+  try {
+    await verifyPropertyAccess(propertyId);
+  } catch (error) {
+    return { message: error instanceof Error ? error.message : "Unauthorized" };
   }
 
   const rawData = {
@@ -106,8 +109,11 @@ export async function updateGuest(
 }
 
 export async function getGuests(propertyId: string, query?: string) {
-  const session = await auth();
-  if (!session?.user?.email) return [];
+  try {
+    await verifyPropertyAccess(propertyId);
+  } catch (error) {
+    return [];
+  }
 
   return prisma.guest.findMany({
     where: {

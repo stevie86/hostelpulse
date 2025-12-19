@@ -2,7 +2,8 @@ import { updateGuest } from "@/app/actions/guests";
 import { GuestForm } from "@/components/guests/guest-form";
 import prisma from "@/lib/db";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
+import { verifyPropertyAccess } from "@/lib/auth-utils";
 
 export default async function EditGuestPage({
   params,
@@ -10,6 +11,12 @@ export default async function EditGuestPage({
   params: Promise<{ id: string; guestId: string }>;
 }) {
   const { id: propertyId, guestId } = await params;
+
+  try {
+    await verifyPropertyAccess(propertyId);
+  } catch (error) {
+    redirect("/login");
+  }
 
   const guest = await prisma.guest.findUnique({
     where: { id: guestId },

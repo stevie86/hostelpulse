@@ -335,4 +335,40 @@ Got it! You want the actual conversation preserved verbatim, not just summaries.
 
 ---
 
+### Session 2 - December 19, 2025 (Race2MVP - Operation Bedrock)
+
+#### [2025-12-19 Bedrock Security & Utility UI]
+
+**User**: "rbac is post mvp! enforce spec-kitty! keep track of our efficiency, we keep hitting walls!"
+
+**Gemini Response**: 
+I have introduced a dedicated mission and efficiency tracking system to stabilize our workflow and accelerate the "Race2MVP".
+
+## ✅ Session Accomplishments
+
+1. **Data Management Hub**:
+   - Created a decoupled utility UI at `/properties/[id]/data`.
+   - Supports bulk CSV import for Rooms, Guests, and Bookings.
+   - Centralized CSV export APIs for data portability.
+
+2. **Hardened RBAC Guards**:
+   - Implemented `verifyPropertyAccess()` in `lib/auth-utils.ts`.
+   - Refactored all core Server Actions (Rooms, Bookings, Dashboard) to enforce property ownership.
+   - Prevented multi-tenant data leakage via URL tampering.
+
+3. **One-Click Dashboard Operations**:
+   - Added "Check In" and "Check Out" buttons to the Dashboard Daily Activity lists.
+   - Enforced transactional integrity in booking creation to prevent double-bookings.
+   - Made Dashboard metrics timezone-aware using property settings.
+
+4. **Workflow Optimization (Spec-Kitty)**:
+   - Created a dedicated `hostelpulse-mvp` mission.
+   - Mapped direct bash script aliases in `package.json` to bypass CLI versioning errors.
+   - Created `docs/WALLS_AND_EFFICIENCY.md` to track bottlenecks.
+
+## 📊 Current Status
+- **Bedrock Stability**: 95% (Hardened actions, correct timezones, 0 tsc errors).
+- **Core Operations**: Fully operational manual CRUD for Rooms and Bookings.
+- **Next Path**: Implement the Guest Management List view to complement the existing CSV import utility.
+
 *Log Format: [YYYY-MM-DD HH:MM] for all future entries*

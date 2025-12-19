@@ -53,16 +53,20 @@ async function seedTeams(users) {
     newTeams.push(team);
     console.log(`Seeded team: ${teamName}`);
 
-    // Link admin user to this team
+    // Link admin user to this team (even if user already existed)
     if (users.length > 0) {
-      await client.teamMember.create({
-        data: {
+      await client.teamMember.upsert({
+        where: {
+          teamId_userId: { teamId: team.id, userId: users[0].id }
+        },
+        update: { role: 'OWNER' },
+        create: {
           teamId: team.id,
           userId: users[0].id,
           role: 'OWNER', // As String for SQLite
         },
       });
-      console.log(`Linked admin user to ${teamName}`);
+      console.log(`Linked/updated admin user to ${teamName}`);
     }
 
   } catch (ex) {

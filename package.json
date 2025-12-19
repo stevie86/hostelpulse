@@ -24,6 +24,10 @@
     "test:all": "pnpm test && pnpm test:e2e",
     "postinstall": "prisma generate",
     "spec": ".venv-speckitty/bin/spec-kitty",
+    "spec:specify": ".kittify/scripts/bash/create-new-feature.sh --mission=hostelpulse-mvp",
+    "spec:plan": ".kittify/scripts/bash/setup-plan.sh",
+    "spec:accept": ".kittify/scripts/bash/accept-feature.sh",
+    "spec:merge": ".kittify/scripts/bash/merge-feature.sh",
     "spec:setup": "python3 -m venv .venv-speckitty && .venv-speckitty/bin/pip install spec-kitty-cli"
   },
   "prisma": {
@@ -32,7 +36,7 @@
   "dependencies": {
     "@auth/prisma-adapter": "^2.11.1",
     "@hookform/resolvers": "^5.2.2",
-    "@prisma/client": "^5.22.0",
+    "@prisma/client": "5.22.0",
     "bcryptjs": "^3.0.3",
     "date-fns": "^4.1.0",
     "date-fns-tz": "^3.2.0",

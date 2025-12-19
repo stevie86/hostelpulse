@@ -5,6 +5,7 @@ import prisma from "@/lib/db";
 import { RoomSchema, RoomFormValues } from "@/lib/schemas/room";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { verifyPropertyAccess } from "@/lib/auth-utils";
 
 export type ActionState = {
   errors?: {
@@ -24,12 +25,11 @@ export async function createRoom(
   prevState: ActionState,
   formData: FormData
 ): Promise<ActionState> {
-  const session = await auth();
-  if (!session?.user?.email) {
-    return { message: "Unauthorized" };
+  try {
+    await verifyPropertyAccess(propertyId);
+  } catch (error) {
+    return { message: error instanceof Error ? error.message : "Unauthorized" };
   }
-
-  // TODO: Verify user owns propertyId (omitted for MVP speed, trust propertyId passed from protected layout)
 
   const rawData = {
     name: formData.get("name"),
@@ -80,9 +80,10 @@ export async function updateRoom(
   prevState: ActionState,
   formData: FormData
 ): Promise<ActionState> {
-  const session = await auth();
-  if (!session?.user?.email) {
-    return { message: "Unauthorized" };
+  try {
+    await verifyPropertyAccess(propertyId);
+  } catch (error) {
+    return { message: error instanceof Error ? error.message : "Unauthorized" };
   }
 
   const rawData = {
@@ -128,10 +129,7 @@ export async function updateRoom(
 }
 
 export async function deleteRoom(roomId: string, propertyId: string) {
-  const session = await auth();
-  if (!session?.user?.email) {
-    throw new Error("Unauthorized");
-  }
+  await verifyPropertyAccess(propertyId);
 
   // Check for active bookings
   const activeBookings = await prisma.bookingBed.count({
@@ -158,9 +156,10 @@ export async function deleteRoom(roomId: string, propertyId: string) {
 }
 
 export async function getRooms(propertyId: string) {
-  const session = await auth();
-  if (!session?.user?.email) {
-    return []; // Or throw, but for list view usually return empty
+  try {
+    await verifyPropertyAccess(propertyId);
+  } catch (error) {
+    return [];
   }
 
   try {

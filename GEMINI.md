@@ -53,6 +53,7 @@
 5.  **Database:** Always update `schema.prisma` first, then generate client/migrate.
 
 ## Current Roadmap (Operation Bedrock)
-1.  **Stability:** Ensure 100% CI/CD success.
-2.  **Type Safety:** Eliminate `any` usage in core paths.
-3.  **Feature Restoration:** Incrementally bring back Room Management and Booking Management.
+1.  **Stability & Type Safety:** Ensure 100% CI/CD success and eliminate `any` usage in core paths.
+2.  **Core Feature Restoration:** Priority focus on Room Management, Booking Management, and Guest Management.
+3.  **Data Management Hub:** Decoupled utility UI for bulk import/export to assist in MVP validation.
+4.  **Nice-to-Have:** Real-time Dashboard and advanced analytics (basic dashboard implemented, further work deferred).

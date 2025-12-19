@@ -5,6 +5,7 @@ import prisma from "@/lib/db";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
+import { verifyPropertyAccess } from "@/lib/auth-utils";
 
 // --- Types & Schemas ---
 
@@ -71,9 +72,10 @@ export async function createBooking(
   prevState: ActionState,
   formData: FormData
 ): Promise<ActionState> {
-  const session = await auth();
-  if (!session?.user?.email) {
-    return { message: "Unauthorized" };
+  try {
+    await verifyPropertyAccess(propertyId);
+  } catch (error) {
+    return { message: error instanceof Error ? error.message : "Unauthorized" };
   }
 
   // Parse Inputs
@@ -182,8 +184,7 @@ export async function createBooking(
 }
 
 export async function cancelBooking(bookingId: string, propertyId: string) {
-  const session = await auth();
-  if (!session?.user?.email) throw new Error("Unauthorized");
+  await verifyPropertyAccess(propertyId);
 
   try {
     await prisma.booking.update({
@@ -197,8 +198,11 @@ export async function cancelBooking(bookingId: string, propertyId: string) {
 }
 
 export async function getBookings(propertyId: string) {
-  const session = await auth();
-  if (!session?.user?.email) return [];
+  try {
+    await verifyPropertyAccess(propertyId);
+  } catch (error) {
+    return [];
+  }
 
   return prisma.booking.findMany({
     where: { propertyId },
@@ -213,8 +217,7 @@ export async function getBookings(propertyId: string) {
 }
 
 export async function checkInBooking(propertyId: string, bookingId: string) {
-  const session = await auth();
-  if (!session?.user?.email) throw new Error("Unauthorized");
+  await verifyPropertyAccess(propertyId);
 
   await prisma.booking.update({
     where: { id: bookingId },
@@ -225,8 +228,7 @@ export async function checkInBooking(propertyId: string, bookingId: string) {
 }
 
 export async function checkOutBooking(propertyId: string, bookingId: string) {
-  const session = await auth();
-  if (!session?.user?.email) throw new Error("Unauthorized");
+  await verifyPropertyAccess(propertyId);
 
   await prisma.booking.update({
     where: { id: bookingId },
