@@ -8,10 +8,10 @@ import bcrypt from 'bcryptjs';
 
 // Define the expected return type from NextAuth to maintain strict typing across the app
 interface NextAuthResult {
-  auth: unknown; // These are complex functions from the library
-  signIn: unknown;
-  signOut: unknown;
-  handlers: unknown;
+  auth: any; // Using any here as a last resort for complex NextAuth internal types
+  signIn: (...args: any[]) => Promise<any>;
+  signOut: (...args: any[]) => Promise<any>;
+  handlers: any;
 }
 
 // Workaround for NextAuth v5 beta type issue where the default export is not seen as callable.
