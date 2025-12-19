@@ -60,12 +60,15 @@ Room B,dormitory,4,2000,4,Shared Dorm`;
         const headers = rows[0].split(',').map(h => h.trim());
         const data = rows.slice(1).map(row => {
           const values = row.split(',').map(v => v.trim());
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           return headers.reduce((obj: Record<string, any>, header, index) => {
             obj[header] = values[index];
             return obj;
           }, {});
         });
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         return { data, errors: [], meta: {} } as any;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
       }) as any);
 
       jest.spyOn(Papa, 'parse').mockImplementationOnce(((file: unknown, options: unknown) => {
@@ -73,12 +76,15 @@ Room B,dormitory,4,2000,4,Shared Dorm`;
         const headers = rows[0].split(',').map(h => h.trim());
         const data = rows.slice(1).map(row => {
           const values = row.split(',').map(v => v.trim());
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           return headers.reduce((obj: Record<string, any>, header, index) => {
             obj[header] = values[index];
             return obj;
           }, {});
         });
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         return { data, errors: [], meta: {} } as any;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
       }) as any);
 
       jest.spyOn(Papa, 'parse').mockImplementationOnce(((file: unknown, options: unknown) => {
@@ -86,12 +92,15 @@ Room B,dormitory,4,2000,4,Shared Dorm`;
         const headers = rows[0].split(',').map(h => h.trim());
         const data = rows.slice(1).map(row => {
           const values = row.split(',').map(v => v.trim());
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           return headers.reduce((obj: Record<string, any>, header, index) => {
             obj[header] = values[index];
             return obj;
           }, {});
         });
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         return { data, errors: [], meta: {} } as any;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
       }) as any);
 
       (Papa.parse as jest.Mock).mockImplementationOnce((file, options) => {
@@ -99,6 +108,7 @@ Room B,dormitory,4,2000,4,Shared Dorm`;
         const headers = rows[0].split(',').map(h => h.trim());
         const data = rows.slice(1).map(row => {
           const values = row.split(',').map(v => v.trim());
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           return headers.reduce((obj: Record<string, any>, header, index) => {
             obj[header] = values[index];
             return obj;
@@ -112,6 +122,7 @@ Room B,dormitory,4,2000,4,Shared Dorm`;
         const headers = rows[0].split(',').map(h => h.trim());
         const data = rows.slice(1).map(row => {
           const values = row.split(',').map(v => v.trim());
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           return headers.reduce((obj: Record<string, any>, header, index) => {
             obj[header] = values[index];
             return obj;
@@ -126,6 +137,7 @@ Room B,dormitory,4,2000,4,Shared Dorm`;
         const headers = rows[0].split(',').map(h => h.trim());
         const data = rows.slice(1).map(row => {
           const values = row.split(',').map(v => v.trim());
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           return headers.reduce((obj: Record<string, any>, header, index) => {
             obj[header] = values[index];
             return obj;
@@ -161,6 +173,7 @@ Invalid Room,,1,5000,1`; // Missing type
         const headers = rows[0].split(',').map(h => h.trim());
         const data = rows.slice(1).map(row => {
           const values = row.split(',').map(v => v.trim());
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           return headers.reduce((obj: Record<string, any>, header, index) => {
             obj[header] = values[index];
             return obj;
@@ -204,6 +217,7 @@ New,Booking,Import Room 1,2025-02-01,2025-02-05,confirmed,new@example.com`;
         const headers = rows[0].split(',').map(h => h.trim());
         const data = rows.slice(1).map(row => {
           const values = row.split(',').map(v => v.trim());
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           return headers.reduce((obj: Record<string, any>, header, index) => {
             obj[header] = values[index];
             return obj;
@@ -252,6 +266,7 @@ Conflict,Guest,Import Room 1,2025-02-02,2025-02-04`; // Overlapping dates
         const headers = rows[0].split(',').map(h => h.trim());
         const data = rows.slice(1).map(row => {
           const values = row.split(',').map(v => v.trim());
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           return headers.reduce((obj: Record<string, any>, header, index) => {
             obj[header] = values[index];
             return obj;

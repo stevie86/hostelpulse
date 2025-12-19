@@ -56,6 +56,7 @@ describe('Guests Server Actions', () => {
         updatedAt: new Date(),
       });
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       await createGuest(PROPERTY_ID, null as any, formData);
 
       expect(mockPrisma.guest.create).toHaveBeenCalledWith({
@@ -92,6 +93,7 @@ describe('Guests Server Actions', () => {
         createdAt: new Date(), updatedAt: new Date(),
       });
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       await createGuest(PROPERTY_ID, null as any, formData);
 
       expect(mockPrisma.guest.create).toHaveBeenCalledWith({
@@ -110,6 +112,7 @@ describe('Guests Server Actions', () => {
     it('should return errors for invalid form data', async () => {
       const formData = new FormData(); // Empty form data
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const result = await createGuest(PROPERTY_ID, null as any, formData);
 
       expect(result).toHaveProperty('errors');
@@ -129,6 +132,7 @@ describe('Guests Server Actions', () => {
 
       (mockPrisma.guest.create as jest.Mock).mockRejectedValueOnce(new Error('DB creation failed'));
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const result = await createGuest(PROPERTY_ID, null as any, formData);
 
       expect(result).toEqual({ message: 'Database Error: Failed to create guest.' });
