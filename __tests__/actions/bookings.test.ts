@@ -1,0 +1,93 @@
+import { createBooking } from "@/app/actions/bookings";
+import prisma from "@/lib/db";
+
+// Mock auth
+jest.mock("@/auth", () => ({
+  auth: jest.fn(() => Promise.resolve({ user: { email: "test@example.com" } })),
+}));
+
+// Mock revalidatePath & redirect
+jest.mock("next/cache", () => ({
+  revalidatePath: jest.fn(),
+}));
+jest.mock("next/navigation", () => ({
+  redirect: jest.fn(),
+}));
+
+describe("Booking Actions", () => {
+  const propertyId = "prop-test";
+  const guestId = "guest-test";
+  const roomId = "room-test";
+
+  beforeEach(async () => {
+    // Cleanup
+    await prisma.bookingBed.deleteMany();
+    await prisma.booking.deleteMany();
+    await prisma.room.deleteMany();
+    await prisma.guest.deleteMany();
+    await prisma.property.deleteMany();
+    await prisma.team.deleteMany();
+
+    // Setup
+    await prisma.team.create({ data: { id: "team-1", name: "Team", slug: "team" } });
+    await prisma.property.create({ data: { id: propertyId, teamId: "team-1", name: "Prop", city: "City" } });
+    await prisma.guest.create({ data: { id: guestId, propertyId, firstName: "John", lastName: "Doe" } });
+    await prisma.room.create({
+      data: {
+        id: roomId,
+        propertyId,
+        name: "Dorm 1",
+        type: "dormitory",
+        beds: 2, // Capacity 2
+        pricePerNight: 1000,
+      },
+    });
+  });
+
+  it("should create a booking when capacity is available", async () => {
+    const formData = new FormData();
+    formData.append("roomId", roomId);
+    formData.append("guestId", guestId);
+    formData.append("checkIn", "2025-01-01");
+    formData.append("checkOut", "2025-01-05");
+
+    const result = await createBooking(propertyId, {}, formData);
+    
+    // If redirect was mocked, result might be undefined or void if successful (as it throws NextRedirect)
+    // But our action catches error? No, redirect throws.
+    // We should expect the mock to be called.
+    
+    const booking = await prisma.booking.findFirst();
+    expect(booking).not.toBeNull();
+    expect(booking?.status).toBe("confirmed");
+  });
+
+  it("should fail when room is full", async () => {
+    // Fill the room (Capacity 2)
+    // Create 2 existing bookings
+    for (let i = 0; i < 2; i++) {
+        const b = await prisma.booking.create({
+            data: {
+                propertyId,
+                checkIn: new Date("2025-01-01"),
+                checkOut: new Date("2025-01-05"),
+                status: "confirmed"
+            }
+        });
+        await prisma.bookingBed.create({
+            data: { bookingId: b.id, roomId, bedLabel: "x", pricePerNight: 1000 }
+        });
+    }
+
+    // Try to create 3rd booking
+    const formData = new FormData();
+    formData.append("roomId", roomId);
+    formData.append("guestId", guestId);
+    formData.append("checkIn", "2025-01-02"); // Overlapping dates
+    formData.append("checkOut", "2025-01-04");
+
+    const result = await createBooking(propertyId, {}, formData);
+    
+    expect(result.message).toBe("Room is fully booked for these dates.");
+  });
+});

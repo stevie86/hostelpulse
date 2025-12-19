@@ -1,0 +1,9 @@
+# Vercel Ignore File
+# Explicitly prevent local dev tools from being uploaded to Vercel
+
+.venv-speckitty/
+.kittify/
+.spec-kitty/
+tests/
+playwright-report/
+dev_debug.log

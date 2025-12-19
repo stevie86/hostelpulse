@@ -1,0 +1,10 @@
+import NextAuth from 'next-auth';
+import { authConfig } from './auth.config';
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const proxy = (NextAuth as any)(authConfig).auth;
+
+export const config = {
+  // https://nextjs.org/docs/app/building-your-application/routing/middleware#matcher
+  matcher: ['/((?!api|_next/static|_next/image|.*\.png$).*)'],
+};
