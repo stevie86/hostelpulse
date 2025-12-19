@@ -42,7 +42,7 @@ For each test case (manual or automated), verify:
 
 A consistent seed data set is required for reproducible tests.
 
--   **User**: `admin@hostelpulse.com` / `password123`
+-   **User**: `admin@hostelpulse.com` / `password`
 -   **Property**: "Downtown Hostel" (ID: `default` or UUID)
 -   **Rooms**:
     -   101 (Dorm, 6 beds, Mixed)

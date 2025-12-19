@@ -29,6 +29,7 @@ export default function LoginForm() {
                 name="email"
                 placeholder="Enter your email address"
                 required
+                defaultValue="admin@hostelpulse.com"
               />
             </div>
           </div>
@@ -48,6 +49,7 @@ export default function LoginForm() {
                 placeholder="Enter password"
                 required
                 minLength={6}
+                defaultValue="password"
               />
             </div>
           </div>
