@@ -15,7 +15,7 @@ export function CancelBookingButton({
   const handleCancel = () => {
     if (!confirm("Cancel this booking?")) return;
     startTransition(async () => {
-      await cancelBooking(bookingId, propertyId);
+      await cancelBooking(propertyId, bookingId);
     });
   };
 

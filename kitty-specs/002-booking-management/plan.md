@@ -20,22 +20,22 @@
 ## 2. Step-by-Step Implementation
 
 ### Phase 1: Logic & Validation (The Hard Part)
-*   [ ] **Task 1:** Implement `AvailabilityService` (logic to check overlaps).
+*   [x] **Task 1:** Implement `AvailabilityService` (logic to check overlaps).
     *   *Sub-task:* Implement `findAvailableBedLabel(roomId, checkIn, checkOut)` helper.
-*   [ ] **Task 2:** Implement `createBooking` server action with `prisma.$transaction`.
+*   [x] **Task 2:** Implement `createBooking` server action with `prisma.$transaction`.
 *   [ ] **Task 3:** Unit Tests for Concurrency/Overlap (Critical).
 
 ### Phase 2: UI - List View
-*   [ ] **Task 4:** Create `BookingList` component.
-*   [ ] **Task 5:** Create `/bookings/page.tsx`.
+*   [x] **Task 4:** Create `BookingList` component.
+*   [x] **Task 5:** Create `/bookings/page.tsx`.
 
 ### Phase 3: UI - Creation Flow
-*   [ ] **Task 6:** Create `BookingForm` (Multi-step).
+*   [x] **Task 6:** Create `BookingForm` (Multi-step).
     *   *Note:* Will use simple inputs for Guest initially until Feature 003 is fully ready.
 
 ### Phase 4: Integration
-*   [ ] **Task 7:** Link "Book Now" from Room List (optional convenience).
-*   [ ] **Task 8:** Cancellation flow.
+*   [x] **Task 7:** Link "Book Now" from Room List (optional convenience).
+*   [x] **Task 8:** Cancellation flow.
 
 ## 3. Key Algorithms
 

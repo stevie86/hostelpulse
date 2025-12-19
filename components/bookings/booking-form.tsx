@@ -1,8 +1,8 @@
 "use client";
 
 import { ActionState } from "@/app/actions/bookings";
-import { useActionState, useState } from "react";
-import { useForm } from "react-hook-form";
+import { useSearchParams } from "next/navigation";
+import { useActionState, useEffect, useState } from "react";
 
 // Define simpler props types to avoid full Prisma dependency on client
 type Room = { id: string; name: string; beds: number; pricePerNight: number };
@@ -19,14 +19,23 @@ interface BookingFormProps {
 }
 
 export function BookingForm({ action, rooms, guests }: BookingFormProps) {
+  const searchParams = useSearchParams();
+  const initialRoomId = searchParams.get("roomId") || "";
+
   const [state, formAction, isPending] = useActionState(action, {
     message: null,
     errors: {},
   });
 
   // Client-side Price Calc
-  const [selectedRoomId, setSelectedRoomId] = useState<string>("");
+  const [selectedRoomId, setSelectedRoomId] = useState<string>(initialRoomId);
   const [dates, setDates] = useState({ checkIn: "", checkOut: "" });
+
+  useEffect(() => {
+    if (initialRoomId) {
+      setSelectedRoomId(initialRoomId);
+    }
+  }, [initialRoomId]);
 
   const selectedRoom = rooms.find((r) => r.id === selectedRoomId);
   
@@ -79,8 +88,8 @@ export function BookingForm({ action, rooms, guests }: BookingFormProps) {
           name="roomId"
           className="select select-bordered w-full"
           required
+          value={selectedRoomId}
           onChange={(e) => setSelectedRoomId(e.target.value)}
-          defaultValue=""
         >
           <option value="" disabled>Select a room...</option>
           {rooms.map((room) => (

@@ -49,6 +49,12 @@ export async function RoomList({ propertyId }: { propertyId: string }) {
               </td>
               <td className="flex gap-2">
                 <Link
+                  href={`/properties/${propertyId}/bookings/new?roomId=${room.id}`}
+                  className="btn btn-sm btn-primary btn-outline"
+                >
+                  Book
+                </Link>
+                <Link
                   href={`/properties/${propertyId}/rooms/${room.id}`}
                   className="btn btn-sm btn-ghost"
                 >
