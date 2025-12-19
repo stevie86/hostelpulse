@@ -26,6 +26,7 @@
     "spec": ".venv-speckitty/bin/spec-kitty",
     "spec:specify": "$(cd $(git rev-parse --git-common-dir)/.. && pwd)/.kittify/scripts/bash/create-new-feature.sh --mission=hostelpulse-mvp",
     "spec:plan": "$(cd $(git rev-parse --git-common-dir)/.. && pwd)/.kittify/scripts/bash/setup-plan.sh",
+    "spec:tasks": "$(cd $(git rev-parse --git-common-dir)/.. && pwd)/.kittify/scripts/bash/refresh-kittify-tasks.sh",
     "spec:accept": "$(cd $(git rev-parse --git-common-dir)/.. && pwd)/.kittify/scripts/bash/accept-feature.sh",
     "spec:merge": "$(cd $(git rev-parse --git-common-dir)/.. && pwd)/.kittify/scripts/bash/merge-feature.sh",
     "spec:setup": "python3 -m venv .venv-speckitty && .venv-speckitty/bin/pip install spec-kitty-cli"

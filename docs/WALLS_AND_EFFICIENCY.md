@@ -17,6 +17,12 @@
 - **Workaround:** Investigated `.kittify/scripts/bash/` and found the raw scripts (e.g., `create-new-feature.sh`). Need to use these directly or update aliases.
 - **Impact:** Lost ~10 minutes debugging CLI commands.
 
+### 4. Spec-Kitty Refresh Script Bug [2025-12-19]
+- **Wall:** Running `refresh-kittify-tasks.sh` from the root directory causes it to delete `.kittify/scripts/tasks` because it identifies the source and target as the same directory.
+- **Root Cause:** Script logic for `REPO_ROOT` assumes a specific directory nesting that matches the target.
+- **Impact:** Deleted critical Python helpers (`task_helpers.py`, `acceptance_support.py`).
+- **Recovery:** Manually restoring logic or moving to manual task management for current features.
+
 ### 2. NextAuth v5 Beta Typing [2025-12-19]
 - **Wall:** `NextAuth` default export not recognized as callable in TypeScript.
 - **Root Cause:** Known issue in beta versions of `@auth/core` and `next-auth`.
