@@ -8,9 +8,13 @@ import bcrypt from 'bcryptjs';
 
 // Define the expected return type from NextAuth to maintain strict typing across the app
 interface NextAuthResult {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   auth: any; // Using any here as a last resort for complex NextAuth internal types
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   signIn: (...args: any[]) => Promise<any>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   signOut: (...args: any[]) => Promise<any>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   handlers: any;
 }
 

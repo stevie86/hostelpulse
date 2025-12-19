@@ -13,10 +13,14 @@ interface AuthConfig {
     newUser?: string;
   };
   callbacks?: {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     signIn?: (params: { user: User | any; account: any; profile?: any; email?: { verificationRequest?: boolean }; credentials?: Record<string, any> }) => Promise<boolean | string> | boolean | string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     signOut?: (params: { session: Session; token: any }) => Promise<void> | void;
     redirect?: (params: { url: string; baseUrl: string }) => Promise<string> | string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     session?: (params: { session: Session; token: any; user: User }) => Promise<Session> | Session;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     jwt?: (params: { token: any; user?: User | any; account?: any; profile?: any; trigger?: 'signIn' | 'signUp' | 'update'; isNewUser?: boolean; session?: any }) => Promise<any> | any;
     authorized?: (params: { auth: Session | null; request: NextRequest }) => boolean | Promise<boolean> | Response | Promise<Response>;
   };
