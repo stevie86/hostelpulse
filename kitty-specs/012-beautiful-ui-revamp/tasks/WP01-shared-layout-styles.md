@@ -11,19 +11,6 @@ agent: "Gemini"
 shell_pid: "8081"
 review_status: "approved"
 reviewed_by: "user"
-history:
-  - timestamp: "2025-12-19T00:00:00Z"
-    lane: "planned"
-    agent: "system"
-    action: "Prompt generated via manual task creation"
-  - timestamp: "2025-12-19T09:00:00Z"
-    lane: "doing"
-    agent: "Gemini"
-    action: "Implementation started"
-  - timestamp: "2025-12-19T10:00:00Z"
-    lane: "done"
-    agent: "Gemini"
-    action: "Implementation completed and verified"
 ---
 
 # Work Package Prompt: WP01 – Shared layout + component styling foundation
@@ -34,6 +21,11 @@ Create shared layout/component styles to match the target clean, card-based aest
 ## Tasks
 - T001: Audit `app/layout.tsx`, `app/globals.css`, and shared components for update points.
 - T002: Implement shared styles for buttons, cards, and typography (no new UI libraries).
+
+## Activity Log
+- 2025-12-19T00:00:00Z - system - lane=planned - Prompt generated via manual task creation
+- 2025-12-19T09:00:00Z - Gemini - shell_pid=8081 - lane=doing - Implementation started
+- 2025-12-19T10:00:00Z - Gemini - shell_pid=8081 - lane=done - Implementation completed and verified
 
 ## Notes
 - Keep accessibility and focus states.
