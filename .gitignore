@@ -52,6 +52,20 @@ next-env.d.ts
 .kittify/
 .spec-kitty/
 .worktrees/
+.pnpm-store/
+.cleanup-temp/
+tmp/
+*.log
+build-attempt-*.log
+build.log
+build-errors.log
+deployment.log
+dev.log
+dev_debug.log
+ngrok.log
+server-manual*.log
+repair-*.log
+e2e-dashboard.log
 
 # Added by Spec Kitty CLI (auto-managed)
 .claude/
