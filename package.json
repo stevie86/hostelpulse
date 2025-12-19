@@ -24,10 +24,10 @@
     "test:all": "pnpm test && pnpm test:e2e",
     "postinstall": "prisma generate",
     "spec": ".venv-speckitty/bin/spec-kitty",
-    "spec:specify": ".kittify/scripts/bash/create-new-feature.sh --mission=hostelpulse-mvp",
-    "spec:plan": ".kittify/scripts/bash/setup-plan.sh",
-    "spec:accept": ".kittify/scripts/bash/accept-feature.sh",
-    "spec:merge": ".kittify/scripts/bash/merge-feature.sh",
+    "spec:specify": "$(git rev-parse --show-toplevel)/.kittify/scripts/bash/create-new-feature.sh --mission=hostelpulse-mvp",
+    "spec:plan": "$(git rev-parse --show-toplevel)/.kittify/scripts/bash/setup-plan.sh",
+    "spec:accept": "$(git rev-parse --show-toplevel)/.kittify/scripts/bash/accept-feature.sh",
+    "spec:merge": "$(git rev-parse --show-toplevel)/.kittify/scripts/bash/merge-feature.sh",
     "spec:setup": "python3 -m venv .venv-speckitty && .venv-speckitty/bin/pip install spec-kitty-cli"
   },
   "prisma": {
