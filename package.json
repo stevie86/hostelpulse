@@ -23,7 +23,7 @@
     "test:e2e": "playwright test",
     "test:all": "pnpm test && pnpm test:e2e",
     "postinstall": "prisma generate",
-    "spec": ".venv-speckitty/bin/spec-kitty",
+    "spec": "pnpm .venv-speckitty/bin/spec-kitty",
     "spec:specify": "$(cd $(git rev-parse --git-common-dir)/.. && pwd)/.kittify/scripts/bash/create-new-feature.sh --mission=hostelpulse-mvp",
     "spec:plan": "$(cd $(git rev-parse --git-common-dir)/.. && pwd)/.kittify/scripts/bash/setup-plan.sh",
     "spec:tasks": "$(cd $(git rev-parse --git-common-dir)/.. && pwd)/.kittify/scripts/bash/refresh-kittify-tasks.sh",
