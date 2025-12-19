@@ -7,8 +7,7 @@
 import { TextEncoder, TextDecoder } from 'util';
 
 global.TextEncoder = TextEncoder;
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-global.TextDecoder = TextDecoder as any;
+global.TextDecoder = TextDecoder;
 
 // Mock the global File class for Node.js environment in Jest
 global.File = class MockFile extends Blob {
