@@ -16,6 +16,22 @@
   "created_at": "2025-12-19T17:51:09Z",
   "feature_number": "012",
   "friendly_name": "Beautiful UI Revamp",
+  "merge_history": [
+    {
+      "merge_commit": "93b99dab277c0f400b9cbbd49bf820af6f96ac76",
+      "merged_at": "2025-12-19T19:52:17Z",
+      "merged_by": "Stefan Pirker",
+      "pushed": true,
+      "strategy": "merge",
+      "target": "main"
+    }
+  ],
+  "merged_at": "2025-12-19T19:52:17Z",
+  "merged_by": "Stefan Pirker",
+  "merged_commit": "93b99dab277c0f400b9cbbd49bf820af6f96ac76",
+  "merged_into": "main",
+  "merged_push": true,
+  "merged_strategy": "merge",
   "mission": "software-dev",
   "slug": "012-beautiful-ui-revamp",
   "source_description": "--feature-description Modernize the welcome page UI and shared layout/components to match the provided clean, card-based aesthetic for demo use, while keeping DaisyUI/Tailwind. --intent-summary Deliver a polished, light UI on the welcome page and shared layout/components for a demo hostel with 8 rooms and 5 bookings; focus on visual design (spacing, cards, buttons) without altering core data flows."
