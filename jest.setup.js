@@ -4,10 +4,43 @@
 // Learn more: https://github.com/testing-library/jest-dom
 // import '@testing-library/jest-dom/extend-expect'; // Commented out to fix module resolution
 
-import { TextEncoder, TextDecoder } from 'util';
+const { TextEncoder, TextDecoder } = require('util');
 
 global.TextEncoder = TextEncoder;
 global.TextDecoder = TextDecoder;
+
+if (typeof global.Request === 'undefined') {
+    global.Request = class Request {
+        constructor(input, init) {
+            this.url = input;
+            this.method = init?.method || 'GET';
+            this.headers = new Headers(init?.headers);
+        }
+    };
+}
+
+if (typeof global.Response === 'undefined') {
+    global.Response = class Response {
+        constructor(body, init) {
+            this.body = body;
+            this.status = init?.status || 200;
+            this.headers = new Headers(init?.headers);
+        }
+    };
+}
+
+if (typeof global.Headers === 'undefined') {
+    global.Headers = class Headers {
+        constructor(init) {
+            this.map = new Map(Object.entries(init || {}));
+        }
+        append(name, value) { this.map.set(name, value); }
+        delete(name) { this.map.delete(name); }
+        get(name) { return this.map.get(name) || null; }
+        has(name) { return this.map.has(name); }
+        set(name, value) { this.map.set(name, value); }
+    }
+}
 
 // Mock the global File class for Node.js environment in Jest
 global.File = class MockFile extends Blob {
