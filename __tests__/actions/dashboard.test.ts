@@ -89,8 +89,8 @@ describe("Dashboard Actions", () => {
     expect(stats).toBeDefined();
     expect(stats?.totalRooms).toBe(2);
     expect(stats?.totalBeds).toBe(5); // Room 1 (1 bed) + Room 2 (4 beds)
-    expect(stats?.occupiedBeds).toBe(3); // Booking 1 (R1, 1 bed) + Arrival (R2, 1 bed) + Departure (R2, 1 bed)
-    expect(stats?.availableBeds).toBe(2);
+    expect(stats?.occupiedBeds).toBe(1); // Only departureBooking is 'checked_in'
+    expect(stats?.availableBeds).toBe(4); // 5 total - 1 occupied
     expect(stats?.arrivalsToday).toBe(2); // Two bookings check in today (booking1, arrivalBooking)
     expect(stats?.departuresToday).toBe(1); // One booking checks out today (departureBooking)
     expect(stats?.currentOccupancyPercentage).toBeCloseTo((3 / 5) * 100);

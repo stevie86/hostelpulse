@@ -106,10 +106,12 @@ describe('Guests Server Actions', () => {
           propertyId: PROPERTY_ID,
           firstName: 'John',
           lastName: 'Smith',
-          email: null,
-          phone: null,
-          nationality: null,
-          documentId: null,
+          email: "",
+          phone: undefined,
+          nationality: undefined,
+          documentId: undefined,
+          documentType: undefined,
+          notes: undefined,
         },
       });
     });
