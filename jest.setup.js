@@ -4,6 +4,12 @@
 // Learn more: https://github.com/testing-library/jest-dom
 // import '@testing-library/jest-dom/extend-expect'; // Commented out to fix module resolution
 
+import { TextEncoder, TextDecoder } from 'util';
+
+global.TextEncoder = TextEncoder;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+global.TextDecoder = TextDecoder as any;
+
 // Mock the global File class for Node.js environment in Jest
 global.File = class MockFile extends Blob {
     constructor(content, name, options) {

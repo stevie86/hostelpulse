@@ -59,7 +59,7 @@ jobs:
         run: pnpm run type-check
 
       - name: Unit Tests
-        run: pnpm run test
+        run: pnpm run test:ci
 
       - name: Build
         run: pnpm run build
