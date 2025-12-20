@@ -1,0 +1,361 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Account {
+  id                String  @id @default(uuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+model Session {
+  id           String   @id @default(uuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model User {
+  id                     String       @id @default(uuid())
+  name                   String
+  email                  String       @unique
+  emailVerified          DateTime?
+  password               String?
+  image                  String?
+  createdAt              DateTime     @default(now())
+  updatedAt              DateTime     @default(now())
+  invalid_login_attempts Int          @default(0)
+  lockedAt               DateTime?
+  accounts               Account[]
+  invitations            Invitation[]
+  sessions               Session[]
+  teamMembers            TeamMember[]
+}
+
+model Team {
+  id              String       @id @default(uuid())
+  name            String
+  slug            String       @unique
+  domain          String?      @unique
+  defaultRole     Role         @default(MEMBER)
+  billingId       String?
+  billingProvider String?
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @default(now())
+  apiKeys         ApiKey[]
+  invitations     Invitation[]
+  property        Property?
+  members         TeamMember[]
+
+  @@index([billingId])
+}
+
+model TeamMember {
+  id        String   @id @default(uuid())
+  teamId    String
+  userId    String
+  role      Role     @default(MEMBER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  team      Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([teamId, userId])
+  @@index([userId])
+}
+
+model Property {
+  id           String    @id @default(uuid())
+  teamId       String    @unique
+  name         String
+  city         String
+  country      String    @default("Portugal")
+  address      String?
+  phone        String?
+  email        String?
+  website      String?
+  timezone     String    @default("Europe/Lisbon")
+  currency     String    @default("EUR")
+  taxRate      Float     @default(0.0)
+  checkInTime  String    @default("15:00")
+  checkOutTime String    @default("11:00")
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @default(now())
+  bookings     Booking[]
+  guests       Guest[]
+  team         Team      @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  rooms        Room[]
+}
+
+model Room {
+  id            String       @id @default(uuid())
+  propertyId    String
+  name          String
+  type          String
+  beds          Int          @default(1)
+  pricePerNight Int          @default(0)
+  status        String       @default("available")
+  description   String?
+  amenities     String?
+  maxOccupancy  Int          @default(1)
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @default(now())
+  bookingBeds   BookingBed[]
+  property      Property     @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  @@index([propertyId])
+  @@index([status])
+}
+
+model Booking {
+  id               String       @id @default(uuid())
+  propertyId       String
+  guestId          String?
+  checkIn          DateTime
+  checkOut         DateTime
+  status           String       @default("confirmed")
+  channel          String?
+  totalAmount      Int          @default(0)
+  amountPaid       Int          @default(0)
+  paymentStatus    String       @default("pending")
+  notes            String?
+  confirmationCode String?      @unique
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @default(now())
+  feedback         String?
+  rating           Int?         @default(0)
+  guest            Guest?       @relation(fields: [guestId], references: [id])
+  property         Property     @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  beds             BookingBed[]
+  payments         Payment[]
+
+  @@index([propertyId])
+  @@index([checkIn])
+  @@index([status])
+  @@index([confirmationCode])
+}
+
+model BookingBed {
+  id            String  @id @default(uuid())
+  bookingId     String
+  roomId        String
+  bedLabel      String
+  pricePerNight Int     @default(0)
+  booking       Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  room          Room    @relation(fields: [roomId], references: [id], onDelete: Cascade)
+
+  @@index([bookingId])
+  @@index([roomId])
+}
+
+model Guest {
+  id           String    @id @default(uuid())
+  propertyId   String
+  firstName    String
+  lastName     String
+  currency     String    @default("EUR")
+  email        String?
+  phone        String?
+  nationality  String?
+  documentType String?
+  documentId   String?
+  dateOfBirth  DateTime?
+  address      String?
+  city         String?
+  country      String?
+  notes        String?
+  blacklisted  Boolean   @default(false)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @default(now())
+  bookings     Booking[]
+  property     Property  @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  @@index([propertyId])
+  @@index([email])
+  @@index([documentId])
+}
+
+model Payment {
+  id          String   @id @default(uuid())
+  bookingId   String
+  amount      Int
+  currency    String   @default("EUR")
+  method      String
+  status      String   @default("completed")
+  reference   String?
+  notes       String?
+  processedBy String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now())
+  booking     Booking  @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+
+  @@index([bookingId])
+  @@index([status])
+}
+
+model Expense {
+  id          String   @id @default(uuid())
+  propertyId  String
+  category    String
+  description String
+  amount      Int
+  currency    String   @default("EUR")
+  date        DateTime @default(now())
+  receipt     String?
+  notes       String?
+  createdBy   String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now())
+
+  @@index([propertyId])
+  @@index([category])
+  @@index([date])
+}
+
+model Invitation {
+  id             String   @id @default(uuid())
+  teamId         String
+  email          String?
+  role           Role     @default(MEMBER)
+  token          String   @unique
+  expires        DateTime
+  invitedBy      String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @default(now())
+  sentViaEmail   Boolean  @default(true)
+  allowedDomains String?
+  user           User     @relation(fields: [invitedBy], references: [id], onDelete: Cascade)
+  team           Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
+
+  @@unique([teamId, email])
+  @@index([email])
+}
+
+model PasswordReset {
+  id        Int      @id @default(autoincrement())
+  email     String
+  token     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  expiresAt DateTime
+}
+
+model ApiKey {
+  id         String    @id @default(uuid())
+  name       String
+  teamId     String
+  hashedKey  String    @unique
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @default(now())
+  expiresAt  DateTime?
+  lastUsedAt DateTime?
+  team       Team      @relation(fields: [teamId], references: [id], onDelete: Cascade)
+
+  @@index([teamId])
+}
+
+model Subscription {
+  id         String    @id
+  customerId String
+  priceId    String
+  active     Boolean   @default(false)
+  startDate  DateTime
+  endDate    DateTime
+  cancelAt   DateTime?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @default(now())
+
+  @@index([customerId])
+}
+
+model Service {
+  id          String   @id @default(uuid())
+  description String
+  features    String?
+  image       String
+  name        String
+  created     DateTime
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now())
+  Price       Price[]
+}
+
+model Price {
+  id            String   @id @default(uuid())
+  billingScheme String
+  currency      String
+  serviceId     String
+  amount        Int?
+  metadata      Json
+  type          String
+  created       DateTime
+  service       Service  @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+}
+
+model jackson_store {
+  key           String          @id
+  value         String
+  iv            String?
+  tag           String?
+  createdAt     DateTime        @default(now())
+  modifiedAt    DateTime?
+  namespace     String?
+  jackson_index jackson_index[]
+
+  @@index([namespace])
+  @@ignore
+}
+
+model jackson_index {
+  id       Int           @id @default(autoincrement())
+  key      String
+  storeKey String
+  store    jackson_store @relation(fields: [storeKey], references: [key], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([key])
+  @@index([key, storeKey])
+  @@ignore
+}
+
+model jackson_ttl {
+  key       String @id
+  expiresAt BigInt
+
+  @@index([expiresAt])
+  @@ignore
+}
+
+enum Role {
+  ADMIN
+  OWNER
+  MEMBER
+}

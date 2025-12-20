@@ -1,0 +1,20 @@
+# Vercel Ignore File
+# Explicitly prevent local dev tools from being uploaded to Vercel
+
+.venv-speckitty/
+.kittify/
+.spec-kitty/
+.worktrees/
+.cleanup-temp/
+.git/
+.next/
+node_modules/
+tests/
+playwright-report/
+test-results/
+tmp/
+*.log
+*.tgz
+*.zip
+dev_debug.log
+

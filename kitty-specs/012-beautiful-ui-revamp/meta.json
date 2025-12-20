@@ -1,0 +1,45 @@
+{
+  "accept_commit": null,
+  "acceptance_history": [
+    {
+      "accepted_at": "2025-12-19T19:37:31Z",
+      "accepted_by": "user",
+      "accepted_from_commit": "e2ed11393a65791712a6e1e89012c6562ec3d025",
+      "branch": "main",
+      "mode": "pr"
+    },
+    {
+      "accepted_at": "2025-12-20T10:18:00Z",
+      "accepted_by": "user",
+      "accepted_from_commit": "e12325486ea3e0f3adff6b8adaaf1731a9c6e7dd",
+      "branch": "integration/012-beautiful-ui-revamp",
+      "mode": "pr"
+    }
+  ],
+  "acceptance_mode": "pr",
+  "accepted_at": "2025-12-20T10:18:00Z",
+  "accepted_by": "user",
+  "accepted_from_commit": "e12325486ea3e0f3adff6b8adaaf1731a9c6e7dd",
+  "created_at": "2025-12-19T17:51:09Z",
+  "feature_number": "012",
+  "friendly_name": "Beautiful UI Revamp",
+  "merge_history": [
+    {
+      "merge_commit": "3a4930699e9af76ef22f47b8002086469b04599e",
+      "merged_at": "2025-12-19T19:52:57Z",
+      "merged_by": "Stefan Pirker",
+      "pushed": true,
+      "strategy": "merge",
+      "target": "integration/012-beautiful-ui-revamp"
+    }
+  ],
+  "merged_at": "2025-12-19T19:52:57Z",
+  "merged_by": "Stefan Pirker",
+  "merged_commit": "3a4930699e9af76ef22f47b8002086469b04599e",
+  "merged_into": "integration/012-beautiful-ui-revamp",
+  "merged_push": true,
+  "merged_strategy": "merge",
+  "mission": "software-dev",
+  "slug": "012-beautiful-ui-revamp",
+  "source_description": "--feature-description Modernize the welcome page UI and shared layout/components to match the provided clean, card-based aesthetic for demo use, while keeping DaisyUI/Tailwind. --intent-summary Deliver a polished, light UI on the welcome page and shared layout/components for a demo hostel with 8 rooms and 5 bookings; focus on visual design (spacing, cards, buttons) without altering core data flows."
+}
