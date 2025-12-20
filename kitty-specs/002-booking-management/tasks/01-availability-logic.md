@@ -9,6 +9,7 @@ lane: 'done'
 
 ## Activity Log
 - [2025-12-20 12:00] Initial implementation and unit tests for availability logic and create booking action.
+  shell_pid: "9734"
 
 **Phase:** Logic & Validation
 **Objective:** The core engine of the PMS. Prevent double bookings.

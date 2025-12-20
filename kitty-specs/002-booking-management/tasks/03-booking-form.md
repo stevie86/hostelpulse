@@ -10,6 +10,7 @@ lane: 'done'
 ## Activity Log
 - [2025-12-20 12:10] Implemented BookingForm with Shadcn/DaisyUI hybrid components.
 - [2025-12-20 12:15] Integrated interactive bed selection and real-time availability.
+  shell_pid: "9734"
 
 **Phase:** Frontend
 **Objective:** Create new bookings.

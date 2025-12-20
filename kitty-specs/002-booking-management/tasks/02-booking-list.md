@@ -9,6 +9,7 @@ lane: 'done'
 
 ## Activity Log
 - [2025-12-20 12:05] Initial implementation of booking list and associated server action.
+  shell_pid: "9734"
 
 **Phase:** Frontend
 **Objective:** View bookings.
