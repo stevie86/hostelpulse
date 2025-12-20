@@ -5,10 +5,10 @@
 | :--- | :--- | :--- | :--- | :--- |
 | **Auth (NextAuth v5)** | ✅ Green | ✅ Stable | Stable | Credentials provider working. |
 | **Room Management** | ✅ Green | ✅ Stable | Stable | Creation & List views functional. |
-| **Guest Management**| ✅ Green | ⚠️ Polish | Ready | CSV import logic stable. |
-| **Booking Engine** | ✅ Green | ⚠️ Polish | Ready | Availability & Creation stable. |
-| **Dashboard** | ✅ Green | ⚠️ Polish | Ready | Stats calculation working. |
-| **CI/CD** | ✅ Green | N/A | Stable | Vercel previews active. |
+| **Guest Management**| ✅ Green | ✅ Stable | Ready | UI Revamp foundation applied. |
+| **Booking Engine** | ✅ Green | ✅ Stable | Ready | Availability & Creation stable. |
+| **Dashboard** | ✅ Green | ✅ Stable | Ready | Glassmorphism layout implemented. |
+| **CI/CD** | ✅ Green | N/A | Stable | Vercel previews & Spec-Kitty active. |
 
 ## Legend
 - ✅ **Green:** Production-ready for MVP.
