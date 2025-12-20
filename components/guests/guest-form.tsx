@@ -1,17 +1,14 @@
-"use client";
+'use client';
 
-import { useActionState } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { GuestSchema, GuestFormValues } from "@/lib/schemas/guest";
-import { ActionState } from "@/app/actions/guests";
+import { useActionState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { GuestSchema, GuestFormValues } from '@/lib/schemas/guest';
+import { ActionState } from '@/app/actions/guests';
 
 interface GuestFormProps {
   propertyId: string;
-  action: (
-    prevState: ActionState,
-    formData: FormData
-  ) => Promise<ActionState>;
+  action: (prevState: ActionState, formData: FormData) => Promise<ActionState>;
   initialValues?: Partial<GuestFormValues>;
   isEditMode?: boolean;
 }
@@ -33,14 +30,14 @@ export function GuestForm({
   } = useForm<GuestFormValues>({
     resolver: zodResolver(GuestSchema),
     defaultValues: {
-      firstName: initialValues?.firstName || "",
-      lastName: initialValues?.lastName || "",
-      email: initialValues?.email || "",
-      phone: initialValues?.phone || "",
-      nationality: initialValues?.nationality || "",
-      documentType: initialValues?.documentType || "passport",
-      documentId: initialValues?.documentId || "",
-      notes: initialValues?.notes || "",
+      firstName: initialValues?.firstName || '',
+      lastName: initialValues?.lastName || '',
+      email: initialValues?.email || '',
+      phone: initialValues?.phone || '',
+      nationality: initialValues?.nationality || '',
+      documentType: initialValues?.documentType || 'passport',
+      documentId: initialValues?.documentId || '',
+      notes: initialValues?.notes || '',
     },
   });
 
@@ -58,10 +55,12 @@ export function GuestForm({
           <input
             type="text"
             className="input input-bordered w-full"
-            {...register("firstName")}
+            {...register('firstName')}
           />
           {clientErrors.firstName && (
-            <span className="text-error text-xs">{clientErrors.firstName.message}</span>
+            <span className="text-error text-xs">
+              {clientErrors.firstName.message}
+            </span>
           )}
         </div>
         <div className="form-control w-1/2">
@@ -69,10 +68,12 @@ export function GuestForm({
           <input
             type="text"
             className="input input-bordered w-full"
-            {...register("lastName")}
+            {...register('lastName')}
           />
           {clientErrors.lastName && (
-            <span className="text-error text-xs">{clientErrors.lastName.message}</span>
+            <span className="text-error text-xs">
+              {clientErrors.lastName.message}
+            </span>
           )}
         </div>
       </div>
@@ -82,7 +83,7 @@ export function GuestForm({
         <input
           type="email"
           className="input input-bordered w-full"
-          {...register("email")}
+          {...register('email')}
         />
       </div>
 
@@ -91,14 +92,17 @@ export function GuestForm({
         <input
           type="tel"
           className="input input-bordered w-full"
-          {...register("phone")}
+          {...register('phone')}
         />
       </div>
 
       <div className="flex gap-4">
         <div className="form-control w-1/3">
           <label className="label">Doc Type</label>
-          <select className="select select-bordered" {...register("documentType")}>
+          <select
+            className="select select-bordered"
+            {...register('documentType')}
+          >
             <option value="passport">Passport</option>
             <option value="id_card">ID Card</option>
             <option value="driving_license">Driver&apos;s License</option>
@@ -109,7 +113,7 @@ export function GuestForm({
           <input
             type="text"
             className="input input-bordered w-full"
-            {...register("documentId")}
+            {...register('documentId')}
           />
         </div>
       </div>
@@ -119,7 +123,7 @@ export function GuestForm({
         <input
           type="text"
           className="input input-bordered w-full"
-          {...register("nationality")}
+          {...register('nationality')}
         />
       </div>
 
@@ -128,7 +132,7 @@ export function GuestForm({
         disabled={isPending}
         className="btn btn-primary w-full"
       >
-        {isPending ? "Saving..." : isEditMode ? "Update Guest" : "Create Guest"}
+        {isPending ? 'Saving...' : isEditMode ? 'Update Guest' : 'Create Guest'}
       </button>
     </form>
   );

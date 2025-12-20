@@ -31,7 +31,10 @@ interface DailyActivity {
 export default function DashboardPage() {
   const router = useRouter();
   const [stats, setStats] = useState<DashboardStats | null>(null);
-  const [activity, setActivity] = useState<DailyActivity>({ arrivals: [], departures: [] });
+  const [activity, setActivity] = useState<DailyActivity>({
+    arrivals: [],
+    departures: [],
+  });
   const [isLoading, setIsLoading] = useState(true);
 
   // Hardcoding propertyId for now, ideally this would come from the user's session or context
@@ -95,7 +98,10 @@ export default function DashboardPage() {
       </div>
 
       <div className="mt-8">
-        <ActivityList arrivals={activity.arrivals} departures={activity.departures} />
+        <ActivityList
+          arrivals={activity.arrivals}
+          departures={activity.departures}
+        />
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
-import { GuestList } from "@/components/guests/guest-list";
-import Link from "next/link";
-import { Suspense } from "react";
+import { GuestList } from '@/components/guests/guest-list';
+import Link from 'next/link';
+import { Suspense } from 'react';
 
 export default async function GuestsPage({
   params,
@@ -26,13 +26,13 @@ export default async function GuestsPage({
 
       <div className="form-control w-full max-w-xs">
         <form>
-            <input
+          <input
             name="q"
             type="text"
             placeholder="Search guests..."
             className="input input-bordered w-full"
             defaultValue={q}
-            />
+          />
         </form>
       </div>
 

@@ -1,6 +1,6 @@
-import { getRooms } from "@/app/actions/rooms";
-import Link from "next/link";
-import { DeleteRoomButton } from "./delete-room-button";
+import { getRooms } from '@/app/actions/rooms';
+import Link from 'next/link';
+import { DeleteRoomButton } from './delete-room-button';
 
 export async function RoomList({ propertyId }: { propertyId: string }) {
   const rooms = await getRooms(propertyId);
@@ -42,9 +42,9 @@ export async function RoomList({ propertyId }: { propertyId: string }) {
               <td>{room.beds}</td>
               <td>{room.maxOccupancy}</td>
               <td>
-                {new Intl.NumberFormat("en-IE", {
-                  style: "currency",
-                  currency: "EUR",
+                {new Intl.NumberFormat('en-IE', {
+                  style: 'currency',
+                  currency: 'EUR',
                 }).format(room.pricePerNight / 100)}
               </td>
               <td className="flex gap-2">

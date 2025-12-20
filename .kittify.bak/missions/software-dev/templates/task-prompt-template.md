@@ -1,21 +1,21 @@
 ---
-work_package_id: "WPxx"
+work_package_id: 'WPxx'
 subtasks:
-  - "Txxx"
-title: "Replace with work package title"
-phase: "Phase N - Replace with phase name"
-lane: "planned"  # DO NOT EDIT - use: tasks_cli.py move <feature> <WP> <lane>
-assignee: ""      # Optional friendly name when in doing/for_review
-agent: ""         # CLI agent identifier (claude, codex, etc.)
-shell_pid: ""     # PID captured when the task moved to the current lane
-review_status: "" # empty | has_feedback | acknowledged (populated by reviewers/implementers)
-reviewed_by: ""   # Agent ID of the reviewer (if reviewed)
+  - 'Txxx'
+title: 'Replace with work package title'
+phase: 'Phase N - Replace with phase name'
+lane: 'planned' # DO NOT EDIT - use: tasks_cli.py move <feature> <WP> <lane>
+assignee: '' # Optional friendly name when in doing/for_review
+agent: '' # CLI agent identifier (claude, codex, etc.)
+shell_pid: '' # PID captured when the task moved to the current lane
+review_status: '' # empty | has_feedback | acknowledged (populated by reviewers/implementers)
+reviewed_by: '' # Agent ID of the reviewer (if reviewed)
 history:
-  - timestamp: "{{TIMESTAMP}}"
-    lane: "planned"
-    agent: "system"
-    shell_pid: ""
-    action: "Prompt generated via /spec-kitty.tasks"
+  - timestamp: '{{TIMESTAMP}}'
+    lane: 'planned'
+    agent: 'system'
+    shell_pid: ''
+    action: 'Prompt generated via /spec-kitty.tasks'
 ---
 
 # Work Package Prompt: {{work_package_id}} – {{title}}
@@ -35,13 +35,14 @@ history:
 
 > **Populated by `/spec-kitty.review`** – Reviewers add detailed feedback here when work needs changes. Implementation must address every item listed below before returning for re-review.
 
-*[This section is empty initially. Reviewers will populate it if the work is returned from review. If you see feedback here, treat each item as a must-do before completion.]*
+_[This section is empty initially. Reviewers will populate it if the work is returned from review. If you see feedback here, treat each item as a must-do before completion.]_
 
 ---
 
 ## Markdown Formatting
+
 Wrap HTML/XML tags in backticks: `` `<div>` ``, `` `<script>` ``
-Use language identifiers in code blocks: ````python`, ````bash`
+Use language identifiers in code blocks: ``python`, ``bash`
 
 ---
 
@@ -59,6 +60,7 @@ Use language identifiers in code blocks: ````python`, ````bash`
 ## Subtasks & Detailed Guidance
 
 ### Subtask TXXX – Replace with summary
+
 - **Purpose**: Explain why this subtask exists.
 - **Steps**: Detailed, actionable instructions.
 - **Files**: Canonical paths to update or create.
@@ -66,6 +68,7 @@ Use language identifiers in code blocks: ````python`, ````bash`
 - **Notes**: Edge cases, dependencies, or data requirements.
 
 ### Subtask TYYY – Replace with summary
+
 - Repeat the structure above for every included `Txxx` entry.
 
 ## Test Strategy (include only when tests are required)
@@ -105,11 +108,13 @@ Use language identifiers in code blocks: ````python`, ````bash`
 **IMPORTANT: Never manually edit the `lane:` field.** The lane is determined by the file's directory location, not the YAML field. Editing the field without moving the file creates a mismatch that breaks the system.
 
 **Always use the move command:**
+
 ```bash
 python3 .kittify/scripts/tasks/tasks_cli.py move <FEATURE> <WPID> <lane> --note "Your note"
 ```
 
 This command:
+
 1. Moves the file to the correct `tasks/<lane>/` directory
 2. Updates the `lane:` field in YAML
 3. Updates `agent` and `shell_pid` metadata

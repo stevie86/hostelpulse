@@ -1,4 +1,4 @@
-import { format } from "date-fns";
+import { format } from 'date-fns';
 
 type BookingWithRoom = {
   id: string;
@@ -11,7 +11,11 @@ type BookingWithRoom = {
 
 export function GuestHistory({ bookings }: { bookings: BookingWithRoom[] }) {
   if (!bookings.length) {
-    return <div className="p-10 text-center bg-base-200 rounded-lg">No previous bookings found.</div>;
+    return (
+      <div className="p-10 text-center bg-base-200 rounded-lg">
+        No previous bookings found.
+      </div>
+    );
   }
 
   return (
@@ -29,11 +33,14 @@ export function GuestHistory({ bookings }: { bookings: BookingWithRoom[] }) {
           {bookings.map((booking) => (
             <tr key={booking.id}>
               <td>
-                {format(booking.checkIn, "MMM d, yyyy")} - {format(booking.checkOut, "MMM d, yyyy")}
+                {format(booking.checkIn, 'MMM d, yyyy')} -{' '}
+                {format(booking.checkOut, 'MMM d, yyyy')}
               </td>
-              <td>{booking.beds[0]?.room.name || "N/A"}</td>
+              <td>{booking.beds[0]?.room.name || 'N/A'}</td>
               <td>
-                <span className={`badge badge-sm ${booking.status === 'confirmed' ? 'badge-success' : 'badge-ghost'}`}>
+                <span
+                  className={`badge badge-sm ${booking.status === 'confirmed' ? 'badge-success' : 'badge-ghost'}`}
+                >
                   {booking.status}
                 </span>
               </td>

@@ -1,5 +1,5 @@
-import { auth } from "@/auth";
-import prisma from "@/lib/db";
+import { auth } from '@/auth';
+import prisma from '@/lib/db';
 
 /**
  * Verifies that the current user has access to the specified property.
@@ -10,7 +10,7 @@ export async function verifyPropertyAccess(propertyId: string) {
   const userId = session?.user?.id;
 
   if (!userId) {
-    throw new Error("Unauthorized: Please log in.");
+    throw new Error('Unauthorized: Please log in.');
   }
 
   // Find property and check if user is a member of the owning team
@@ -31,7 +31,7 @@ export async function verifyPropertyAccess(propertyId: string) {
   const member = property?.team.members[0];
 
   if (!member) {
-    throw new Error("Access Denied: You do not have access to this property.");
+    throw new Error('Access Denied: You do not have access to this property.');
   }
 
   return {

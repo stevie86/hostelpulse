@@ -14,9 +14,10 @@ tasks/
 
 All WP files are stored **FLAT** in `tasks/`. The lane (planned, doing, for_review, done) is stored in the YAML frontmatter `lane:` field.
 
-⚠️  **CRITICAL: NO SUBDIRECTORIES ALLOWED**
+⚠️ **CRITICAL: NO SUBDIRECTORIES ALLOWED**
 
 **DO NOT** create subdirectories in tasks/ for organization:
+
 - ❌ `tasks/phase-1/WP01.md` - WRONG
 - ❌ `tasks/backend/WP02.md` - WRONG
 - ❌ `tasks/planned/WP03.md` - WRONG (old format)
@@ -31,25 +32,24 @@ Each WP file **MUST** use YAML frontmatter:
 
 ```yaml
 ---
-work_package_id: "WP01"
-title: "Work Package Title"
-lane: "planned"
+work_package_id: 'WP01'
+title: 'Work Package Title'
+lane: 'planned'
 subtasks:
-  - "T001"
-  - "T002"
-phase: "Phase 1 - Setup"
-assignee: ""
-agent: ""
-shell_pid: ""
-review_status: ""
-reviewed_by: ""
+  - 'T001'
+  - 'T002'
+phase: 'Phase 1 - Setup'
+assignee: ''
+agent: ''
+shell_pid: ''
+review_status: ''
+reviewed_by: ''
 history:
-  - timestamp: "2025-01-01T00:00:00Z"
-    lane: "planned"
-    agent: "system"
-    action: "Prompt generated via /spec-kitty.tasks"
+  - timestamp: '2025-01-01T00:00:00Z'
+    lane: 'planned'
+    agent: 'system'
+    action: 'Prompt generated via /spec-kitty.tasks'
 ---
-
 # Work Package Prompt: WP01 – Work Package Title
 
 [Content follows...]
@@ -65,11 +65,13 @@ history:
 ## Moving Between Lanes
 
 Use the CLI (updates frontmatter only, no file movement):
+
 ```bash
 spec-kitty tasks update <WPID> --lane <lane>
 ```
 
 Or use the helper script:
+
 ```bash
 .kittify/scripts/bash/tasks-move-to-lane.sh <FEATURE> <WPID> <lane>
 ```

@@ -1,6 +1,6 @@
-import { createGuest } from "@/app/actions/guests";
-import { GuestForm } from "@/components/guests/guest-form";
-import Link from "next/link";
+import { createGuest } from '@/app/actions/guests';
+import { GuestForm } from '@/components/guests/guest-form';
+import Link from 'next/link';
 
 export default async function NewGuestPage({
   params,
@@ -12,7 +12,7 @@ export default async function NewGuestPage({
 
   return (
     <div className="space-y-6">
-       <div className="flex items-center gap-4">
+      <div className="flex items-center gap-4">
         <Link
           href={`/properties/${propertyId}/guests`}
           className="btn btn-ghost btn-sm"

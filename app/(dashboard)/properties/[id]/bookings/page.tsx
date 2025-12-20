@@ -1,6 +1,6 @@
-import { BookingList } from "@/components/bookings/booking-list";
-import Link from "next/link";
-import { Suspense } from "react";
+import { BookingList } from '@/components/bookings/booking-list';
+import Link from 'next/link';
+import { Suspense } from 'react';
 
 export default async function BookingsPage({
   params,

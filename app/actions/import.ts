@@ -1,12 +1,12 @@
-"use server";
+'use server';
 
-import { auth } from "@/auth";
-import prisma from "@/lib/db";
-import { z } from "zod";
-import Papa from "papaparse";
-import { AvailabilityService } from "@/lib/availability"; // Use service directly
-import { GuestSchema } from "@/lib/schemas/guest";
-import { revalidatePath } from "next/cache";
+import { auth } from '@/auth';
+import prisma from '@/lib/db';
+import { z } from 'zod';
+import Papa from 'papaparse';
+import { AvailabilityService } from '@/lib/availability'; // Use service directly
+import { GuestSchema } from '@/lib/schemas/guest';
+import { revalidatePath } from 'next/cache';
 
 export type ImportActionState = {
   message?: string | null;
@@ -21,28 +21,45 @@ export type ImportActionState = {
 // --- Schemas for Import Validation ---
 
 const RoomImportSchema = z.object({
-  name: z.string().min(1, "Name is required"),
-  type: z.enum(["dormitory", "private", "suite"]),
-  beds: z.coerce.number().int().min(1, "Min 1 bed"),
-  pricePerNight: z.coerce.number().int().min(0, "Min 0 price"),
-  maxOccupancy: z.coerce.number().int().min(1, "Min 1 occupancy"),
+  name: z.string().min(1, 'Name is required'),
+  type: z.enum(['dormitory', 'private', 'suite']),
+  beds: z.coerce.number().int().min(1, 'Min 1 bed'),
+  pricePerNight: z.coerce.number().int().min(0, 'Min 0 price'),
+  maxOccupancy: z.coerce.number().int().min(1, 'Min 1 occupancy'),
   description: z.string().optional(),
 });
 
 const BookingImportSchema = z.object({
-  guestFirstName: z.string().min(1, "Guest first name required"),
-  guestLastName: z.string().min(1, "Guest last name required"),
-  roomName: z.string().min(1, "Room name required"),
-  checkIn: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Invalid date format (YYYY-MM-DD)").transform((str) => new Date(str)),
-  checkOut: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Invalid date format (YYYY-MM-DD)").transform((str) => new Date(str)),
-  status: z.enum(["pending", "confirmed", "checked_in", "checked_out", "cancelled", "no_show"]).default("confirmed"),
-  email: z.string().email().optional().or(z.literal("")),
+  guestFirstName: z.string().min(1, 'Guest first name required'),
+  guestLastName: z.string().min(1, 'Guest last name required'),
+  roomName: z.string().min(1, 'Room name required'),
+  checkIn: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, 'Invalid date format (YYYY-MM-DD)')
+    .transform((str) => new Date(str)),
+  checkOut: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, 'Invalid date format (YYYY-MM-DD)')
+    .transform((str) => new Date(str)),
+  status: z
+    .enum([
+      'pending',
+      'confirmed',
+      'checked_in',
+      'checked_out',
+      'cancelled',
+      'no_show',
+    ])
+    .default('confirmed'),
+  email: z.string().email().optional().or(z.literal('')),
   phone: z.string().optional(),
 });
 
 // --- Helper for CSV Parsing ---
 
-async function parseCsv(file: File): Promise<{ data: Record<string, string>[]; errors: Papa.ParseError[] }> {
+async function parseCsv(
+  file: File
+): Promise<{ data: Record<string, string>[]; errors: Papa.ParseError[] }> {
   return new Promise((resolve, reject) => {
     Papa.parse<Record<string, string>>(file, {
       header: true,
@@ -67,17 +84,23 @@ export async function importGuests(
 ): Promise<ImportActionState> {
   const session = await auth();
   if (!session?.user?.email) {
-    return { message: "Unauthorized", errors: ["Authentication required."] };
+    return { message: 'Unauthorized', errors: ['Authentication required.'] };
   }
 
-  const file = formData.get("file") as File;
+  const file = formData.get('file') as File;
   if (!file || file.size === 0) {
-    return { message: "No file selected.", errors: ["Please upload a CSV file."] };
+    return {
+      message: 'No file selected.',
+      errors: ['Please upload a CSV file.'],
+    };
   }
 
   const { data, errors: parseErrors } = await parseCsv(file);
   if (parseErrors.length > 0) {
-    return { message: "CSV Parse Error", errors: parseErrors.map((e) => e.message) };
+    return {
+      message: 'CSV Parse Error',
+      errors: parseErrors.map((e) => e.message),
+    };
   }
 
   let successCount = 0;
@@ -109,13 +132,16 @@ export async function importGuests(
       successCount++;
     } catch (error: unknown) {
       failCount++;
-      failedRows.push({ row: rowNumber, reason: error instanceof Error ? error.message : "Database error." });
+      failedRows.push({
+        row: rowNumber,
+        reason: error instanceof Error ? error.message : 'Database error.',
+      });
     }
   }
 
   revalidatePath(`/properties/${propertyId}/guests`);
   return {
-    message: "Import complete.",
+    message: 'Import complete.',
     results: { successCount, failCount, failedRows },
   };
 }
@@ -127,17 +153,23 @@ export async function importRooms(
 ): Promise<ImportActionState> {
   const session = await auth();
   if (!session?.user?.email) {
-    return { message: "Unauthorized", errors: ["Authentication required."] };
+    return { message: 'Unauthorized', errors: ['Authentication required.'] };
   }
 
-  const file = formData.get("file") as File;
+  const file = formData.get('file') as File;
   if (!file || file.size === 0) {
-    return { message: "No file selected.", errors: ["Please upload a CSV file."] };
+    return {
+      message: 'No file selected.',
+      errors: ['Please upload a CSV file.'],
+    };
   }
 
   const { data, errors: parseErrors } = await parseCsv(file);
   if (parseErrors.length > 0) {
-    return { message: "CSV Parse Error", errors: parseErrors.map((e) => e.message) };
+    return {
+      message: 'CSV Parse Error',
+      errors: parseErrors.map((e) => e.message),
+    };
   }
 
   let successCount = 0;
@@ -166,7 +198,10 @@ export async function importRooms(
       });
       if (existingRoom) {
         failCount++;
-        failedRows.push({ row: rowNumber, reason: "Room with this name already exists." });
+        failedRows.push({
+          row: rowNumber,
+          reason: 'Room with this name already exists.',
+        });
         continue;
       }
 
@@ -174,19 +209,22 @@ export async function importRooms(
         data: {
           propertyId,
           ...validated.data,
-          status: "available", // Default status
+          status: 'available', // Default status
         },
       });
       successCount++;
     } catch (error: unknown) {
       failCount++;
-      failedRows.push({ row: rowNumber, reason: error instanceof Error ? error.message : "Database error." });
+      failedRows.push({
+        row: rowNumber,
+        reason: error instanceof Error ? error.message : 'Database error.',
+      });
     }
   }
 
   revalidatePath(`/properties/${propertyId}/rooms`);
   return {
-    message: "Import complete.",
+    message: 'Import complete.',
     results: { successCount, failCount, failedRows },
   };
 }
@@ -198,17 +236,23 @@ export async function importBookings(
 ): Promise<ImportActionState> {
   const session = await auth();
   if (!session?.user?.email) {
-    return { message: "Unauthorized", errors: ["Authentication required."] };
+    return { message: 'Unauthorized', errors: ['Authentication required.'] };
   }
 
-  const file = formData.get("file") as File;
+  const file = formData.get('file') as File;
   if (!file || file.size === 0) {
-    return { message: "No file selected.", errors: ["Please upload a CSV file."] };
+    return {
+      message: 'No file selected.',
+      errors: ['Please upload a CSV file.'],
+    };
   }
 
   const { data, errors: parseErrors } = await parseCsv(file);
   if (parseErrors.length > 0) {
-    return { message: "CSV Parse Error", errors: parseErrors.map((e) => e.message) };
+    return {
+      message: 'CSV Parse Error',
+      errors: parseErrors.map((e) => e.message),
+    };
   }
 
   let successCount = 0;
@@ -222,10 +266,13 @@ export async function importBookings(
   ]);
   const roomMap = new Map(rooms.map((r) => [r.name.toLowerCase(), r]));
   const guestMap = new Map(
-    guests.map((g) => [`${g.firstName?.toLowerCase()} ${g.lastName?.toLowerCase()}`, g])
+    guests.map((g) => [
+      `${g.firstName?.toLowerCase()} ${g.lastName?.toLowerCase()}`,
+      g,
+    ])
   );
   const guestEmailMap = new Map(
-    guests.filter(g => g.email).map((g) => [g.email!.toLowerCase(), g])
+    guests.filter((g) => g.email).map((g) => [g.email!.toLowerCase(), g])
   );
 
   for (let i = 0; i < data.length; i++) {
@@ -244,10 +291,23 @@ export async function importBookings(
     }
 
     try {
-      const { guestFirstName, guestLastName, roomName, checkIn, checkOut, status, email, phone } = validated.data;
+      const {
+        guestFirstName,
+        guestLastName,
+        roomName,
+        checkIn,
+        checkOut,
+        status,
+        email,
+        phone,
+      } = validated.data;
 
       // Find or Create Guest
-      let guest = guestEmailMap.get(email?.toLowerCase() || '') || guestMap.get(`${guestFirstName.toLowerCase()} ${guestLastName.toLowerCase()}`);
+      let guest =
+        guestEmailMap.get(email?.toLowerCase() || '') ||
+        guestMap.get(
+          `${guestFirstName.toLowerCase()} ${guestLastName.toLowerCase()}`
+        );
       if (!guest) {
         guest = await prisma.guest.create({
           data: {
@@ -264,22 +324,33 @@ export async function importBookings(
       const room = roomMap.get(roomName.toLowerCase());
       if (!room) {
         failCount++;
-        failedRows.push({ row: rowNumber, reason: `Room '${roomName}' not found.` });
+        failedRows.push({
+          row: rowNumber,
+          reason: `Room '${roomName}' not found.`,
+        });
         continue;
       }
 
       // Check Availability using our service
-      const availableBeds = await AvailabilityService.getAvailableBeds(room.id, { checkIn, checkOut });
+      const availableBeds = await AvailabilityService.getAvailableBeds(
+        room.id,
+        { checkIn, checkOut }
+      );
       if (availableBeds.length === 0) {
         failCount++;
-        failedRows.push({ row: rowNumber, reason: "Room fully booked for these dates." });
+        failedRows.push({
+          row: rowNumber,
+          reason: 'Room fully booked for these dates.',
+        });
         continue;
       }
       const bedLabel = availableBeds[0];
 
       // Create Booking in a transaction
       await prisma.$transaction(async (tx) => {
-        const nights = Math.ceil((checkOut.getTime() - checkIn.getTime()) / (1000 * 60 * 60 * 24));
+        const nights = Math.ceil(
+          (checkOut.getTime() - checkIn.getTime()) / (1000 * 60 * 60 * 24)
+        );
         const totalAmount = room.pricePerNight * nights;
 
         const booking = await tx.booking.create({
@@ -291,7 +362,7 @@ export async function importBookings(
             status,
             totalAmount,
             amountPaid: 0,
-            paymentStatus: "pending",
+            paymentStatus: 'pending',
           },
         });
 
@@ -308,14 +379,20 @@ export async function importBookings(
     } catch (error: unknown) {
       failCount++;
       console.error('Error processing booking row:', row, error); // Log original row for debugging
-      failedRows.push({ row: rowNumber, reason: error instanceof Error ? error.message : "Unknown error processing row." });
+      failedRows.push({
+        row: rowNumber,
+        reason:
+          error instanceof Error
+            ? error.message
+            : 'Unknown error processing row.',
+      });
     }
   }
 
   revalidatePath(`/properties/${propertyId}/bookings`);
   revalidatePath(`/properties/${propertyId}/rooms`); // Rooms might be affected by imports.
   return {
-    message: "Import complete.",
+    message: 'Import complete.',
     results: { successCount, failCount, failedRows },
   };
 }

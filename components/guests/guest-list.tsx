@@ -1,5 +1,5 @@
-import { getGuests } from "@/app/actions/guests";
-import Link from "next/link";
+import { getGuests } from '@/app/actions/guests';
+import Link from 'next/link';
 
 export async function GuestList({
   propertyId,
@@ -32,9 +32,9 @@ export async function GuestList({
               <td className="font-bold">
                 {guest.firstName} {guest.lastName}
               </td>
-              <td>{guest.email || "-"}</td>
-              <td>{guest.phone || "-"}</td>
-              <td>{guest.nationality || "-"}</td>
+              <td>{guest.email || '-'}</td>
+              <td>{guest.phone || '-'}</td>
+              <td>{guest.nationality || '-'}</td>
               <td>
                 <Link
                   href={`/properties/${propertyId}/guests/${guest.id}`}

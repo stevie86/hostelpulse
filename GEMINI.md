@@ -1,10 +1,12 @@
 # HostelPulse - Project Context
 
 ## Project Overview
-**HostelPulse** is a modern, SaaS-based Property Management System (PMS) for hostels. 
+
+**HostelPulse** is a modern, SaaS-based Property Management System (PMS) for hostels.
 **Current State:** "Clean Slate" / "Operation Bedrock". The project has been reset to a minimal, stable Next.js 15 foundation to eliminate technical debt. Features are being re-added incrementally with a strict focus on stability and type safety.
 
 ## Tech Stack
+
 - **Framework:** Next.js 15 (App Router)
 - **Language:** TypeScript (Strict mode, no `any` allowed)
 - **Database:** PostgreSQL (via Prisma ORM)
@@ -14,19 +16,21 @@
 - **Package Manager:** pnpm (preferred) or npm
 
 ## Key Commands
-| Action | Command | Description |
-| :--- | :--- | :--- |
-| **Dev Server** | `npm run dev` | Starts local dev server at http://localhost:3000 |
-| **Build** | `npm run build` | Production build |
-| **Lint** | `npm run lint` | Runs ESLint |
-| **Format** | `npm run format` | Runs Prettier |
-| **Test (Unit)** | `npm run test` | Runs Jest tests |
-| **Test (E2E)** | `npm run test:e2e` | Runs Playwright tests |
-| **DB Push** | `npx prisma db push` | Pushes schema changes to DB (prototyping) |
-| **DB Migrate** | `npm run db:migrate` | Creates migrations (production) |
-| **DB Studio** | `npm run db:studio` | GUI for viewing database data |
+
+| Action          | Command              | Description                                      |
+| :-------------- | :------------------- | :----------------------------------------------- |
+| **Dev Server**  | `npm run dev`        | Starts local dev server at http://localhost:3000 |
+| **Build**       | `npm run build`      | Production build                                 |
+| **Lint**        | `npm run lint`       | Runs ESLint                                      |
+| **Format**      | `npm run format`     | Runs Prettier                                    |
+| **Test (Unit)** | `npm run test`       | Runs Jest tests                                  |
+| **Test (E2E)**  | `npm run test:e2e`   | Runs Playwright tests                            |
+| **DB Push**     | `npx prisma db push` | Pushes schema changes to DB (prototyping)        |
+| **DB Migrate**  | `npm run db:migrate` | Creates migrations (production)                  |
+| **DB Studio**   | `npm run db:studio`  | GUI for viewing database data                    |
 
 ## Project Structure
+
 ```text
 /
 ├── app/                 # Next.js App Router
@@ -46,6 +50,7 @@
 ```
 
 ## Development Conventions
+
 1.  **Strict Typing:** Do not use `any`. Define proper interfaces/types for all data, especially database results.
 2.  **Server Actions:** Prefer Server Actions over API routes for internal mutations.
 3.  **Clean Slate Philosophy:** Do not re-introduce "messy" code. If a feature is added, it must be clean, typed, and tested.
@@ -53,6 +58,7 @@
 5.  **Database:** Always update `schema.prisma` first, then generate client/migrate.
 
 ## Current Roadmap (Operation Bedrock)
+
 1.  **Stability & Type Safety:** Ensure 100% CI/CD success and eliminate `any` usage in core paths.
 2.  **Core Feature Restoration:** Priority focus on Room Management, Booking Management, and Guest Management.
 3.  **Data Management Hub:** Decoupled utility UI for bulk import/export to assist in MVP validation.

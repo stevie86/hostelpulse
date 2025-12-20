@@ -1,11 +1,11 @@
-"use server";
+'use server';
 
-import { auth } from "@/auth";
-import prisma from "@/lib/db";
-import { GuestSchema } from "@/lib/schemas/guest";
-import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
-import { verifyPropertyAccess } from "@/lib/auth-utils";
+import { auth } from '@/auth';
+import prisma from '@/lib/db';
+import { GuestSchema } from '@/lib/schemas/guest';
+import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
+import { verifyPropertyAccess } from '@/lib/auth-utils';
 
 export type ActionState = {
   errors?: {
@@ -25,18 +25,18 @@ export async function createGuest(
   try {
     await verifyPropertyAccess(propertyId);
   } catch (error) {
-    return { message: error instanceof Error ? error.message : "Unauthorized" };
+    return { message: error instanceof Error ? error.message : 'Unauthorized' };
   }
 
   const rawData = {
-    firstName: formData.get("firstName"),
-    lastName: formData.get("lastName"),
-    email: formData.get("email") || "",
-    phone: formData.get("phone") || undefined,
-    nationality: formData.get("nationality") || undefined,
-    documentType: formData.get("documentType") || undefined,
-    documentId: formData.get("documentId") || undefined,
-    notes: formData.get("notes") || undefined,
+    firstName: formData.get('firstName'),
+    lastName: formData.get('lastName'),
+    email: formData.get('email') || '',
+    phone: formData.get('phone') || undefined,
+    nationality: formData.get('nationality') || undefined,
+    documentType: formData.get('documentType') || undefined,
+    documentId: formData.get('documentId') || undefined,
+    notes: formData.get('notes') || undefined,
   };
 
   const validatedFields = GuestSchema.safeParse(rawData);
@@ -44,7 +44,7 @@ export async function createGuest(
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,
-      message: "Missing Fields. Failed to Create Guest.",
+      message: 'Missing Fields. Failed to Create Guest.',
     };
   }
 
@@ -56,7 +56,7 @@ export async function createGuest(
       },
     });
   } catch (error) {
-    return { message: "Database Error: Failed to Create Guest." };
+    return { message: 'Database Error: Failed to Create Guest.' };
   }
 
   revalidatePath(`/properties/${propertyId}/guests`);
@@ -72,18 +72,18 @@ export async function updateGuest(
   try {
     await verifyPropertyAccess(propertyId);
   } catch (error) {
-    return { message: error instanceof Error ? error.message : "Unauthorized" };
+    return { message: error instanceof Error ? error.message : 'Unauthorized' };
   }
 
   const rawData = {
-    firstName: formData.get("firstName"),
-    lastName: formData.get("lastName"),
-    email: formData.get("email") || "",
-    phone: formData.get("phone") || undefined,
-    nationality: formData.get("nationality") || undefined,
-    documentType: formData.get("documentType") || undefined,
-    documentId: formData.get("documentId") || undefined,
-    notes: formData.get("notes") || undefined,
+    firstName: formData.get('firstName'),
+    lastName: formData.get('lastName'),
+    email: formData.get('email') || '',
+    phone: formData.get('phone') || undefined,
+    nationality: formData.get('nationality') || undefined,
+    documentType: formData.get('documentType') || undefined,
+    documentId: formData.get('documentId') || undefined,
+    notes: formData.get('notes') || undefined,
   };
 
   const validatedFields = GuestSchema.safeParse(rawData);
@@ -91,7 +91,7 @@ export async function updateGuest(
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,
-      message: "Missing Fields. Failed to Update Guest.",
+      message: 'Missing Fields. Failed to Update Guest.',
     };
   }
 
@@ -101,7 +101,7 @@ export async function updateGuest(
       data: validatedFields.data,
     });
   } catch (error) {
-    return { message: "Database Error: Failed to Update Guest." };
+    return { message: 'Database Error: Failed to Update Guest.' };
   }
 
   revalidatePath(`/properties/${propertyId}/guests`);
@@ -120,12 +120,12 @@ export async function getGuests(propertyId: string, query?: string) {
       propertyId,
       OR: query
         ? [
-            { firstName: { contains: query, mode: "insensitive" } },
-            { lastName: { contains: query, mode: "insensitive" } },
-            { email: { contains: query, mode: "insensitive" } },
+            { firstName: { contains: query, mode: 'insensitive' } },
+            { lastName: { contains: query, mode: 'insensitive' } },
+            { email: { contains: query, mode: 'insensitive' } },
           ]
         : undefined,
     },
-    orderBy: { lastName: "asc" },
+    orderBy: { lastName: 'asc' },
   });
 }

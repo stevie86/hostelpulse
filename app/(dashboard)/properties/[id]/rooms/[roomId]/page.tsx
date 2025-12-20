@@ -1,8 +1,8 @@
-import { updateRoom } from "@/app/actions/rooms";
-import { RoomForm } from "@/components/rooms/room-form";
-import prisma from "@/lib/db";
-import Link from "next/link";
-import { notFound } from "next/navigation";
+import { updateRoom } from '@/app/actions/rooms';
+import { RoomForm } from '@/components/rooms/room-form';
+import prisma from '@/lib/db';
+import Link from 'next/link';
+import { notFound } from 'next/navigation';
 
 export default async function EditRoomPage({
   params,
@@ -42,11 +42,11 @@ export default async function EditRoomPage({
           roomId={roomId}
           initialValues={{
             name: room.name,
-            type: room.type as "dormitory" | "private" | "suite",
+            type: room.type as 'dormitory' | 'private' | 'suite',
             beds: room.beds,
             pricePerNight: room.pricePerNight,
             maxOccupancy: room.maxOccupancy,
-            description: room.description || "",
+            description: room.description || '',
           }}
         />
       </div>

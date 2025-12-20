@@ -1,8 +1,11 @@
 import NextAuth from 'next-auth';
 import { authConfig } from './auth.config';
 
+// Workaround for NextAuth v5 beta type issue
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const proxy = (NextAuth as any)(authConfig).auth;
+const { auth } = (NextAuth as any)(authConfig);
+
+export default auth;
 
 export const config = {
   // https://nextjs.org/docs/app/building-your-application/routing/middleware#matcher

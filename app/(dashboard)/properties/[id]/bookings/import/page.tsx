@@ -1,6 +1,6 @@
-import { importBookings } from "@/app/actions/import";
-import { ImportForm } from "@/components/import/import-form";
-import Link from "next/link";
+import { importBookings } from '@/app/actions/import';
+import { ImportForm } from '@/components/import/import-form';
+import Link from 'next/link';
 
 export default async function BookingsImportPage({
   params,
@@ -23,7 +23,11 @@ export default async function BookingsImportPage({
       </div>
 
       <div className="bg-base-100 p-6 rounded-box shadow">
-        <ImportForm propertyId={propertyId} type="bookings" action={importBookingsWithId} />
+        <ImportForm
+          propertyId={propertyId}
+          type="bookings"
+          action={importBookingsWithId}
+        />
       </div>
     </div>
   );

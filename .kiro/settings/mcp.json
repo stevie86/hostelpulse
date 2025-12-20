@@ -10,7 +10,7 @@
       "autoApprove": ["fetch"]
     },
     "stripe": {
-      "command": "uvx", 
+      "command": "uvx",
       "args": ["mcp-stripe"],
       "env": {
         "STRIPE_API_KEY": "",
@@ -43,7 +43,7 @@
       "command": "uvx",
       "args": ["awslabs.aws-serverless-mcp@latest"],
       "env": {
-        "AWS_PROFILE": "default", 
+        "AWS_PROFILE": "default",
         "AWS_REGION": "us-east-1",
         "FASTMCP_LOG_LEVEL": "ERROR"
       },

@@ -2,7 +2,7 @@
 
 /**
  * 🚀 HostelPulse Quick Deploy Script
- * 
+ *
  * This script automates the entire Vercel deployment process:
  * 1. Checks if Vercel CLI is installed
  * 2. Builds the project locally to catch errors
@@ -22,7 +22,7 @@ const colors = {
   yellow: '\x1b[33m',
   blue: '\x1b[34m',
   reset: '\x1b[0m',
-  bold: '\x1b[1m'
+  bold: '\x1b[1m',
 };
 
 function log(message, color = 'reset') {
@@ -57,11 +57,16 @@ async function main() {
     // Step 2: Check if we're in a git repository
     log('\n🔍 Checking git status...', 'blue');
     try {
-      const gitStatus = execSync('git status --porcelain', { encoding: 'utf8' });
+      const gitStatus = execSync('git status --porcelain', {
+        encoding: 'utf8',
+      });
       if (gitStatus.trim()) {
         log('📝 Uncommitted changes found. Committing...', 'yellow');
         runCommand('git add .', 'Staging changes');
-        runCommand('git commit -m "Deploy: Ready for production with complete demo"', 'Committing changes');
+        runCommand(
+          'git commit -m "Deploy: Ready for production with complete demo"',
+          'Committing changes'
+        );
       } else {
         log('✅ Git repository is clean', 'green');
       }
@@ -78,7 +83,7 @@ async function main() {
     // Step 5: Deploy to Vercel
     log('\n🚀 Deploying to Vercel...', 'blue');
     const deployOutput = execSync('vercel --prod --yes', { encoding: 'utf8' });
-    
+
     // Extract the deployment URL from Vercel output
     const urlMatch = deployOutput.match(/https:\/\/[^\s]+/);
     const deploymentUrl = urlMatch ? urlMatch[0] : null;
@@ -86,20 +91,20 @@ async function main() {
     if (deploymentUrl) {
       log('\n🎉 DEPLOYMENT SUCCESSFUL!', 'green');
       log('═'.repeat(60), 'green');
-      
+
       log(`\n🌐 Your HostelPulse demo is live at:`, 'bold');
       log(`${deploymentUrl}/demo`, 'blue');
-      
+
       log(`\n📱 Share this URL with users to test:`, 'bold');
       log(`${deploymentUrl}/demo`, 'yellow');
-      
+
       log(`\n🎯 Demo Features Available:`, 'bold');
       log(`• Dashboard: ${deploymentUrl}/demo`, 'reset');
       log(`• Rooms: ${deploymentUrl}/demo/rooms`, 'reset');
       log(`• Bookings: ${deploymentUrl}/demo/bookings`, 'reset');
       log(`• New Booking: ${deploymentUrl}/demo/bookings/new`, 'reset');
       log(`• Check-in: ${deploymentUrl}/demo/checkin`, 'reset');
-      
+
       log(`\n💬 Advanced Feedback System:`, 'bold');
       log(`• Floating feedback button on all pages`, 'reset');
       log(`• Star ratings and user comments`, 'reset');
@@ -107,15 +112,18 @@ async function main() {
       log(`• Pushbullet instant notifications`, 'reset');
       log(`• Feedback queuing when services unavailable`, 'reset');
       log(`• User tracking with GitHub issue URLs`, 'reset');
-      
+
       log(`\n⚙️  Optional Integrations:`, 'bold');
       log(`• Setup Pushbullet: node scripts/setup-pushbullet.sh`, 'reset');
       log(`• Setup GitHub: node scripts/setup-github-feedback.js`, 'reset');
-      log(`• Process queue: GET ${deploymentUrl}/api/feedback/process-queue`, 'reset');
-      
+      log(
+        `• Process queue: GET ${deploymentUrl}/api/feedback/process-queue`,
+        'reset'
+      );
+
       log('\n═'.repeat(60), 'green');
       log('🚀 Ready for user testing!', 'green');
-      
+
       // Save comprehensive deployment info
       const deploymentInfo = {
         url: `${deploymentUrl}/demo`,
@@ -125,26 +133,27 @@ async function main() {
           'Advanced feedback system with GitHub integration',
           'Mobile-responsive design',
           'Real-time notifications',
-          'Feedback queuing system'
+          'Feedback queuing system',
         ],
         endpoints: {
           demo: `${deploymentUrl}/demo`,
           feedback: `${deploymentUrl}/api/feedback`,
-          processQueue: `${deploymentUrl}/api/feedback/process-queue`
-        }
+          processQueue: `${deploymentUrl}/api/feedback/process-queue`,
+        },
       };
-      
+
       fs.writeFileSync('DEMO_URL.txt', `${deploymentUrl}/demo`);
-      fs.writeFileSync('deployment-info.json', JSON.stringify(deploymentInfo, null, 2));
-      
+      fs.writeFileSync(
+        'deployment-info.json',
+        JSON.stringify(deploymentInfo, null, 2)
+      );
+
       log('\n📄 Demo URL saved to DEMO_URL.txt', 'blue');
       log('📊 Deployment info saved to deployment-info.json', 'blue');
-      
     } else {
       log('⚠️  Deployment completed but URL not found in output', 'yellow');
       console.log('Vercel output:', deployOutput);
     }
-
   } catch (error) {
     log('\n❌ Deployment failed:', 'red');
     console.error(error.message);

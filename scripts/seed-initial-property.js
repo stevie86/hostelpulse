@@ -25,7 +25,9 @@ async function main() {
     });
 
     if (!adminUser) {
-      console.error(`Admin user with email ${adminEmail} not found. Please ensure seed data is run.`);
+      console.error(
+        `Admin user with email ${adminEmail} not found. Please ensure seed data is run.`
+      );
       return;
     }
 
@@ -33,7 +35,9 @@ async function main() {
     const adminTeam = adminUser.teamMembers[0]?.team;
 
     if (!adminTeam) {
-      console.error(`Admin user ${adminEmail} is not associated with any team.`);
+      console.error(
+        `Admin user ${adminEmail} is not associated with any team.`
+      );
       return;
     }
 
@@ -43,7 +47,9 @@ async function main() {
     });
 
     if (existingProperty) {
-      console.log(`Team '${adminTeam.name}' (ID: ${adminTeam.id}) already has property: '${existingProperty.name}' (ID: ${existingProperty.id}). No new property created.`);
+      console.log(
+        `Team '${adminTeam.name}' (ID: ${adminTeam.id}) already has property: '${existingProperty.name}' (ID: ${existingProperty.id}). No new property created.`
+      );
     } else {
       // Create a new property for the admin's team
       const newProperty = await prisma.property.create({
@@ -59,15 +65,28 @@ async function main() {
           // Add default rooms and beds
           rooms: {
             create: [
-              { name: 'Dorm 1', type: 'dormitory', beds: 8, pricePerNight: 2000, maxOccupancy: 8 },
-              { name: 'Private Room', type: 'private', beds: 2, pricePerNight: 5000, maxOccupancy: 2 },
+              {
+                name: 'Dorm 1',
+                type: 'dormitory',
+                beds: 8,
+                pricePerNight: 2000,
+                maxOccupancy: 8,
+              },
+              {
+                name: 'Private Room',
+                type: 'private',
+                beds: 2,
+                pricePerNight: 5000,
+                maxOccupancy: 2,
+              },
             ],
           },
         },
       });
-      console.log(`Created new property '${newProperty.name}' (ID: ${newProperty.id}) for team '${adminTeam.name}'.`);
+      console.log(
+        `Created new property '${newProperty.name}' (ID: ${newProperty.id}) for team '${adminTeam.name}'.`
+      );
     }
-
   } catch (error) {
     console.error('Error seeding initial property:', error);
   } finally {

@@ -19,7 +19,9 @@ jest.mock('@/lib/db', () => ({
 
 // Mock auth-utils
 jest.mock('@/lib/auth-utils', () => ({
-  verifyPropertyAccess: jest.fn().mockResolvedValue({ userId: 'test-user', role: 'admin' }),
+  verifyPropertyAccess: jest
+    .fn()
+    .mockResolvedValue({ userId: 'test-user', role: 'admin' }),
 }));
 
 const mockPrisma = prisma as jest.Mocked<typeof prisma>;
@@ -75,8 +77,12 @@ describe('Guests Server Actions', () => {
           documentId: 'ABC12345',
         },
       });
-      expect(mockRevalidatePath).toHaveBeenCalledWith(`/properties/${PROPERTY_ID}/guests`);
-      expect(mockRedirect).toHaveBeenCalledWith(`/properties/${PROPERTY_ID}/guests`);
+      expect(mockRevalidatePath).toHaveBeenCalledWith(
+        `/properties/${PROPERTY_ID}/guests`
+      );
+      expect(mockRedirect).toHaveBeenCalledWith(
+        `/properties/${PROPERTY_ID}/guests`
+      );
     });
 
     it('should create a guest with optional fields as null', async () => {
@@ -93,9 +99,18 @@ describe('Guests Server Actions', () => {
         propertyId: PROPERTY_ID,
         firstName: 'John',
         lastName: 'Smith',
-        email: null, phone: null, nationality: null, documentId: null,
-        dateOfBirth: null, address: null, city: null, country: null, notes: null, blacklisted: false,
-        createdAt: new Date(), updatedAt: new Date(),
+        email: null,
+        phone: null,
+        nationality: null,
+        documentId: null,
+        dateOfBirth: null,
+        address: null,
+        city: null,
+        country: null,
+        notes: null,
+        blacklisted: false,
+        createdAt: new Date(),
+        updatedAt: new Date(),
       });
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -106,7 +121,7 @@ describe('Guests Server Actions', () => {
           propertyId: PROPERTY_ID,
           firstName: 'John',
           lastName: 'Smith',
-          email: "",
+          email: '',
           phone: undefined,
           nationality: undefined,
           documentId: undefined,
@@ -137,12 +152,16 @@ describe('Guests Server Actions', () => {
       formData.append('nationality', '');
       formData.append('documentId', '');
 
-      (mockPrisma.guest.create as jest.Mock).mockRejectedValueOnce(new Error('DB creation failed'));
+      (mockPrisma.guest.create as jest.Mock).mockRejectedValueOnce(
+        new Error('DB creation failed')
+      );
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const result = await createGuest(PROPERTY_ID, null as any, formData);
 
-      expect(result).toEqual({ message: 'Database Error: Failed to Create Guest.' });
+      expect(result).toEqual({
+        message: 'Database Error: Failed to Create Guest.',
+      });
       expect(mockPrisma.guest.create).toHaveBeenCalled();
       expect(mockRevalidatePath).not.toHaveBeenCalled();
       expect(mockRedirect).not.toHaveBeenCalled();

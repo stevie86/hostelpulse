@@ -4,8 +4,8 @@ scripts:
   sh: scripts/bash/check-prerequisites.sh --json --require-tasks --include-tasks
   ps: scripts/powershell/check-prerequisites.ps1 -Json -RequireTasks -IncludeTasks
 ---
-*Path: [templates/commands/implement.md](templates/commands/implement.md)*
 
+_Path: [templates/commands/implement.md](templates/commands/implement.md)_
 
 ## User Input
 
@@ -31,6 +31,7 @@ if not result.is_valid:
 ```
 
 **What this validates**:
+
 - Current branch follows the feature pattern like `001-feature-name`
 - You're not attempting to run from `main` or any release branch
 - The validator prints clear navigation instructions if you're outside the feature worktree
@@ -63,17 +64,17 @@ This is intentional - worktrees provide isolation for parallel feature developme
 1. **Verify worktree context**:
    - The CLI prefers an isolated checkout at `PROJECT_ROOT/.worktrees/FEATURE-SLUG`; use the path returned by `create-new-feature` when it exists.
    - If that directory is present and you are not already inside it, `cd` into the worktree before proceeding.
-    - When inspecting git status or listing files, always reference the worktree paths (for example, `kitty-specs/<feature>/...` inside `.worktrees/<feature>/`).
+   - When inspecting git status or listing files, always reference the worktree paths (for example, `kitty-specs/<feature>/...` inside `.worktrees/<feature>/`).
    - If worktree creation was skipped (the CLI returned no worktree path or the directory is missing), remain in the primary checkout on the feature branch or recreate the worktree with `git worktree add PROJECT_ROOT/.worktrees/FEATURE-SLUG FEATURE-SLUG` and then `cd` into it.
 
 2. Run `{SCRIPT}` from repo root and parse FEATURE_DIR and AVAILABLE_DOCS list. All paths must be absolute.
 
-2. **Check checklists status** (if FEATURE_DIR/checklists/ exists):
+3. **Check checklists status** (if FEATURE_DIR/checklists/ exists):
    - Scan all checklist files in the checklists/ directory
    - For each checklist, count:
-     * Total items: All lines matching `- [ ]` or `- [X]` or `- [x]`
-     * Completed items: Lines matching `- [X]` or `- [x]`
-     * Incomplete items: Lines matching `- [ ]`
+     - Total items: All lines matching `- [ ]` or `- [X]` or `- [x]`
+     - Completed items: Lines matching `- [X]` or `- [x]`
+     - Incomplete items: Lines matching `- [ ]`
    - Create a status table:
      ```
      | Checklist | Total | Completed | Incomplete | Status |
@@ -83,52 +84,54 @@ This is intentional - worktrees provide isolation for parallel feature developme
      | security.md | 6   | 6         | 0          | ✓ PASS |
      ```
    - Calculate overall status:
-     * **PASS**: All checklists have 0 incomplete items
-     * **FAIL**: One or more checklists have incomplete items
-   
+     - **PASS**: All checklists have 0 incomplete items
+     - **FAIL**: One or more checklists have incomplete items
    - **If any checklist is incomplete**:
-     * Display the table with incomplete item counts
-     * **STOP** and ask: "Some checklists are incomplete. Do you want to proceed with implementation anyway? (yes/no)"
-     * Wait for user response before continuing
-     * If user says "no" or "wait" or "stop", halt execution
-     * If user says "yes" or "proceed" or "continue", proceed to step 3
-   
+     - Display the table with incomplete item counts
+     - **STOP** and ask: "Some checklists are incomplete. Do you want to proceed with implementation anyway? (yes/no)"
+     - Wait for user response before continuing
+     - If user says "no" or "wait" or "stop", halt execution
+     - If user says "yes" or "proceed" or "continue", proceed to step 3
    - **If all checklists are complete**:
-     * Display the table showing all checklists passed
-     * Automatically proceed to step 3
+     - Display the table showing all checklists passed
+     - Automatically proceed to step 3
 
-3. **MANDATORY: Initialize Task Workflow** ⚠️ BLOCKING STEP
+4. **MANDATORY: Initialize Task Workflow** ⚠️ BLOCKING STEP
 
    **For EACH task you will implement**:
 
    a. **Move task prompt to doing lane**:
-      ```bash
-      # Capture your shell PID
-      SHELL_PID=$(echo $$)
 
-      # Move prompt (example for T001)
-      .kittify/scripts/bash/tasks-move-to-lane.sh FEATURE-SLUG TXXX doing \
-        --shell-pid "$SHELL_PID" \
-        --agent "claude" \
-        --note "Started implementation"
-      ```
-      > Windows users: run `.kittify/scripts/powershell/tasks-move-to-lane.ps1` with the same arguments.
+   ```bash
+   # Capture your shell PID
+   SHELL_PID=$(echo $$)
+
+   # Move prompt (example for T001)
+   .kittify/scripts/bash/tasks-move-to-lane.sh FEATURE-SLUG TXXX doing \
+     --shell-pid "$SHELL_PID" \
+     --agent "claude" \
+     --note "Started implementation"
+   ```
+
+   > Windows users: run `.kittify/scripts/powershell/tasks-move-to-lane.ps1` with the same arguments.
 
    b. **Verify frontmatter metadata** in the moved file:
-      ```yaml
-      lane: "doing"
-      assignee: "Your Name or Agent ID"
-      agent: "claude"  # or codex, gemini, etc.
-      shell_pid: "12345"  # from echo $$
-      ```
+
+   ```yaml
+   lane: 'doing'
+   assignee: 'Your Name or Agent ID'
+   agent: 'claude' # or codex, gemini, etc.
+   shell_pid: '12345' # from echo $$
+   ```
 
    c. **Confirm the Activity Log** shows a new entry that records the transition to `doing` (the helper script adds it automatically—adjust the note if needed).
 
    d. **Commit the move**:
-      ```bash
-      git status --short
-      git commit -m "Start TXXX: Move to doing lane"
-      ```
+
+   ```bash
+   git status --short
+   git commit -m "Start TXXX: Move to doing lane"
+   ```
 
    **VALIDATION**: Before proceeding to implementation, verify:
    - [ ] Prompt file exists in `tasks/doing/phase-X-name/`
@@ -140,7 +143,7 @@ This is intentional - worktrees provide isolation for parallel feature developme
    **If validation fails**: STOP and fix the workflow before implementing.
    (Optional) Run `scripts/bash/validate-task-workflow.sh TXXX FEATURE_DIR` for automated checks.
 
-4. Load and analyze the implementation context:
+5. Load and analyze the implementation context:
    - **REQUIRED**: Read tasks.md for the complete task list and execution plan
    - **REQUIRED**: Read the task prompt file from `tasks/doing/phase-X-name/TXXX-slug.md` (moved in step 3)
    - **MANDATORY** 🚨 **REVIEW FEEDBACK CHECK**: Look at the `review_status` field in the frontmatter:
@@ -156,13 +159,13 @@ This is intentional - worktrees provide isolation for parallel feature developme
    - **IF EXISTS**: Read research.md for technical decisions and constraints
    - **IF EXISTS**: Read quickstart.md for integration scenarios
 
-5. Parse tasks.md structure and extract:
+6. Parse tasks.md structure and extract:
    - **Task phases**: Setup, Tests, Core, Integration, Polish
    - **Task dependencies**: Sequential vs parallel execution rules
    - **Task details**: ID, description, file paths, parallel markers [P]
    - **Execution flow**: Order and dependency requirements
 
-6. Execute implementation following the task plan:
+7. Execute implementation following the task plan:
    - **Pull from planned intentionally**: Select the next task from `tasks/planned/`.
      - **If it recently came back from `for_review/`** (check `reviewed_by` field and `review_status: has_feedback`):
        - Treat the `## Review Feedback` section as your primary TODO list
@@ -176,14 +179,14 @@ This is intentional - worktrees provide isolation for parallel feature developme
    - **Validation checkpoints**: Verify each phase completion before proceeding
    - **Kanban discipline**: Use the lane helper scripts to keep the prompt in `tasks/doing/`, update the Activity Log, and capture your shell PID (`echo $$`). These should already be complete from step 3—verify before coding.
 
-7. Implementation execution rules:
+8. Implementation execution rules:
    - **Setup first**: Initialize feature scaffolding, dependencies, configuration
    - **Tests before code**: If you need to write tests for contracts, entities, and integration scenarios
    - **Core development**: Implement models, services, CLI commands, endpoints
    - **Integration work**: Database connections, middleware, logging, external services
    - **Polish and validation**: Unit tests, performance optimization, documentation
 
-8. Progress tracking and error handling:
+9. Progress tracking and error handling:
    - Report progress after each completed task
    - Halt execution if any non-parallel task fails
    - For parallel tasks [P], continue with successful tasks, report failed ones
@@ -202,6 +205,7 @@ This is intentional - worktrees provide isolation for parallel feature developme
        --agent "claude" \
        --note "Ready for review"
      ```
+
      - Commit:
        ```bash
        git status --short
@@ -213,12 +217,12 @@ This is intentional - worktrees provide isolation for parallel feature developme
      - [ ] Activity log has completion entry
      - [ ] Git commit exists for the move
 
-9. Completion validation:
-   - Verify all required tasks are completed
-   - Check that implemented features match the original specification
-   - Validate that tests pass and coverage meets requirements
-   - Confirm the implementation follows the technical plan
-   - Report final status with summary of completed work
+10. Completion validation:
+    - Verify all required tasks are completed
+    - Check that implemented features match the original specification
+    - Validate that tests pass and coverage meets requirements
+    - Confirm the implementation follows the technical plan
+    - Report final status with summary of completed work
 
 ## Task Workflow Summary (Quick Reference)
 

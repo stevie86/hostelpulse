@@ -1,5 +1,5 @@
 ---
-description: "Work package task list for Beautiful UI Revamp"
+description: 'Work package task list for Beautiful UI Revamp'
 ---
 
 # Work Packages: Beautiful UI Revamp
@@ -14,6 +14,7 @@ description: "Work package task list for Beautiful UI Revamp"
 **Prompt**: `/kitty-specs/012-beautiful-ui-revamp/tasks/WP01-shared-layout-styles.md`
 
 ### Included Subtasks
+
 - [x] T001 Audit `app/layout.tsx`, `app/globals.css`, and shared components for update points.
 - [x] T002 Implement shared styles for buttons, cards, and typography (no new UI libraries).
 
@@ -26,6 +27,7 @@ description: "Work package task list for Beautiful UI Revamp"
 **Prompt**: `/kitty-specs/012-beautiful-ui-revamp/tasks/WP02-welcome-page-layout.md`
 
 ### Included Subtasks
+
 - [x] T003 Replace redirect-only `app/page.tsx` with the new welcome page layout.
 - [x] T004 Add static demo data (8 rooms, 5 bookings) for the page display.
 
@@ -38,6 +40,7 @@ description: "Work package task list for Beautiful UI Revamp"
 **Prompt**: `/kitty-specs/012-beautiful-ui-revamp/tasks/WP03-responsive-polish.md`
 
 ### Included Subtasks
+
 - [x] T005 Validate mobile/tablet layouts (grid collapse, spacing).
 - [x] T006 Final visual pass (shadows, borders, typography, status badges).
 
@@ -50,6 +53,7 @@ description: "Work package task list for Beautiful UI Revamp"
 **Prompt**: `/kitty-specs/012-beautiful-ui-revamp/tasks/WP04-ci-cd-stabilization.md`
 
 ### Included Subtasks
+
 - [x] T007 Fix `jest.setup.ts` and `jest.config.js` to properly support TypeScript and global mocks.
 - [x] T008 Update `__tests__` to correctly mock `verifyPropertyAccess` and `auth()` to bypass RBAC.
 - [x] T009 Stabilize `import.test.ts` timeouts and ensure `dashboard.test.ts` database operations are isolated.

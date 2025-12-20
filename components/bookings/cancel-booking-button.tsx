@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { cancelBooking } from "@/app/actions/bookings";
-import { useTransition } from "react";
+import { cancelBooking } from '@/app/actions/bookings';
+import { useTransition } from 'react';
 
 export function CancelBookingButton({
   bookingId,
@@ -13,7 +13,7 @@ export function CancelBookingButton({
   const [isPending, startTransition] = useTransition();
 
   const handleCancel = () => {
-    if (!confirm("Cancel this booking?")) return;
+    if (!confirm('Cancel this booking?')) return;
     startTransition(async () => {
       await cancelBooking(propertyId, bookingId);
     });

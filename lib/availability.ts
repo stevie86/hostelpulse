@@ -1,5 +1,5 @@
-import prisma from "@/lib/db";
-import { Booking, BookingBed, Room } from "@prisma/client";
+import prisma from '@/lib/db';
+import { Booking, BookingBed, Room } from '@prisma/client';
 
 export interface DateRange {
   checkIn: Date;
@@ -23,14 +23,14 @@ export class AvailabilityService {
       where: { id: roomId },
     });
 
-    if (!room || room.status !== "available") {
+    if (!room || room.status !== 'available') {
       return [];
     }
 
     // Find all bookings that overlap with the requested range for this room
     const overlappingBookings = await prisma.booking.findMany({
       where: {
-        status: { in: ["confirmed", "checked_in"] },
+        status: { in: ['confirmed', 'checked_in'] },
         checkIn: { lt: range.checkOut },
         checkOut: { gt: range.checkIn },
         beds: {
@@ -92,7 +92,7 @@ export class AvailabilityService {
         roomId: roomId,
         bedLabel: bedLabel,
         booking: {
-          status: { in: ["confirmed", "checked_in"] },
+          status: { in: ['confirmed', 'checked_in'] },
           checkIn: { lt: range.checkOut },
           checkOut: { gt: range.checkIn },
         },

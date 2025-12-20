@@ -3,6 +3,7 @@
 **Branch**: `[###-research-name]` | **Date**: [DATE] | **Spec**: [link]
 
 ## Summary
+
 [One paragraph: research question + methodology + expected outcomes]
 
 ## Research Context
@@ -14,6 +15,7 @@
 **Resources Available**: [Databases, tools, budget, time]
 
 **Key Background**:
+
 - [Context point 1]
 - [Context point 2]
 
@@ -24,6 +26,7 @@
 **Approach**: [Systematic Literature Review | Survey | Experiment | Mixed Methods]
 
 **Phases**:
+
 1. **Question Formation** (Week 1)
    - Define precise research question
    - Identify sub-questions
@@ -53,13 +56,16 @@
 ### Data Sources
 
 **Primary Sources**:
+
 - [Database 1: e.g., IEEE Xplore, PubMed, arXiv]
 - [Database 2]
 
 **Secondary Sources**:
+
 - [Gray literature, industry reports, etc.]
 
 **Search Strategy**:
+
 - **Keywords**: [List search terms]
 - **Inclusion Criteria**: [What qualifies for review]
 - **Exclusion Criteria**: [What will be filtered out]
@@ -78,6 +84,7 @@
 **Purpose**: Track all evidence collected with citations and findings
 
 **Columns**:
+
 - `timestamp`: When evidence collected (ISO format)
 - `source_type`: journal | conference | book | web | preprint
 - `citation`: Full citation (BibTeX or APA format)
@@ -86,6 +93,7 @@
 - `notes`: Additional context or caveats
 
 **Agent Guidance**:
+
 1. Read source and extract key finding.
 2. Add row to evidence-log.csv.
 3. Assign confidence level based on source quality and clarity.
@@ -97,6 +105,7 @@
 **Purpose**: Maintain master list of all sources for bibliography
 
 **Columns**:
+
 - `source_id`: Unique identifier (e.g., "smith2025")
 - `citation`: Full citation
 - `url`: Link to source (if available)
@@ -105,6 +114,7 @@
 - `status`: reviewed | pending | archived
 
 **Agent Guidance**:
+
 1. Add source to register when first discovered.
 2. Update status as research progresses.
 3. Maintain relevance ratings to prioritize review.
@@ -112,6 +122,7 @@
 ## Project Structure
 
 ### Documentation (this research project)
+
 ```
 kitty-specs/[###-research]/
 ├── spec.md              # Research question and scope
@@ -126,6 +137,7 @@ kitty-specs/[###-research]/
 ```
 
 ### Deliverables
+
 ```
 findings/
 ├── report.md           # Main research report
@@ -136,24 +148,28 @@ findings/
 ## Quality Gates
 
 ### Before Data Gathering
+
 - [ ] Research question is clear and focused
 - [ ] Methodology is documented and reproducible
 - [ ] Data sources identified and accessible
 - [ ] Analysis framework defined
 
 ### During Data Gathering
+
 - [ ] All sources documented in source-register.csv
 - [ ] Evidence logged with proper citations
 - [ ] Confidence levels assigned
 - [ ] Quality threshold maintained
 
 ### Before Synthesis
+
 - [ ] All sources reviewed
 - [ ] Findings coded and categorized
 - [ ] Patterns identified
 - [ ] Limitations documented
 
 ### Before Publication
+
 - [ ] Research question answered
 - [ ] All claims cited
 - [ ] Methodology clear and reproducible

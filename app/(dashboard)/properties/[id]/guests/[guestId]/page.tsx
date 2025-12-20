@@ -1,11 +1,11 @@
-import { updateGuest } from "@/app/actions/guests";
-import { GuestForm } from "@/components/guests/guest-form";
-import { GuestHeader } from "@/components/guests/guest-header";
-import { GuestHistory } from "@/components/guests/guest-history";
-import prisma from "@/lib/db";
-import Link from "next/link";
-import { notFound, redirect } from "next/navigation";
-import { verifyPropertyAccess } from "@/lib/auth-utils";
+import { updateGuest } from '@/app/actions/guests';
+import { GuestForm } from '@/components/guests/guest-form';
+import { GuestHeader } from '@/components/guests/guest-header';
+import { GuestHistory } from '@/components/guests/guest-history';
+import prisma from '@/lib/db';
+import Link from 'next/link';
+import { notFound, redirect } from 'next/navigation';
+import { verifyPropertyAccess } from '@/lib/auth-utils';
 
 export default async function GuestDetailPage({
   params,
@@ -17,7 +17,7 @@ export default async function GuestDetailPage({
   try {
     await verifyPropertyAccess(propertyId);
   } catch (error) {
-    redirect("/login");
+    redirect('/login');
   }
 
   const guest = await prisma.guest.findUnique({
@@ -33,7 +33,7 @@ export default async function GuestDetailPage({
           },
         },
         orderBy: {
-          checkIn: "desc",
+          checkIn: 'desc',
         },
       },
     },
@@ -42,7 +42,10 @@ export default async function GuestDetailPage({
   if (!guest) notFound();
 
   const totalStays = guest.bookings.length;
-  const lifetimeValue = guest.bookings.reduce((sum, b) => sum + b.totalAmount, 0);
+  const lifetimeValue = guest.bookings.reduce(
+    (sum, b) => sum + b.totalAmount,
+    0
+  );
 
   const updateGuestWithId = updateGuest.bind(null, guestId, propertyId);
 
@@ -80,12 +83,17 @@ export default async function GuestDetailPage({
               initialValues={{
                 firstName: guest.firstName,
                 lastName: guest.lastName,
-                email: guest.email || "",
-                phone: guest.phone || "",
-                nationality: guest.nationality || "",
-                documentType: (guest.documentType as "passport" | "id_card" | "driving_license" | undefined) || "passport",
-                documentId: guest.documentId || "",
-                notes: guest.notes || "",
+                email: guest.email || '',
+                phone: guest.phone || '',
+                nationality: guest.nationality || '',
+                documentType:
+                  (guest.documentType as
+                    | 'passport'
+                    | 'id_card'
+                    | 'driving_license'
+                    | undefined) || 'passport',
+                documentId: guest.documentId || '',
+                notes: guest.notes || '',
               }}
             />
           </div>

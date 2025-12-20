@@ -1,26 +1,28 @@
-"use client";
+'use client';
 
-import { ActionState } from "@/app/actions/bookings";
-import { useSearchParams } from "next/navigation";
-import { useActionState, useEffect, useState } from "react";
+import { ActionState } from '@/app/actions/bookings';
+import { useSearchParams } from 'next/navigation';
+import { useActionState, useEffect, useState } from 'react';
 
 // Define simpler props types to avoid full Prisma dependency on client
 type Room = { id: string; name: string; beds: number; pricePerNight: number };
-type Guest = { id: string; firstName: string; lastName: string; email: string | null };
+type Guest = {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string | null;
+};
 
 interface BookingFormProps {
   propertyId: string;
-  action: (
-    prevState: ActionState,
-    formData: FormData
-  ) => Promise<ActionState>;
+  action: (prevState: ActionState, formData: FormData) => Promise<ActionState>;
   rooms: Room[];
   guests: Guest[];
 }
 
 export function BookingForm({ action, rooms, guests }: BookingFormProps) {
   const searchParams = useSearchParams();
-  const initialRoomId = searchParams.get("roomId") || "";
+  const initialRoomId = searchParams.get('roomId') || '';
 
   const [state, formAction, isPending] = useActionState(action, {
     message: null,
@@ -29,7 +31,7 @@ export function BookingForm({ action, rooms, guests }: BookingFormProps) {
 
   // Client-side Price Calc
   const [selectedRoomId, setSelectedRoomId] = useState<string>(initialRoomId);
-  const [dates, setDates] = useState({ checkIn: "", checkOut: "" });
+  const [dates, setDates] = useState({ checkIn: '', checkOut: '' });
 
   useEffect(() => {
     if (initialRoomId) {
@@ -38,12 +40,14 @@ export function BookingForm({ action, rooms, guests }: BookingFormProps) {
   }, [initialRoomId]);
 
   const selectedRoom = rooms.find((r) => r.id === selectedRoomId);
-  
+
   const calculateTotal = () => {
     if (!selectedRoom || !dates.checkIn || !dates.checkOut) return 0;
     const start = new Date(dates.checkIn);
     const end = new Date(dates.checkOut);
-    const nights = Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
+    const nights = Math.ceil(
+      (end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)
+    );
     return nights > 0 ? nights * selectedRoom.pricePerNight : 0;
   };
 
@@ -91,10 +95,13 @@ export function BookingForm({ action, rooms, guests }: BookingFormProps) {
           value={selectedRoomId}
           onChange={(e) => setSelectedRoomId(e.target.value)}
         >
-          <option value="" disabled>Select a room...</option>
+          <option value="" disabled>
+            Select a room...
+          </option>
           {rooms.map((room) => (
             <option key={room.id} value={room.id}>
-              {room.name} ({room.beds} beds) - €{(room.pricePerNight / 100).toFixed(2)}
+              {room.name} ({room.beds} beds) - €
+              {(room.pricePerNight / 100).toFixed(2)}
             </option>
           ))}
         </select>
@@ -109,16 +116,23 @@ export function BookingForm({ action, rooms, guests }: BookingFormProps) {
           required
           defaultValue=""
         >
-          <option value="" disabled>Select a guest...</option>
+          <option value="" disabled>
+            Select a guest...
+          </option>
           {guests.map((guest) => (
             <option key={guest.id} value={guest.id}>
-              {guest.firstName} {guest.lastName} {guest.email ? `(${guest.email})` : ""}
+              {guest.firstName} {guest.lastName}{' '}
+              {guest.email ? `(${guest.email})` : ''}
             </option>
           ))}
         </select>
         <label className="label">
           <span className="label-text-alt">
-            Don&apos;t see the guest? <a href="#" className="link">Create new guest</a> (Go back)
+            Don&apos;t see the guest?{' '}
+            <a href="#" className="link">
+              Create new guest
+            </a>{' '}
+            (Go back)
           </span>
         </label>
       </div>
@@ -129,9 +143,9 @@ export function BookingForm({ action, rooms, guests }: BookingFormProps) {
           <div className="stat">
             <div className="stat-title">Total Price</div>
             <div className="stat-value text-primary">
-              {new Intl.NumberFormat("en-IE", {
-                style: "currency",
-                currency: "EUR",
+              {new Intl.NumberFormat('en-IE', {
+                style: 'currency',
+                currency: 'EUR',
               }).format(total / 100)}
             </div>
             <div className="stat-desc">For {selectedRoom?.name}</div>
@@ -144,7 +158,7 @@ export function BookingForm({ action, rooms, guests }: BookingFormProps) {
         disabled={isPending}
         className="btn btn-primary w-full"
       >
-        {isPending ? "Booking..." : "Confirm Booking"}
+        {isPending ? 'Booking...' : 'Confirm Booking'}
       </button>
     </form>
   );

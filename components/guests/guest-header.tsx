@@ -1,11 +1,11 @@
-import { CreditCard, History } from "lucide-react";
+import { CreditCard, History } from 'lucide-react';
 
-export function GuestHeader({ 
-  totalStays, 
-  lifetimeValue 
-}: { 
-  totalStays: number; 
-  lifetimeValue: number 
+export function GuestHeader({
+  totalStays,
+  lifetimeValue,
+}: {
+  totalStays: number;
+  lifetimeValue: number;
 }) {
   return (
     <div className="stats shadow w-full bg-base-100">

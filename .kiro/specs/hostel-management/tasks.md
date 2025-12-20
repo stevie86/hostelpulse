@@ -7,7 +7,7 @@
   - Set up Vitest and fast-check testing frameworks
   - _Requirements: All_
 
-- [ ]* 1.1 Write property test for date validation
+- [ ]\* 1.1 Write property test for date validation
   - **Property 4: Invalid date range rejection**
   - **Validates: Requirements 2.3**
 
@@ -16,11 +16,11 @@
   - Implement room occupation calculation logic that queries active bookings
   - _Requirements: 1.1, 1.2, 5.1, 5.2, 6.1, 6.2, 6.3, 6.4_
 
-- [ ]* 2.1 Write property test for occupation calculation invariant
+- [ ]\* 2.1 Write property test for occupation calculation invariant
   - **Property 13: Occupation calculation invariant**
   - **Validates: Requirements 6.3**
 
-- [ ]* 2.2 Write property test for occupation reflects active bookings
+- [ ]\* 2.2 Write property test for occupation reflects active bookings
   - **Property 14: Occupation reflects active bookings**
   - **Validates: Requirements 6.1, 6.2, 6.4**
 
@@ -31,15 +31,15 @@
   - Return structured error responses for validation failures
   - _Requirements: 5.1, 5.2, 5.3, 5.4, 5.5_
 
-- [ ]* 3.1 Write property test for room creation with valid data
+- [ ]\* 3.1 Write property test for room creation with valid data
   - **Property 10: Room creation with valid data**
   - **Validates: Requirements 5.2**
 
-- [ ]* 3.2 Write property test for empty room name rejection
+- [ ]\* 3.2 Write property test for empty room name rejection
   - **Property 11: Empty room name rejection**
   - **Validates: Requirements 5.3**
 
-- [ ]* 3.3 Write property test for invalid bed count rejection
+- [ ]\* 3.3 Write property test for invalid bed count rejection
   - **Property 12: Invalid bed count rejection**
   - **Validates: Requirements 5.4**
 
@@ -49,11 +49,11 @@
   - Implement booking sorting by check-in date
   - _Requirements: 2.1, 2.2, 3.1, 3.2, 3.3, 3.4, 4.2_
 
-- [ ]* 4.1 Write property test for bookings sorted by check-in date
+- [ ]\* 4.1 Write property test for bookings sorted by check-in date
   - **Property 6: Bookings sorted by check-in date**
   - **Validates: Requirements 3.1**
 
-- [ ]* 4.2 Write property test for booking status calculation
+- [ ]\* 4.2 Write property test for booking status calculation
   - **Property 8: Booking status calculation**
   - **Validates: Requirements 3.3, 3.4**
 
@@ -65,15 +65,15 @@
   - Return structured error responses for validation failures
   - _Requirements: 2.1, 2.2, 2.3, 2.4, 2.5, 4.2, 4.3, 4.4_
 
-- [ ]* 5.1 Write property test for booking creation with valid data
+- [ ]\* 5.1 Write property test for booking creation with valid data
   - **Property 3: Booking creation with valid data**
   - **Validates: Requirements 2.2**
 
-- [ ]* 5.2 Write property test for fully occupied room rejection
+- [ ]\* 5.2 Write property test for fully occupied room rejection
   - **Property 5: Fully occupied room rejection**
   - **Validates: Requirements 2.4**
 
-- [ ]* 5.3 Write property test for cancellation removes booking and updates occupation
+- [ ]\* 5.3 Write property test for cancellation removes booking and updates occupation
   - **Property 9: Cancellation removes booking and updates occupation**
   - **Validates: Requirements 4.2, 4.4**
 
@@ -85,11 +85,11 @@
   - Style all components with CSS Modules for mobile-first responsive design
   - _Requirements: 7.1, 7.2, 7.4, 7.5_
 
-- [ ]* 6.1 Write property test for touch target minimum size
+- [ ]\* 6.1 Write property test for touch target minimum size
   - **Property 15: Touch target minimum size**
   - **Validates: Requirements 7.1**
 
-- [ ]* 6.2 Write property test for mobile-appropriate input types
+- [ ]\* 6.2 Write property test for mobile-appropriate input types
   - **Property 17: Mobile-appropriate input types**
   - **Validates: Requirements 7.4**
 
@@ -101,11 +101,11 @@
   - Implement form validation with real-time feedback
   - _Requirements: 1.2, 1.4, 5.1_
 
-- [ ]* 7.1 Write property test for room display completeness
+- [ ]\* 7.1 Write property test for room display completeness
   - **Property 1: Room display completeness**
   - **Validates: Requirements 1.2**
 
-- [ ]* 7.2 Write property test for occupation visual indicators
+- [ ]\* 7.2 Write property test for occupation visual indicators
   - **Property 2: Occupation visual indicators**
   - **Validates: Requirements 1.4**
 
@@ -118,7 +118,7 @@
   - Implement form validation with real-time feedback
   - _Requirements: 2.1, 3.2, 4.1_
 
-- [ ]* 8.1 Write property test for booking display completeness
+- [ ]\* 8.1 Write property test for booking display completeness
   - **Property 7: Booking display completeness**
   - **Validates: Requirements 3.2**
 
@@ -130,7 +130,7 @@
   - Implement client-side navigation between pages
   - _Requirements: 1.1, 1.2, 1.3, 1.4, 5.1, 5.2, 5.3, 5.4, 5.5, 8.3, 8.4_
 
-- [ ]* 9.1 Write property test for direct URL navigation
+- [ ]\* 9.1 Write property test for direct URL navigation
   - **Property 19: Direct URL navigation**
   - **Validates: Requirements 8.4**
 
@@ -150,11 +150,11 @@
   - Ensure responsive layout adapts to mobile and tablet screen sizes
   - _Requirements: 7.1, 7.2, 8.1, 8.3_
 
-- [ ]* 11.1 Write property test for responsive layout adaptation
+- [ ]\* 11.1 Write property test for responsive layout adaptation
   - **Property 16: Responsive layout adaptation**
   - **Validates: Requirements 7.2**
 
-- [ ]* 11.2 Write property test for client-side navigation
+- [ ]\* 11.2 Write property test for client-side navigation
   - **Property 18: Client-side navigation**
   - **Validates: Requirements 8.3**
 
