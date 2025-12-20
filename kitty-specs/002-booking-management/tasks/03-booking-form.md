@@ -1,8 +1,15 @@
 ---
+agent: "Gemini-CLI"
+assignee: "User"
+shell_pid: "9660"
 lane: 'done'
 ---
 
 # Task: Booking Form (Wizard)
+
+## Activity Log
+- [2025-12-20 12:10] Implemented BookingForm with Shadcn/DaisyUI hybrid components.
+- [2025-12-20 12:15] Integrated interactive bed selection and real-time availability.
 
 **Phase:** Frontend
 **Objective:** Create new bookings.

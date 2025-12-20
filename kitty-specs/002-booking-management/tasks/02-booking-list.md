@@ -1,8 +1,14 @@
 ---
+agent: "Gemini-CLI"
+assignee: "User"
+shell_pid: "9660"
 lane: 'done'
 ---
 
 # Task: Booking List & Pages
+
+## Activity Log
+- [2025-12-20 12:05] Initial implementation of booking list and associated server action.
 
 **Phase:** Frontend
 **Objective:** View bookings.

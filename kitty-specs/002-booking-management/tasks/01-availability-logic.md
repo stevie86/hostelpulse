@@ -1,8 +1,14 @@
 ---
+agent: "Gemini-CLI"
+assignee: "User"
+shell_pid: "9660"
 lane: 'done'
 ---
 
 # Task: Implement Availability Logic & Create Action
+
+## Activity Log
+- [2025-12-20 12:00] Initial implementation and unit tests for availability logic and create booking action.
 
 **Phase:** Logic & Validation
 **Objective:** The core engine of the PMS. Prevent double bookings.
