@@ -39,6 +39,7 @@ export async function createBooking(
     checkIn: formData.get('checkIn'),
     checkOut: formData.get('checkOut'),
     notes: formData.get('notes'),
+    bedLabel: formData.get('bedLabel'),
   };
 
   const validatedFields = BookingSchema.safeParse(rawData);
@@ -50,21 +51,19 @@ export async function createBooking(
     };
   }
 
-  const { guestId, roomId, checkIn, checkOut, notes } = validatedFields.data;
+  const { guestId, roomId, checkIn, checkOut, notes, bedLabel } = validatedFields.data;
 
   try {
     await prisma.$transaction(async (tx) => {
       // 1. Re-check availability within the transaction
-      const availableBeds = await AvailabilityService.getAvailableBeds(roomId, {
+      const isAvailable = await AvailabilityService.isBedAvailable(roomId, bedLabel, {
         checkIn,
         checkOut,
       });
 
-      if (availableBeds.length === 0) {
-        throw new Error('No beds available for the selected dates.');
+      if (!isAvailable) {
+        throw new Error('The selected bed is no longer available.');
       }
-
-      const bedLabel = availableBeds[0];
 
       // 2. Get room details for pricing
       const room = await tx.room.findUnique({

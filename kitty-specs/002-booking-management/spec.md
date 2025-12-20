@@ -1,4 +1,15 @@
+---
+status: "active"
+agent: "Gemini-CLI"
+assignee: "User"
+shell_pid: "8554"
+created_at: "2025-12-20"
+---
+
 # Feature Specification: Booking Management
+
+## Activity Log
+- [2025-12-20 10:55] Mission initiated. Updated metadata and tasks.md for Booking Management Polish.
 
 ## 1. Executive Summary
 
@@ -47,3 +58,5 @@
 
 - **SC-01:** Concurrency Test: 2 requests for the same last bed at the same millisecond -> Only 1 succeeds.
 - **SC-02:** Booking list loads < 500ms.
+- [2025-12-20 11:15] Implemented interactive Bed Selection in BookingForm. Updated createBooking action to respect specific bed choices. Integrated real-time availability checking via Server Actions.
+- [2025-12-20 11:25] Linting and build checks passed successfully.

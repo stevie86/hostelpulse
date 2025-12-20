@@ -1,7 +1,6 @@
-# Mission Tasks: UI Revamp
-- [x] Environmental Compliance (Directories & Keep files)
-- [x] Initialize Environment (Shadcn + DaisyUI)
-- [x] Create BedPulseCard Component (Hybrid)
-- [x] Implement Dashboard Layout (Glassmorphism)
-- [x] Verify Mobile Responsiveness
-- [ ] Pass Linting & Build Checks
+# Mission Tasks: Booking Management Polish
+- [x] Update Spec Metadata (Priority Zero)
+- [x] Initialize Shadcn Booking Form (Hybrid)
+- [x] Implement Interactive Bed Selection Logic
+- [x] Integrate Real-time Availability Feedback
+- [x] Pass Linting - [ ] Pass Linting & Build Checks Build Checks

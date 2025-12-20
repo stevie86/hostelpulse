@@ -57,6 +57,7 @@ describe('Booking Actions', () => {
     formData.append('checkIn', '2025-01-01');
     formData.append('checkOut', '2025-01-05');
     formData.append('status', 'confirmed');
+    formData.append('bedLabel', '1');
 
     try {
       await createBooking(propertyId, {}, formData);
@@ -98,9 +99,10 @@ describe('Booking Actions', () => {
     formData.append('checkIn', '2025-01-02'); // Overlapping dates
     formData.append('checkOut', '2025-01-04');
     formData.append('status', 'confirmed');
+    formData.append('bedLabel', '1');
 
     const result = await createBooking(propertyId, {}, formData);
 
-    expect(result.message).toBe('No beds available for the selected dates.');
+    expect(result.message).toBe('The selected bed is no longer available.');
   });
 });

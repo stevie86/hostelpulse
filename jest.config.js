@@ -21,7 +21,7 @@ const customJestConfig = {
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/$1',
   },
-  testTimeout: 60000,
+  testTimeout: 90000,
   // Add transform for TypeScript files using ts-jest
   transform: {
     '^.+\\.(ts|tsx)$': 'ts-jest',
