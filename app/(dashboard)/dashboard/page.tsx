@@ -1,10 +1,11 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { getDashboardStats, getDailyActivity } from '@/app/actions/dashboard';
 import { OccupancyCard } from '@/components/dashboard/OccupancyCard';
 import { ActivityList } from '@/components/dashboard/ActivityList';
+import { CheckInForm } from '@/components/bookings/checkin-form';
+import { CheckOutForm } from '@/components/bookings/checkout-form';
 import { DashboardStats } from '@/types/dashboard';
 
 interface BookingDetails {
@@ -12,11 +13,16 @@ interface BookingDetails {
   checkIn: Date;
   checkOut: Date;
   status: string;
+  totalAmount: number;
+  amountPaid: number;
   guest: {
     firstName: string;
     lastName: string;
+    email: string | null;
   } | null;
   beds: {
+    bedLabel: string;
+    pricePerNight: number;
     room: {
       name: string;
     };
@@ -29,16 +35,39 @@ interface DailyActivity {
 }
 
 export default function DashboardPage() {
-  const router = useRouter();
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [activity, setActivity] = useState<DailyActivity>({
     arrivals: [],
     departures: [],
   });
   const [isLoading, setIsLoading] = useState(true);
+  const [cityTaxRate, setCityTaxRate] = useState<number>(2.0);
 
   // Hardcoding propertyId for now, ideally this would come from the user's session or context
   const propertyId = 'clx6r2g740000109o2016x11k'; // Replace with dynamic propertyId
+
+  // Function to refresh dashboard data
+  const refreshData = async () => {
+    try {
+      const statsData = await getDashboardStats(propertyId);
+      const activityData = await getDailyActivity(propertyId);
+      setStats(statsData);
+      setActivity(activityData);
+    } catch (error) {
+      console.error('Failed to refresh dashboard data:', error);
+    }
+  };
+
+  // Function to fetch property data
+  const fetchPropertyData = async () => {
+    try {
+      // For now, we'll hardcode the city tax rate as it's in the schema default
+      // In a real implementation, you'd fetch this from the property
+      setCityTaxRate(2.0);
+    } catch (error) {
+      console.error('Failed to fetch property data:', error);
+    }
+  };
 
   // Initial data fetch
   useEffect(() => {
@@ -47,6 +76,7 @@ export default function DashboardPage() {
       try {
         const statsData = await getDashboardStats(propertyId);
         const activityData = await getDailyActivity(propertyId);
+        await fetchPropertyData();
         setStats(statsData);
         setActivity(activityData);
       } catch (error) {
@@ -61,19 +91,7 @@ export default function DashboardPage() {
   // Polling mechanism
   useEffect(() => {
     const interval = setInterval(() => {
-      // Since we converted the whole page to a client component,
-      // we need to manually re-fetch the data.
-      async function reFetchData() {
-        try {
-          const statsData = await getDashboardStats(propertyId);
-          const activityData = await getDailyActivity(propertyId);
-          setStats(statsData);
-          setActivity(activityData);
-        } catch (error) {
-          console.error('Failed to re-fetch dashboard data:', error);
-        }
-      }
-      reFetchData();
+      refreshData();
     }, 60000); // 60 seconds
 
     return () => clearInterval(interval);
@@ -102,6 +120,23 @@ export default function DashboardPage() {
           arrivals={activity.arrivals}
           departures={activity.departures}
         />
+      </div>
+
+      {/* Check-in/Check-out Operations */}
+      <div className="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="bg-white/50 backdrop-blur-sm rounded-2xl border border-base-300 p-6">
+          <CheckInForm
+            bookings={activity.arrivals}
+            onSuccess={refreshData}
+          />
+        </div>
+        <div className="bg-white/50 backdrop-blur-sm rounded-2xl border border-base-300 p-6">
+          <CheckOutForm
+            bookings={activity.departures}
+            cityTaxRate={cityTaxRate}
+            onSuccess={refreshData}
+          />
+        </div>
       </div>
     </div>
   );

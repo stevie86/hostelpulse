@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+
 import GlassCard from '@/components/ui/glass-card';
 import { Bed, ArrowDownLeft, ArrowUpRight } from 'lucide-react';
 

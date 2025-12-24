@@ -3,8 +3,8 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider = "sqlite"
+  url      = "file:./dev.db"
 }
 
 model Account {
@@ -66,7 +66,7 @@ model Team {
   name            String
   slug            String       @unique
   domain          String?      @unique
-  defaultRole     Role         @default(MEMBER)
+  defaultRole     String         @default("MEMBER")
   billingId       String?
   billingProvider String?
   createdAt       DateTime     @default(now())
@@ -83,7 +83,7 @@ model TeamMember {
   id        String   @id @default(uuid())
   teamId    String
   userId    String
-  role      Role     @default(MEMBER)
+  role      String     @default("MEMBER")
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
   team      Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
@@ -106,6 +106,7 @@ model Property {
   timezone     String    @default("Europe/Lisbon")
   currency     String    @default("EUR")
   taxRate      Float     @default(0.0)
+  cityTaxRate  Float     @default(2.0) // Lisbon city tax per night per person
   checkInTime  String    @default("15:00")
   checkOutTime String    @default("11:00")
   createdAt    DateTime  @default(now())
@@ -142,6 +143,8 @@ model Booking {
   guestId          String?
   checkIn          DateTime
   checkOut         DateTime
+  actualCheckIn    DateTime?    // When guest actually checked in
+  actualCheckOut   DateTime?    // When guest actually checked out
   status           String       @default("confirmed")
   channel          String?
   totalAmount      Int          @default(0)
@@ -242,7 +245,7 @@ model Invitation {
   id             String   @id @default(uuid())
   teamId         String
   email          String?
-  role           Role     @default(MEMBER)
+  role           String     @default("MEMBER")
   token          String   @unique
   expires        DateTime
   invitedBy      String
@@ -312,7 +315,7 @@ model Price {
   currency      String
   serviceId     String
   amount        Int?
-  metadata      Json
+
   type          String
   created       DateTime
   service       Service  @relation(fields: [serviceId], references: [id], onDelete: Cascade)
@@ -351,8 +354,4 @@ model jackson_ttl {
   @@ignore
 }
 
-enum Role {
-  ADMIN
-  OWNER
-  MEMBER
-}
+

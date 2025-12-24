@@ -1,0 +1,13 @@
+# Mission Tasks: Implement Check-in/Check-out System
+- [x] Add city tax fields to Property schema
+- [x] Add actual check-in/out timestamps to Booking schema
+- [x] Implement checkInBooking server action
+- [x] Implement checkOutBooking server action
+- [x] Create CheckInForm component
+- [x] Create CheckOutForm component
+- [x] Update dashboard with arrival/departure widgets
+- [x] Add check-in/check-out routes (integrated into dashboard)
+- [ ] Update booking status UI
+- [ ] Add unit tests for check-in/check-out
+- [ ] Test end-to-end workflows
+- [x] Fix TypeScript errors in existing codebase (removed invalid Prisma mode syntax)

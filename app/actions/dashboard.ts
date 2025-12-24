@@ -137,9 +137,14 @@ export async function getDailyActivity(propertyId: string) {
         select: {
           firstName: true,
           lastName: true,
+          email: true,
         },
       },
       beds: {
+        select: {
+          bedLabel: true,
+          pricePerNight: true,
+        },
         include: {
           room: {
             select: {
@@ -168,9 +173,14 @@ export async function getDailyActivity(propertyId: string) {
         select: {
           firstName: true,
           lastName: true,
+          email: true,
         },
       },
       beds: {
+        select: {
+          bedLabel: true,
+          pricePerNight: true,
+        },
         include: {
           room: {
             select: {
@@ -201,7 +211,7 @@ export async function checkIn(bookingId: string) {
 
     await prisma.booking.update({
       where: { id: bookingId },
-      data: { status: 'checked_in' },
+      data: { status: 'checked_in', actualCheckIn: new Date() },
     });
     revalidatePath('/dashboard');
     return { success: true };
@@ -229,7 +239,7 @@ export async function checkOut(bookingId: string) {
 
     await prisma.booking.update({
       where: { id: bookingId },
-      data: { status: 'checked_out' },
+      data: { status: 'completed', actualCheckOut: new Date() },
     });
     revalidatePath('/dashboard');
     return { success: true };
