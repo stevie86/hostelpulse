@@ -102,3 +102,28 @@ global.File = class MockFile extends Blob {
     return this.arrayBuffer().then((buffer) => Buffer.from(buffer).toString());
   }
 } as any;
+
+// Wait for database to be ready
+import { PrismaClient } from '@prisma/client';
+
+const prisma = new PrismaClient();
+
+async function waitForDb() {
+  let retries = 30; // Increased retries
+  while (retries > 0) {
+    try {
+      await prisma.$queryRaw`SELECT 1`;
+      console.log('Database ready');
+      return;
+    } catch (e) {
+      console.log(`Database not ready, retries left: ${retries}`);
+      retries--;
+      await new Promise((resolve) => setTimeout(resolve, 2000)); // Wait 2 seconds
+    }
+  }
+  throw new Error('Database not ready after retries');
+}
+
+beforeAll(async () => {
+  await waitForDb();
+});
