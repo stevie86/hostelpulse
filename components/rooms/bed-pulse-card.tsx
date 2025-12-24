@@ -21,23 +21,23 @@ export const BedPulseCard: React.FC<BedPulseCardProps> = ({
   };
 
   return (
-    <div className="card bg-white/80 backdrop-blur-md border border-gray-100 shadow-sm transition-all hover:shadow-md">
+    <div className="card bg-base-100 border border-base-300 shadow-sm transition-all hover:shadow-md">
       <div className="card-body p-4 flex flex-row items-center gap-4">
-        <div className="p-3 rounded-full bg-gray-50 text-gray-400">
+        <div className="p-3 rounded-full bg-base-200 text-base-content/70">
           <Bed size={20} />
         </div>
         <div className="flex-1">
           <div className="flex justify-between items-start">
-            <h3 className="font-semibold text-gray-900">Bed {label}</h3>
+            <h3 className="font-semibold text-base-content">Bed {label}</h3>
             <span className={`badge badge-sm ${statusStyles[status]}`}>
               {status}
             </span>
           </div>
           {guestName && (
-            <p className="text-sm text-gray-500 mt-1 truncate">{guestName}</p>
+            <p className="text-sm text-base-content/70 mt-1 truncate">{guestName}</p>
           )}
           {price && (
-            <p className="text-xs font-medium text-gray-400 mt-1">
+            <p className="text-xs font-medium text-base-content/60 mt-1">
               €{(price / 100).toFixed(2)} / night
             </p>
           )}

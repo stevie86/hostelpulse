@@ -64,3 +64,5 @@ Modernize the **welcome page** and shared layout/components to match the provide
 - [2025-12-20 10:10] Created BedPulseCard with hybrid styling (Lucide + DaisyUI).
 - [2025-12-20 10:15] Updated Dashboard layout and Sidebar with glassmorphism and refined spacing.
 - [2025-12-20 10:20] Added mobile toggle and responsive width handling to Sidebar.
+- [2025-12-22] WP05: Fixed contrast issues across UI - replaced low-contrast text-gray-400/500 with text-slate-500/600, updated borders from gray-200 to slate-200/300, fixed opacity-based text colors. All text now meets WCAG AA 4.5:1 contrast ratio.
+- [2025-12-22] WP05: Added theme switcher with custom DaisyUI themes (corporate/night). Converted all hardcoded colors to semantic tokens (base-100, base-200, base-300, base-content). Full light/dark mode support.

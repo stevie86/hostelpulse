@@ -57,3 +57,19 @@ description: 'Work package task list for Beautiful UI Revamp'
 - [x] T007 Fix `jest.setup.ts` and `jest.config.js` to properly support TypeScript and global mocks.
 - [x] T008 Update `__tests__` to correctly mock `verifyPropertyAccess` and `auth()` to bypass RBAC.
 - [x] T009 Stabilize `import.test.ts` timeouts and ensure `dashboard.test.ts` database operations are isolated.
+
+---
+
+## Work Package WP05: Contrast & Accessibility Fixes (Priority: P0)
+
+**Goal**: Fix contrast issues to meet WCAG AA standards and unify the color system.
+**Independent Test**: All text has 4.5:1+ contrast ratio when inspected.
+**Prompt**: `/kitty-specs/012-beautiful-ui-revamp/tasks/WP05-contrast-accessibility.md`
+
+### Included Subtasks
+
+- [x] T010 Update globals.css with improved contrast tokens
+- [x] T011 Fix sidebar.tsx contrast (borders, text opacity, icons)
+- [x] T012 Fix bed-pulse-card.tsx contrast (icon, price text)
+- [x] T013 Fix dashboard layout.tsx contrast (header, backgrounds)
+- [x] T014 Audit and fix remaining low-contrast components

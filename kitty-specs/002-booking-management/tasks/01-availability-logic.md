@@ -8,7 +8,9 @@ lane: 'done'
 # Task: Implement Availability Logic & Create Action
 
 ## Activity Log
-- [2025-12-20 12:00] Initial implementation and unit tests for availability logic and create booking action.
+- timestamp: "2025-12-20 12:00"
+  agent: "Gemini-CLI"
+  action: "Initial implementation and unit tests for availability logic and create booking action."
   shell_pid: "9734"
 
 **Phase:** Logic & Validation

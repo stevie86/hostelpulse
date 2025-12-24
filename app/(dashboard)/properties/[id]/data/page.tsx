@@ -22,7 +22,7 @@ export default async function DataManagementPage({
     <div className="space-y-10 pb-20">
       <header>
         <h1 className="text-3xl font-bold tracking-tight">Data Management</h1>
-        <p className="text-base-content/60 mt-2">
+        <p className="text-base-content/70 mt-2">
           Decoupled utility tools for bulk importing and exporting property
           data.
         </p>
@@ -89,7 +89,7 @@ export default async function DataManagementPage({
               <Download size={24} />
               <div className="text-center">
                 <div className="font-bold">Export Rooms</div>
-                <div className="text-xs opacity-60">Download as CSV</div>
+                <div className="text-xs text-base-content/70">Download as CSV</div>
               </div>
             </a>
 
@@ -101,7 +101,7 @@ export default async function DataManagementPage({
               <Download size={24} />
               <div className="text-center">
                 <div className="font-bold">Export Guests</div>
-                <div className="text-xs opacity-60">Download as CSV</div>
+                <div className="text-xs text-base-content/70">Download as CSV</div>
               </div>
             </a>
 
@@ -113,7 +113,7 @@ export default async function DataManagementPage({
               <Download size={24} />
               <div className="text-center">
                 <div className="font-bold">Export All Bookings</div>
-                <div className="text-xs opacity-60">Full history download</div>
+                <div className="text-xs text-base-content/70">Full history download</div>
               </div>
             </a>
           </div>

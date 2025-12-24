@@ -64,7 +64,7 @@ const ActivityCard = ({
                 ? `${booking.guest.firstName} ${booking.guest.lastName}`
                 : 'Guest'}
             </h4>
-            <div className="flex items-center gap-2 text-xs text-base-content/50 mt-1">
+            <div className="flex items-center gap-2 text-xs text-base-content/60 mt-1">
               <Bed size={12} />
               <span>{booking.beds.map((bed) => bed.room.name).join(', ')}</span>
             </div>
@@ -86,7 +86,7 @@ const ActivityCard = ({
       </div>
 
       <div className="mt-4 pt-4 border-t border-base-200 flex items-center justify-between">
-        <div className="flex items-center gap-1 text-xs text-base-content/40">
+        <div className="flex items-center gap-1 text-xs text-base-content/60">
           <Clock size={12} />
           <span>
             {type === 'arrival' ? 'Check-in from 14:00' : 'Check-out by 11:00'}
@@ -156,7 +156,7 @@ export function ActivityList({ arrivals, departures }: ActivityListProps) {
               <motion.p
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="text-base-content/40 text-center py-10 bg-base-100/50 rounded-3xl border border-dashed border-base-300"
+                className="text-base-content/60 text-center py-10 bg-base-100/50 rounded-3xl border border-dashed border-base-300"
               >
                 No arrivals scheduled for today.
               </motion.p>
@@ -191,7 +191,7 @@ export function ActivityList({ arrivals, departures }: ActivityListProps) {
               <motion.p
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="text-base-content/40 text-center py-10 bg-base-100/50 rounded-3xl border border-dashed border-base-300"
+                className="text-base-content/60 text-center py-10 bg-base-100/50 rounded-3xl border border-dashed border-base-300"
               >
                 No departures scheduled for today.
               </motion.p>

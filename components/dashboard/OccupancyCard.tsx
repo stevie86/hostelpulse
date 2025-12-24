@@ -22,7 +22,7 @@ export function OccupancyCard({
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
       <GlassCard delay={0.1} className="flex flex-col gap-4">
         <div className="flex items-center justify-between">
-          <span className="text-sm font-medium text-base-content/60 uppercase tracking-wider">
+          <span className="text-sm font-medium text-base-content/70 uppercase tracking-wider">
             Occupancy
           </span>
           <div className="p-2 bg-primary/10 text-primary rounded-xl">
@@ -45,7 +45,7 @@ export function OccupancyCard({
 
       <GlassCard delay={0.2} className="flex flex-col gap-4">
         <div className="flex items-center justify-between">
-          <span className="text-sm font-medium text-base-content/60 uppercase tracking-wider">
+          <span className="text-sm font-medium text-base-content/70 uppercase tracking-wider">
             Arrivals Today
           </span>
           <div className="p-2 bg-secondary/10 text-secondary rounded-xl">
@@ -58,14 +58,14 @@ export function OccupancyCard({
             Scheduled
           </span>
         </div>
-        <p className="text-xs text-base-content/50 font-medium">
+        <p className="text-xs text-base-content/60 font-medium">
           Check-ins starting from 14:00
         </p>
       </GlassCard>
 
       <GlassCard delay={0.3} className="flex flex-col gap-4">
         <div className="flex items-center justify-between">
-          <span className="text-sm font-medium text-base-content/60 uppercase tracking-wider">
+          <span className="text-sm font-medium text-base-content/70 uppercase tracking-wider">
             Departures
           </span>
           <div className="p-2 bg-accent/10 text-accent rounded-xl">
@@ -80,7 +80,7 @@ export function OccupancyCard({
             Pending
           </span>
         </div>
-        <p className="text-xs text-base-content/50 font-medium">
+        <p className="text-xs text-base-content/60 font-medium">
           Room cleaning scheduled
         </p>
       </GlassCard>

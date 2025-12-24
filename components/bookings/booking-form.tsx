@@ -149,7 +149,7 @@ export function BookingForm({
 
       {/* Bed Selection - Interactive Layer */}
       {selectedRoomId && (
-        <div className="space-y-4 p-6 bg-gray-50/50 rounded-2xl border border-gray-100 animate-in fade-in slide-in-from-top-4">
+        <div className="space-y-4 p-6 bg-base-200 rounded-2xl border border-base-300 animate-in fade-in slide-in-from-top-4">
           <Label className="text-sm font-semibold flex items-center gap-2 mb-2">
             <CreditCard size={16} className="text-primary" />
             Select a Bed
@@ -158,7 +158,7 @@ export function BookingForm({
           
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
             {isCheckingBeds ? (
-              <div className="col-span-full py-10 flex flex-col items-center justify-center text-gray-400 gap-2">
+              <div className="col-span-full py-10 flex flex-col items-center justify-center text-base-content/60 gap-2">
                 <Loader2 className="animate-spin" />
                 <span className="text-xs">Checking availability...</span>
               </div>
@@ -173,7 +173,7 @@ export function BookingForm({
                 </div>
               ))
             ) : (
-              <div className="col-span-full py-10 text-center text-gray-500 bg-white/50 rounded-xl border border-dashed border-gray-200">
+              <div className="col-span-full py-10 text-center text-base-content/70 bg-base-100 rounded-xl border border-dashed border-base-300">
                 No beds available for these dates.
               </div>
             )}
@@ -212,7 +212,7 @@ export function BookingForm({
             </div>
             <div>
               <p className="text-xs text-primary/60 font-medium uppercase tracking-wider">Estimated Total</p>
-              <p className="text-2xl font-bold text-gray-900">
+              <p className="text-2xl font-bold text-base-content">
                 {new Intl.NumberFormat('en-IE', {
                   style: 'currency',
                   currency: 'EUR',
@@ -221,8 +221,8 @@ export function BookingForm({
             </div>
           </div>
           <div className="text-right">
-            <p className="text-sm font-semibold text-gray-900">{selectedRoom?.name}</p>
-            <p className="text-xs text-gray-500">{format(new Date(dates.checkIn), 'MMM d')} - {format(new Date(dates.checkOut), 'MMM d')}</p>
+            <p className="text-sm font-semibold text-base-content">{selectedRoom?.name}</p>
+            <p className="text-xs text-base-content/70">{format(new Date(dates.checkIn), 'MMM d')} - {format(new Date(dates.checkOut), 'MMM d')}</p>
           </div>
         </div>
       )}

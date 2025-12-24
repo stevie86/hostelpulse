@@ -36,20 +36,41 @@ All feature work is managed by `spec-kitty`.
 - **Install:** `mise run -- pnpm install`
 - **Dev:** `mise run -- pnpm run dev`
 - **Build:** `mise run -- pnpm run build`
-- **Lint:** `mise run -- pnpm run lint`
-- **Format:** `mise run -- pnpm run format`
+- **Lint:** `mise run -- pnpm run lint` / `pnpm run lint:fix`
+- **Format:** `mise run -- pnpm run format` / `pnpm run format:check`
+- **Type-check:** `mise run -- pnpm run type-check`
 - **Test (Unit):** `mise run -- pnpm run test`
+- **Test (Single):** `pnpm test __tests__/actions/auth.test.ts` (Jest pattern matching)
 - **Test (E2E):** `mise run -- pnpm run test:e2e`
+- **Test (All):** `mise run -- pnpm run test:all`
 - **DB Push:** `mise run -- npx prisma db push` (Prototyping)
 - **Spec Kitty:** `mise run -- pnpm run spec -- <command>`
 
 ## 4. Coding Standards
 
-- **Strict Types:** Zero tolerance for `any`. Define Zod schemas in `lib/schemas/`.
-- **Server Actions:** Use for all mutations. Validate inputs with Zod.
-- **UI:** Use Tailwind utility classes and DaisyUI components.
-- **Forms:** `react-hook-form` + `zodResolver`.
-- **Quality Gates:** Refer to `docs/CODE_CRITIC_CODEX.md` and `docs/CODE_REVIEW_CODEX.md` before marking tasks as done.
+### Build/Lint/Test Commands
+
+- **Install:** `mise run -- pnpm install`
+- **Build:** `mise run -- pnpm run build`
+- **Lint:** `mise run -- pnpm run lint` (fix with `pnpm run lint:fix`)
+- **Format:** `mise run -- pnpm run format` (check with `pnpm run format:check`)
+- **Type Check:** `mise run -- pnpm run type-check`
+- **Unit Tests:** `mise run -- pnpm run test` (single test: `pnpm test __tests__/path/to/test.test.ts`)
+- **E2E Tests:** `mise run -- pnpm run test:e2e`
+- **All Tests:** `mise run -- pnpm run test:all`
+
+### Code Style Guidelines
+
+- **Formatting:** Single quotes, trailing comma 'es5', semicolons, 80 char width
+- **Types:** Strict TypeScript, zero `any` usage, define Zod schemas in `lib/schemas/`
+- **Naming:** PascalCase components, camelCase variables/functions, kebab-case files
+- **Imports:** Absolute paths with `@/` alias, group by external/internal
+- **Error Handling:** Try/catch in async functions, descriptive error messages
+- **Server Actions:** Use for all mutations, validate inputs with Zod
+- **Forms:** `react-hook-form` + `zodResolver`, handle server validation errors
+- **UI:** Tailwind utility classes + DaisyUI components, atomic design pattern
+- **Components:** Functional with hooks, explicit return types, prop interfaces
+- **Database:** Filter all queries by `propertyId` (multi-tenancy)
 
 ## 5. SaaS Architecture Patterns
 

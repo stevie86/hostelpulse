@@ -21,6 +21,11 @@ jest.mock('papaparse', () => ({
   parse: jest.fn(),
 }));
 
+// Mock next/cache
+jest.mock('next/cache', () => ({
+  revalidatePath: jest.fn(),
+}));
+
 describe('Import Actions', () => {
   const propertyId = 'prop-test-import';
 
@@ -49,7 +54,11 @@ describe('Import Actions', () => {
         { name: 'Room B', type: 'dormitory', beds: '4', pricePerNight: '2000', maxOccupancy: '4', description: 'Shared Dorm' }
       ];
 
-      (Papa.parse as jest.Mock).mockReturnValue({ data: roomsData, errors: [], meta: {} });
+      (Papa.parse as jest.Mock).mockImplementation((file, config) => {
+        if (config.complete) {
+          config.complete({ data: roomsData, errors: [], meta: {} });
+        }
+      });
 
       const mockFile = new Blob(['dummy'], { type: 'text/csv' }) as File;
       const formData = new FormData();
@@ -57,7 +66,8 @@ describe('Import Actions', () => {
 
       const result = await importRooms(propertyId, {}, formData);
 
-      expect(result.message).toContain('Successfully imported 2 rooms');
+      expect(result.message).toBe('Import complete.');
+      expect(result.results?.successCount).toBe(2);
       
       const createdRooms = await prisma.room.findMany({ where: { propertyId } });
       expect(createdRooms).toHaveLength(2);
@@ -68,14 +78,18 @@ describe('Import Actions', () => {
         { name: 'Invalid Room', type: '', beds: '1', pricePerNight: '5000', maxOccupancy: '1' }
       ];
 
-      (Papa.parse as jest.Mock).mockReturnValue({ data: roomsData, errors: [], meta: {} });
+      (Papa.parse as jest.Mock).mockImplementation((file, config) => {
+        if (config.complete) {
+          config.complete({ data: roomsData, errors: [], meta: {} });
+        }
+      });
 
       const mockFile = new Blob(['dummy'], { type: 'text/csv' }) as File;
       const formData = new FormData();
       formData.append('file', mockFile);
 
       const result = await importRooms(propertyId, {}, formData);
-      expect(result.errors).toBeDefined();
+      expect(result.results?.failCount).toBe(1);
     }, 30000);
   });
 
@@ -90,14 +104,19 @@ describe('Import Actions', () => {
         { guestFirstName: 'New', guestLastName: 'Booking', roomName: 'Import Room 1', checkIn: '2025-02-01', checkOut: '2025-02-05', status: 'confirmed', email: 'new@example.com' }
       ];
 
-      (Papa.parse as jest.Mock).mockReturnValue({ data: bookingsData, errors: [], meta: {} });
+      (Papa.parse as jest.Mock).mockImplementation((file, config) => {
+        if (config.complete) {
+          config.complete({ data: bookingsData, errors: [], meta: {} });
+        }
+      });
 
       const mockFile = new Blob(['dummy'], { type: 'text/csv' }) as File;
       const formData = new FormData();
       formData.append('file', mockFile);
 
       const result = await importBookings(propertyId, {}, formData);
-      expect(result.message).toContain('Successfully imported 1 bookings');
+      expect(result.message).toBe('Import complete.');
+      expect(result.results?.successCount).toBe(1);
 
       const createdBookings = await prisma.booking.findMany({ where: { propertyId } });
       expect(createdBookings).toHaveLength(1);
@@ -130,14 +149,19 @@ describe('Import Actions', () => {
         { guestFirstName: 'Conflict', guestLastName: 'User', roomName: 'Full Room', checkIn: '2025-02-02', checkOut: '2025-02-04', status: 'confirmed', email: 'conflict@example.com' }
       ];
 
-      (Papa.parse as jest.Mock).mockReturnValue({ data: bookingsData, errors: [], meta: {} });
+      (Papa.parse as jest.Mock).mockImplementation((file, config) => {
+        if (config.complete) {
+          config.complete({ data: bookingsData, errors: [], meta: {} });
+        }
+      });
 
       const mockFile = new Blob(['dummy'], { type: 'text/csv' }) as File;
       const formData = new FormData();
       formData.append('file', mockFile);
 
       const result = await importBookings(propertyId, {}, formData);
-      expect(result.message).toContain('0 bookings');
+      expect(result.results?.failCount).toBe(1);
+      expect(result.results?.successCount).toBe(0);
     }, 30000);
   });
 });

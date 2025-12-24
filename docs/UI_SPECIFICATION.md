@@ -11,7 +11,13 @@ The UI is defined by a clean, premium, and functional aesthetic that prioritizes
 - **Glassmorphism (Subtle):** Utilizing translucent overlays for cards and modals to create depth.
 - **Micro-interactions:** Subtle Framer Motion transitions between pages and state changes.
 
-## 2. Visual Palette
+## 2. Target Audience Focus: "The Volunteer Test"
+**Crucial Context:** Our users are often non-technical volunteers or busy owners juggling multiple tasks. The UI must be:
+- **Tablet-First:** Large touch targets (min 44px) for check-in on iPads.
+- **Jargon-Free:** Use "Guest Arrived" instead of "Execute Check-in Workflow".
+- **Zero Training:** The interface should be so obvious that a new volunteer can use it on their first shift without a manual.
+
+## 3. Visual Palette
 | Component | Choice | Hex/Class |
 | :--- | :--- | :--- |
 | **Primary Theme** | Light/Clean | `bg-white` / `bg-gray-50` |

@@ -9,19 +9,19 @@ export default function LoginForm() {
 
   return (
     <form action={dispatch} className="space-y-3">
-      <div className="flex-1 rounded-lg bg-gray-50 px-6 pb-4 pt-8">
-        <h1 className="mb-3 text-2xl font-bold">Please log in to continue.</h1>
+      <div className="flex-1 rounded-lg bg-base-200 px-6 pb-4 pt-8">
+        <h1 className="mb-3 text-2xl font-bold text-base-content">Please log in to continue.</h1>
         <div className="w-full">
           <div>
             <label
-              className="mb-3 mt-5 block text-xs font-medium text-gray-900"
+              className="mb-3 mt-5 block text-xs font-medium text-base-content"
               htmlFor="email"
             >
               Email
             </label>
             <div className="relative">
               <input
-                className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-3 text-sm outline-2 placeholder:text-gray-500"
+                className="peer block w-full rounded-md border border-base-300 bg-base-100 py-[9px] pl-3 text-sm outline-2 placeholder:text-base-content/50 text-base-content"
                 id="email"
                 type="email"
                 name="email"
@@ -33,14 +33,14 @@ export default function LoginForm() {
           </div>
           <div className="mt-4">
             <label
-              className="mb-3 mt-5 block text-xs font-medium text-gray-900"
+              className="mb-3 mt-5 block text-xs font-medium text-base-content"
               htmlFor="password"
             >
               Password
             </label>
             <div className="relative">
               <input
-                className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-3 text-sm outline-2 placeholder:text-gray-500"
+                className="peer block w-full rounded-md border border-base-300 bg-base-100 py-[9px] pl-3 text-sm outline-2 placeholder:text-base-content/50 text-base-content"
                 id="password"
                 type="password"
                 name="password"
@@ -59,10 +59,10 @@ export default function LoginForm() {
           aria-atomic="true"
         >
           {errorMessage && (
-            <p className="text-sm text-red-500">{errorMessage}</p>
+            <p className="text-sm text-error">{errorMessage}</p>
           )}
         </div>
-        <p className="text-xs text-gray-500 mt-4">
+        <p className="text-xs text-base-content/70 mt-4">
           Demo: admin@hostelpulse.com / password
         </p>
       </div>
@@ -75,7 +75,7 @@ function LoginButton() {
 
   return (
     <button
-      className="mt-4 w-full rounded-lg bg-blue-600 py-3 text-sm font-medium text-white transition-colors hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 disabled:opacity-50"
+      className="mt-4 w-full rounded-lg bg-primary py-3 text-sm font-medium text-primary-content transition-colors hover:bg-primary/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:opacity-50"
       aria-disabled={pending}
     >
       Log in
