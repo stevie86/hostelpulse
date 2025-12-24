@@ -23,7 +23,7 @@ export const BedPulseCard: React.FC<BedPulseCardProps> = ({
   return (
     <div className="card bg-base-100 border border-base-300 shadow-sm transition-all hover:shadow-md">
       <div className="card-body p-4 flex flex-row items-center gap-4">
-        <div className="p-3 rounded-full bg-base-200 text-base-content/70">
+        <div className="p-3 rounded-full bg-base-200 text-base-content/85">
           <Bed size={20} />
         </div>
         <div className="flex-1">
@@ -34,10 +34,12 @@ export const BedPulseCard: React.FC<BedPulseCardProps> = ({
             </span>
           </div>
           {guestName && (
-            <p className="text-sm text-base-content/70 mt-1 truncate">{guestName}</p>
+            <p className="text-sm text-base-content/85 mt-1 truncate">
+              {guestName}
+            </p>
           )}
           {price && (
-            <p className="text-xs font-medium text-base-content/60 mt-1">
+            <p className="text-xs font-medium text-base-content/80 mt-1">
               €{(price / 100).toFixed(2)} / night
             </p>
           )}

@@ -23,8 +23,12 @@ export default function DashboardLayout({
           <div className="flex items-center gap-3">
             <ThemeSwitcher />
             <div className="flex flex-col items-end">
-              <span className="text-xs font-semibold text-base-content">Admin User</span>
-              <span className="text-[10px] text-base-content/60">HostelPulse Lisbon</span>
+              <span className="text-xs font-semibold text-base-content">
+                Admin User
+              </span>
+              <span className="text-[10px] text-base-content/80">
+                HostelPulse Lisbon
+              </span>
             </div>
             <div className="avatar placeholder">
               <div className="bg-gradient-to-br from-primary to-secondary text-white rounded-xl w-9 shadow-md flex items-center justify-center font-bold text-sm">

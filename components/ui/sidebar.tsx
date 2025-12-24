@@ -39,10 +39,12 @@ const SidebarItem = ({
         className={`relative flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 cursor-pointer group ${
           active
             ? 'bg-gradient-to-r from-primary to-secondary text-white shadow-lg shadow-primary/25'
-            : 'hover:bg-base-200/80 text-base-content/70 hover:text-base-content'
+            : 'hover:bg-base-200/80 text-base-content/85 hover:text-base-content'
         }`}
       >
-        <div className={`flex-shrink-0 ${active ? 'text-white' : ''}`}>{icon}</div>
+        <div className={`flex-shrink-0 ${active ? 'text-white' : ''}`}>
+          {icon}
+        </div>
         <AnimatePresence mode="wait">
           {!collapsed && (
             <motion.span
@@ -123,8 +125,17 @@ export default function Sidebar() {
 
       <motion.aside
         animate={{
-          width: collapsed ? (typeof window !== 'undefined' && window.innerWidth < 1024 ? 0 : 80) : 280,
-          x: collapsed && typeof window !== 'undefined' && window.innerWidth < 1024 ? -280 : 0
+          width: collapsed
+            ? typeof window !== 'undefined' && window.innerWidth < 1024
+              ? 0
+              : 80
+            : 280,
+          x:
+            collapsed &&
+            typeof window !== 'undefined' &&
+            window.innerWidth < 1024
+              ? -280
+              : 0,
         }}
         className="fixed lg:relative flex flex-col h-screen bg-base-100 border-r border-base-200 transition-all duration-300 z-30"
       >
@@ -143,9 +154,14 @@ export default function Sidebar() {
               className="flex flex-col"
             >
               <h1 className="text-xl font-bold tracking-tight text-base-content">
-                Hostel<span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Pulse</span>
+                Hostel
+                <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+                  Pulse
+                </span>
               </h1>
-              <span className="text-xs text-base-content/50">Property Management</span>
+              <span className="text-xs text-base-content/70">
+                Property Management
+              </span>
             </motion.div>
           )}
         </div>
@@ -153,13 +169,20 @@ export default function Sidebar() {
         {/* Navigation */}
         <nav className="flex-1 px-4 space-y-1 py-4 overflow-y-auto overflow-x-hidden">
           <div className="mb-2 px-3">
-            {!collapsed && <span className="text-xs font-semibold text-base-content/40 uppercase tracking-wider">Menu</span>}
+            {!collapsed && (
+              <span className="text-xs font-semibold text-base-content/60 uppercase tracking-wider">
+                Menu
+              </span>
+            )}
           </div>
           {menuItems.map((item) => (
             <SidebarItem
               key={item.href}
               {...item}
-              active={pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href))}
+              active={
+                pathname === item.href ||
+                (item.href !== '/' && pathname.startsWith(item.href))
+              }
               collapsed={collapsed}
             />
           ))}
@@ -192,9 +215,9 @@ export default function Sidebar() {
           className="absolute -right-3 top-24 w-6 h-6 rounded-full bg-base-100 border border-base-300 flex items-center justify-center shadow-lg hover:shadow-xl z-40 transition-all hover:border-primary"
         >
           {collapsed ? (
-            <ChevronRight size={14} className="text-base-content/70" />
+            <ChevronRight size={14} className="text-base-content/85" />
           ) : (
-            <ChevronLeft size={14} className="text-base-content/70" />
+            <ChevronLeft size={14} className="text-base-content/85" />
           )}
         </motion.button>
       </motion.aside>

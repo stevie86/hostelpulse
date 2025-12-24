@@ -66,8 +66,6 @@ description: 'Work package task list for Beautiful UI Revamp'
 **Independent Test**: All text has 4.5:1+ contrast ratio when inspected.
 **Prompt**: `/kitty-specs/012-beautiful-ui-revamp/tasks/WP05-contrast-accessibility.md`
 
-### Included Subtasks
-
 - [x] T010 Update globals.css with improved contrast tokens
 - [x] T011 Fix sidebar.tsx contrast (borders, text opacity, icons)
 - [x] T012 Fix bed-pulse-card.tsx contrast (icon, price text)
