@@ -14,12 +14,19 @@
       "accepted_from_commit": "e12325486ea3e0f3adff6b8adaaf1731a9c6e7dd",
       "branch": "integration/012-beautiful-ui-revamp",
       "mode": "pr"
+    },
+    {
+      "accepted_at": "2025-12-24T07:55:17Z",
+      "accepted_by": "user",
+      "accepted_from_commit": "2f0a1662bf9e93429f0ee8ca48886ecfd7d1878a",
+      "branch": "integration/012-beautiful-ui-revamp",
+      "mode": "pr"
     }
   ],
   "acceptance_mode": "pr",
-  "accepted_at": "2025-12-20T10:18:00Z",
+  "accepted_at": "2025-12-24T07:55:17Z",
   "accepted_by": "user",
-  "accepted_from_commit": "e12325486ea3e0f3adff6b8adaaf1731a9c6e7dd",
+  "accepted_from_commit": "2f0a1662bf9e93429f0ee8ca48886ecfd7d1878a",
   "created_at": "2025-12-19T17:51:09Z",
   "feature_number": "012",
   "friendly_name": "Beautiful UI Revamp",
