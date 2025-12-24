@@ -1,3 +1,21 @@
+---
+work_package_id: 'WP05'
+title: 'Contrast & Accessibility Fixes'
+lane: 'done'
+subtasks:
+  - 'T010'
+  - 'T011'
+  - 'T012'
+  - 'T013'
+  - 'T014'
+phase: 'Phase 1 - Polish'
+assignee: 'user'
+agent: 'opencode'
+shell_pid: '12345'
+review_status: 'approved'
+reviewed_by: 'user'
+---
+
 # WP05: Contrast & Accessibility Fixes
 
 ## Goal
