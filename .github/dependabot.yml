@@ -22,11 +22,16 @@ updates:
         patterns:
           - 'next'
           - 'eslint-config-next'
-      prisma:
-        patterns:
-          - '@prisma/client'
-          - 'prisma'
+       prisma:
+         patterns:
+           - '@prisma/client'
+           - 'prisma'
   - package-ecosystem: 'github-actions'
     directory: '/'
     schedule:
       interval: 'weekly'
+  - package-ecosystem: 'mise'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+    open-pull-requests-limit: 5

@@ -1,3 +1,30 @@
 [tools]
 node = "20"
-pnpm = "10.26.0"
+pnpm = "10.26.2"
+
+[tasks.install]
+run = "pnpm install"
+
+[tasks.dev]
+run = "pnpm run dev"
+
+[tasks.build]
+run = "pnpm run build"
+
+[tasks.lint]
+run = "pnpm run lint"
+
+[tasks.format]
+run = "pnpm run format"
+
+[tasks.type-check]
+run = "pnpm run type-check"
+
+[tasks.test]
+run = "pnpm run test"
+
+[tasks.db-push]
+run = "npx prisma db push"
+
+[tasks.spec]
+run = "pnpm run spec"
