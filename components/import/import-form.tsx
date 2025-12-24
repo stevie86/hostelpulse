@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { useActionState, useState } from "react";
-import { ImportActionState } from "@/app/actions/import";
+import { useActionState, useState } from 'react';
+import { ImportActionState } from '@/app/actions/import';
 
 interface ImportFormProps {
   propertyId: string;
-  type: "rooms" | "bookings" | "guests";
+  type: 'rooms' | 'bookings' | 'guests';
   action: (
     prevState: ImportActionState,
     formData: FormData
@@ -31,7 +31,7 @@ export function ImportForm({ propertyId, type, action }: ImportFormProps) {
 
   const handleFormAction = (formData: FormData) => {
     if (selectedFile) {
-      formData.append("file", selectedFile);
+      formData.append('file', selectedFile);
     }
     formAction(formData);
   };
@@ -43,13 +43,13 @@ export function ImportForm({ propertyId, type, action }: ImportFormProps) {
       {state.message && (
         <div
           className={`alert ${
-            state.results?.failCount === 0 ? "alert-success" : "alert-warning"
+            state.results?.failCount === 0 ? 'alert-success' : 'alert-warning'
           }`}
         >
           <span>{state.message}</span>
           {state.results && (
             <p className="text-sm">
-              Success: {state.results.successCount}, Failed:{" "}
+              Success: {state.results.successCount}, Failed:{' '}
               {state.results.failCount}
             </p>
           )}
@@ -95,7 +95,9 @@ export function ImportForm({ propertyId, type, action }: ImportFormProps) {
           onChange={handleFileChange}
         />
         <label className="label">
-          <span className="label-text-alt">Upload a CSV file to import {type}.</span>
+          <span className="label-text-alt">
+            Upload a CSV file to import {type}.
+          </span>
         </label>
       </div>
 

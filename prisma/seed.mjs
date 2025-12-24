@@ -30,7 +30,9 @@ async function seedUsers() {
   } catch (ex) {
     if (ex.code === 'P2002' && ex.meta?.target?.includes('email')) {
       console.log(`Admin user ${ADMIN_EMAIL} already exists. Skipping.`);
-      const existingAdmin = await client.user.findUnique({ where: { email: ADMIN_EMAIL } });
+      const existingAdmin = await client.user.findUnique({
+        where: { email: ADMIN_EMAIL },
+      });
       if (existingAdmin) newUsers.push(existingAdmin);
     } else {
       console.error('Error seeding admin user:', ex);
@@ -57,7 +59,7 @@ async function seedTeams(users) {
     if (users.length > 0) {
       await client.teamMember.upsert({
         where: {
-          teamId_userId: { teamId: team.id, userId: users[0].id }
+          teamId_userId: { teamId: team.id, userId: users[0].id },
         },
         update: { role: 'OWNER' },
         create: {
@@ -68,11 +70,12 @@ async function seedTeams(users) {
       });
       console.log(`Linked/updated admin user to ${teamName}`);
     }
-
   } catch (ex) {
     if (ex.code === 'P2002' && ex.meta?.target?.includes('slug')) {
       console.log(`Team ${teamName} already exists. Skipping.`);
-      const existingTeam = await client.team.findUnique({ where: { slug: 'hostelpulse-global' } });
+      const existingTeam = await client.team.findUnique({
+        where: { slug: 'hostelpulse-global' },
+      });
       if (existingTeam) newTeams.push(existingTeam);
     } else {
       console.error('Error seeding team:', ex);
@@ -108,8 +111,12 @@ async function seedProperties(teams) {
     console.log(`Seeded property: ${propertyName}`);
   } catch (ex) {
     if (ex.code === 'P2002' && ex.meta?.target?.includes('teamId')) {
-      console.log(`Property ${propertyName} already exists for this team. Skipping.`);
-      const existingProperty = await client.property.findFirst({ where: { name: propertyName, teamId: teamId } });
+      console.log(
+        `Property ${propertyName} already exists for this team. Skipping.`
+      );
+      const existingProperty = await client.property.findFirst({
+        where: { name: propertyName, teamId: teamId },
+      });
       if (existingProperty) newProperties.push(existingProperty);
     } else {
       console.error('Error seeding property:', ex);
@@ -127,9 +134,30 @@ async function seedRooms(properties) {
   const propertyId = properties[0].id;
 
   const roomData = [
-    { name: 'Dorm 1', type: 'dormitory', beds: 8, pricePerNight: 2500, maxOccupancy: 8, status: 'available' },
-    { name: 'Private A', type: 'private', beds: 2, pricePerNight: 6000, maxOccupancy: 2, status: 'available' },
-    { name: 'Suite Deluxe', type: 'suite', beds: 2, pricePerNight: 10000, maxOccupancy: 2, status: 'available' },
+    {
+      name: 'Dorm 1',
+      type: 'dormitory',
+      beds: 8,
+      pricePerNight: 2500,
+      maxOccupancy: 8,
+      status: 'available',
+    },
+    {
+      name: 'Private A',
+      type: 'private',
+      beds: 2,
+      pricePerNight: 6000,
+      maxOccupancy: 2,
+      status: 'available',
+    },
+    {
+      name: 'Suite Deluxe',
+      type: 'suite',
+      beds: 2,
+      pricePerNight: 10000,
+      maxOccupancy: 2,
+      status: 'available',
+    },
   ];
 
   for (const data of roomData) {
@@ -145,7 +173,9 @@ async function seedRooms(properties) {
     } catch (ex) {
       if (ex.code === 'P2002' && ex.meta?.target?.includes('name')) {
         console.log(`Room ${data.name} already exists. Skipping.`);
-        const existingRoom = await client.room.findFirst({ where: { name: data.name, propertyId } });
+        const existingRoom = await client.room.findFirst({
+          where: { name: data.name, propertyId },
+        });
         if (existingRoom) newRooms.push(existingRoom);
       } else {
         console.error('Error seeding room:', ex);
@@ -192,8 +222,14 @@ async function seedBookings(properties, rooms, guests) {
   }
   const propertyId = properties[0].id;
 
-  const allRooms = rooms.length > 0 ? rooms : await client.room.findMany({ where: { propertyId } });
-  const allGuests = guests.length > 0 ? guests : await client.guest.findMany({ where: { propertyId } });
+  const allRooms =
+    rooms.length > 0
+      ? rooms
+      : await client.room.findMany({ where: { propertyId } });
+  const allGuests =
+    guests.length > 0
+      ? guests
+      : await client.guest.findMany({ where: { propertyId } });
 
   if (allRooms.length === 0 || allGuests.length === 0) {
     console.log('Not enough rooms or guests to create bookings. Skipping.');
@@ -214,8 +250,12 @@ async function seedBookings(properties, rooms, guests) {
           checkIn,
           checkOut,
           status: 'confirmed',
-          totalAmount: randomRoom.pricePerNight * Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24)),
-          amountPaid: randomRoom.pricePerNight * Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24)),
+          totalAmount:
+            randomRoom.pricePerNight *
+            Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24)),
+          amountPaid:
+            randomRoom.pricePerNight *
+            Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24)),
           paymentStatus: 'paid',
           confirmationCode: faker.string.alphanumeric(10).toUpperCase(),
         },

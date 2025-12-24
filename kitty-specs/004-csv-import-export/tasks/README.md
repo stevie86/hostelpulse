@@ -19,26 +19,25 @@ Each WP file **MUST** use YAML frontmatter (not markdown headers):
 
 ```yaml
 ---
-work_package_id: "WP01"
+work_package_id: 'WP01'
 subtasks:
-  - "T001"
-  - "T002"
-title: "Work Package Title"
-phase: "Phase 1 - Setup"
-lane: "planned"
-assignee: ""
-agent: ""
-shell_pid: ""
-review_status: ""
-reviewed_by: ""
+  - 'T001'
+  - 'T002'
+title: 'Work Package Title'
+phase: 'Phase 1 - Setup'
+lane: 'planned'
+assignee: ''
+agent: ''
+shell_pid: ''
+review_status: ''
+reviewed_by: ''
 history:
-  - timestamp: "2025-01-01T00:00:00Z"
-    lane: "planned"
-    agent: "system"
-    shell_pid: ""
-    action: "Prompt generated via /spec-kitty.tasks"
+  - timestamp: '2025-01-01T00:00:00Z'
+    lane: 'planned'
+    agent: 'system'
+    shell_pid: ''
+    action: 'Prompt generated via /spec-kitty.tasks'
 ---
-
 # Work Package Prompt: WP01 – Work Package Title
 
 [Content follows...]
@@ -52,11 +51,13 @@ history:
 ## Moving Between Lanes
 
 Use the helper script:
+
 ```bash
 .kittify/scripts/bash/tasks-move-to-lane.sh <FEATURE> <WPID> <lane>
 ```
 
 Or manually:
+
 1. Move the file to the target lane directory
 2. Update the `lane` field in frontmatter
 3. Add a history entry with timestamp

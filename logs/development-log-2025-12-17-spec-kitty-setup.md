@@ -6,12 +6,14 @@
 To support the "Clean Slate" / "Operation Bedrock" strategy, we have integrated `spec-kitty` to enforce strict focus and prevent scope creep.
 
 **Tooling:**
+
 - **Tool:** `spec-kitty` (Fork of GitHub Spec Kit)
 - **Method:** Installed in a local Python virtual environment (`.venv-speckitty`) managed via `npm run spec`.
 - **Integration:** Configured for Codex and Gemini interaction.
 - **Safety:** Explicitly ignored in `.gitignore` and `.vercelignore` to prevent production pollution.
 
 **Workflow:**
+
 1.  **Define:** `npm run spec -- specify "Feature Name"`
 2.  **Implement:** `npm run spec -- implement`
 3.  **Review:** `npm run spec -- review`
@@ -37,7 +39,8 @@ This tool isolates features into git worktrees, ensuring that when we work on "R
 **Gemini:** Initialized the project with `--ai codex,gemini`. The tool is now live.
 
 **User:** "Populate with all tasks we previously covered."
-**Gemini:** 
+**Gemini:**
+
 - Implemented **Feature 001: Restore Room Management**.
   - Created `RoomForm` (Client Component) and `RoomList` (Server Component).
   - Implemented Server Actions (`create`, `update`, `delete`, `get`).
@@ -50,19 +53,22 @@ This tool isolates features into git worktrees, ensuring that when we work on "R
   - `005-realtime-dashboard` (UI).
 
 **User:** "Constitution in my browser displays only [placeholders]... that's unacceptable."
-**Gemini:** 
+**Gemini:**
+
 - Identified that the dashboard was reading a template file.
 - Discovered a critical issue where the root `.kittify` directory contained broken symlinks pointing to nowhere (`../../../`).
 - **FIX:** Removed broken symlinks, restored real directories (`.kittify/memory`), and populated the actual `constitution.md`.
 - Restarted the dashboard.
 
 **User:** "How would you prioritize the features?"
-**Gemini:** 
+**Gemini:**
+
 - Recommended switching to **Feature 003: Guest Management** immediately.
 - **Reasoning:** Booking Management (002) depends on Guests. Building Guests first allows for a complete Booking implementation without mocking.
 
 **User:** "Can you autonomously run through a sprint2mvp?"
-**Gemini:** 
+**Gemini:**
+
 - **Implemented Feature 003 (Guest Management).**
   - Created Zod Schema & Server Actions (CRUD).
   - Built `GuestList` and `GuestForm` UI.
@@ -76,6 +82,7 @@ This tool isolates features into git worktrees, ensuring that when we work on "R
   - Switched project to strict `pnpm` usage.
 
 **User:** "Protect me from scope-creep... keep @AGENTS.md updated."
-**Gemini:** 
+**Gemini:**
+
 - Updated `AGENTS.md` to reference `docs/SAAS_BUILDER_SETUP.md` but warn against premature optimization (AWS Lambda).
 - Confirmed strict adherence to Vercel/Next.js MVP stack.

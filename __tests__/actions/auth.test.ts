@@ -74,7 +74,9 @@ describe('Auth Server Actions', () => {
       // Mock signIn to throw another AuthError type
       mockSignIn.mockRejectedValueOnce(new MockAuthError('CallbackError'));
 
-      await expect(authenticate(undefined, formData)).rejects.toThrow(MockAuthError);
+      await expect(authenticate(undefined, formData)).rejects.toThrow(
+        MockAuthError
+      );
       expect(mockSignIn).toHaveBeenCalledWith('credentials', formData);
     });
 
@@ -86,7 +88,9 @@ describe('Auth Server Actions', () => {
       // Mock signIn to throw a generic error
       mockSignIn.mockRejectedValueOnce(new Error('Generic error'));
 
-      await expect(authenticate(undefined, formData)).rejects.toThrow('Generic error');
+      await expect(authenticate(undefined, formData)).rejects.toThrow(
+        'Generic error'
+      );
       expect(mockSignIn).toHaveBeenCalledWith('credentials', formData);
     });
   });

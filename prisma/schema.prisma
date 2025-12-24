@@ -7,16 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum Role {
-  ADMIN
-  OWNER
-  MEMBER
-}
-
-
-
-// enum Role removed for SQLite compatibility
-
 model Account {
   id                String  @id @default(uuid())
   userId            String
@@ -30,8 +20,7 @@ model Account {
   scope             String?
   id_token          String?
   session_state     String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
   @@index([userId])
@@ -56,21 +45,20 @@ model VerificationToken {
 }
 
 model User {
-  id                     String    @id @default(uuid())
+  id                     String       @id @default(uuid())
   name                   String
-  email                  String    @unique
+  email                  String       @unique
   emailVerified          DateTime?
   password               String?
   image                  String?
-  createdAt              DateTime  @default(now())
-  updatedAt              DateTime  @default(now())
-  invalid_login_attempts Int       @default(0)
+  createdAt              DateTime     @default(now())
+  updatedAt              DateTime     @default(now())
+  invalid_login_attempts Int          @default(0)
   lockedAt               DateTime?
-
-  teamMembers TeamMember[]
-  accounts    Account[]
-  sessions    Session[]
-  invitations Invitation[]
+  accounts               Account[]
+  invitations            Invitation[]
+  sessions               Session[]
+  teamMembers            TeamMember[]
 }
 
 model Team {
@@ -78,15 +66,15 @@ model Team {
   name            String
   slug            String       @unique
   domain          String?      @unique
-  defaultRole     Role         @default(MEMBER) // Changed back to Role enum
+  defaultRole     Role         @default(MEMBER)
   billingId       String?
   billingProvider String?
   createdAt       DateTime     @default(now())
   updatedAt       DateTime     @default(now())
-  members         TeamMember[]
-  invitations     Invitation[]
   apiKeys         ApiKey[]
+  invitations     Invitation[]
   property        Property?
+  members         TeamMember[]
 
   @@index([billingId])
 }
@@ -95,84 +83,78 @@ model TeamMember {
   id        String   @id @default(uuid())
   teamId    String
   userId    String
-  role      Role     @default(MEMBER) // Changed back to Role enum
+  role      Role     @default(MEMBER)
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
-
-  team Team @relation(fields: [teamId], references: [id], onDelete: Cascade)
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  team      Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([teamId, userId])
   @@index([userId])
 }
 
 model Property {
-  id          String   @id @default(uuid())
-  teamId      String   @unique
-  name        String
-  city        String
-  country     String   @default("Portugal")
-  address     String?
-  phone       String?
-  email       String?
-  website     String?
-  timezone    String   @default("Europe/Lisbon")
-  currency    String   @default("EUR")
-  taxRate     Float    @default(0.0)
-  checkInTime String   @default("15:00")
-  checkOutTime String  @default("11:00")
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @default(now())
-
-  team     Team      @relation(fields: [teamId], references: [id], onDelete: Cascade)
-  rooms    Room[]
-  bookings Booking[]
-  guests   Guest[]
+  id           String    @id @default(uuid())
+  teamId       String    @unique
+  name         String
+  city         String
+  country      String    @default("Portugal")
+  address      String?
+  phone        String?
+  email        String?
+  website      String?
+  timezone     String    @default("Europe/Lisbon")
+  currency     String    @default("EUR")
+  taxRate      Float     @default(0.0)
+  checkInTime  String    @default("15:00")
+  checkOutTime String    @default("11:00")
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @default(now())
+  bookings     Booking[]
+  guests       Guest[]
+  team         Team      @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  rooms        Room[]
 }
 
 model Room {
-  id          String   @id @default(uuid())
-  propertyId  String
-  name        String
-  type        String   // "dormitory", "private", "suite"
-  beds        Int      @default(1)
-  pricePerNight Int    @default(0) // in cents
-  status      String   @default("available") // "available", "maintenance", "closed"
-  description String?
-  amenities   String?  // JSON string: ["wifi", "ac", "bathroom", "balcony"]
-  maxOccupancy Int     @default(1)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @default(now())
-
-  property    Property     @relation(fields: [propertyId], references: [id], onDelete: Cascade)
-  bookingBeds BookingBed[]
+  id            String       @id @default(uuid())
+  propertyId    String
+  name          String
+  type          String
+  beds          Int          @default(1)
+  pricePerNight Int          @default(0)
+  status        String       @default("available")
+  description   String?
+  amenities     String?
+  maxOccupancy  Int          @default(1)
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @default(now())
+  bookingBeds   BookingBed[]
+  property      Property     @relation(fields: [propertyId], references: [id], onDelete: Cascade)
 
   @@index([propertyId])
   @@index([status])
 }
 
 model Booking {
-  id           String    @id @default(uuid())
-  propertyId   String
-  guestId      String?
-  checkIn      DateTime
-  checkOut     DateTime
-  status       String    @default("confirmed") // "pending", "confirmed", "checked_in", "checked_out", "cancelled", "no_show"
-  channel      String?   // "direct", "booking.com", "hostelworld", "walk_in"
-  totalAmount  Int       @default(0) // in cents
-  amountPaid   Int       @default(0) // in cents
-  paymentStatus String   @default("pending") // "pending", "partial", "paid", "refunded"
-  notes        String?
-  rating       Int?      @default(0) // 1-5 star rating
-  feedback     String?   // Guest written feedback
-  confirmationCode String? @unique
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @default(now())
-
-  property Property     @relation(fields: [propertyId], references: [id], onDelete: Cascade)
-  guest    Guest?       @relation(fields: [guestId], references: [id], onDelete: SetNull)
-  beds     BookingBed[]
-  payments Payment[]
+  id               String       @id @default(uuid())
+  propertyId       String
+  guestId          String?
+  checkIn          DateTime
+  checkOut         DateTime
+  status           String       @default("confirmed")
+  channel          String?
+  totalAmount      Int          @default(0)
+  amountPaid       Int          @default(0)
+  paymentStatus    String       @default("pending")
+  notes            String?
+  confirmationCode String?      @unique
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @default(now())
+  guest            Guest?       @relation(fields: [guestId], references: [id])
+  property         Property     @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  beds             BookingBed[]
+  payments         Payment[]
 
   @@index([propertyId])
   @@index([checkIn])
@@ -181,14 +163,13 @@ model Booking {
 }
 
 model BookingBed {
-  id        String   @id @default(uuid())
-  bookingId String
-  roomId    String
-  bedLabel  String
-  pricePerNight Int @default(0) // in cents, can override room price
-
-  booking Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
-  room    Room    @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  id            String  @id @default(uuid())
+  bookingId     String
+  roomId        String
+  bedLabel      String
+  pricePerNight Int     @default(0)
+  booking       Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  room          Room    @relation(fields: [roomId], references: [id], onDelete: Cascade)
 
   @@index([bookingId])
   @@index([roomId])
@@ -199,11 +180,10 @@ model Guest {
   propertyId   String
   firstName    String
   lastName     String
-  currency     String    @default("EUR")
   email        String?
   phone        String?
   nationality  String?
-  documentType String?   // "passport", "id_card", "driving_license"
+  documentType String?
   documentId   String?
   dateOfBirth  DateTime?
   address      String?
@@ -213,9 +193,8 @@ model Guest {
   blacklisted  Boolean   @default(false)
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @default(now())
-
-  property Property  @relation(fields: [propertyId], references: [id], onDelete: Cascade)
-  bookings Booking[]
+  bookings     Booking[]
+  property     Property  @relation(fields: [propertyId], references: [id], onDelete: Cascade)
 
   @@index([propertyId])
   @@index([email])
@@ -223,19 +202,18 @@ model Guest {
 }
 
 model Payment {
-  id            String   @id @default(uuid())
-  bookingId     String
-  amount        Int      // in cents
-  currency      String   @default("EUR")
-  method        String   // "cash", "card", "bank_transfer", "online"
-  status        String   @default("completed") // "pending", "completed", "failed", "refunded"
-  reference     String?  // external payment reference
-  notes         String?
-  processedBy   String?  // user ID who processed the payment
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @default(now())
-
-  booking Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  id          String   @id @default(uuid())
+  bookingId   String
+  amount      Int
+  currency    String   @default("EUR")
+  method      String
+  status      String   @default("completed")
+  reference   String?
+  notes       String?
+  processedBy String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now())
+  booking     Booking  @relation(fields: [bookingId], references: [id], onDelete: Cascade)
 
   @@index([bookingId])
   @@index([status])
@@ -244,14 +222,14 @@ model Payment {
 model Expense {
   id          String   @id @default(uuid())
   propertyId  String
-  category    String   // "maintenance", "supplies", "utilities", "marketing", "other"
+  category    String
   description String
-  amount      Int      // in cents
+  amount      Int
   currency    String   @default("EUR")
   date        DateTime @default(now())
-  receipt     String?  // file path or URL
+  receipt     String?
   notes       String?
-  createdBy   String   // user ID
+  createdBy   String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @default(now())
 
@@ -264,17 +242,16 @@ model Invitation {
   id             String   @id @default(uuid())
   teamId         String
   email          String?
-  role           Role     @default(MEMBER) // Changed back to Role enum
+  role           Role     @default(MEMBER)
   token          String   @unique
   expires        DateTime
   invitedBy      String
   createdAt      DateTime @default(now())
   updatedAt      DateTime @default(now())
   sentViaEmail   Boolean  @default(true)
-  allowedDomains String?  // JSON string array
-
-  user User @relation(fields: [invitedBy], references: [id], onDelete: Cascade)
-  team Team @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  allowedDomains String?
+  user           User     @relation(fields: [invitedBy], references: [id], onDelete: Cascade)
+  team           Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
 
   @@unique([teamId, email])
   @@index([email])
@@ -298,8 +275,7 @@ model ApiKey {
   updatedAt  DateTime  @default(now())
   expiresAt  DateTime?
   lastUsedAt DateTime?
-
-  team Team @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  team       Team      @relation(fields: [teamId], references: [id], onDelete: Cascade)
 
   @@index([teamId])
 }
@@ -321,7 +297,7 @@ model Subscription {
 model Service {
   id          String   @id @default(uuid())
   description String
-  features    String?  // JSON string array
+  features    String?
   image       String
   name        String
   created     DateTime
@@ -336,22 +312,20 @@ model Price {
   currency      String
   serviceId     String
   amount        Int?
-  metadata      Json // Changed back to Json
+  metadata      Json
   type          String
   created       DateTime
-
-  service Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  service       Service  @relation(fields: [serviceId], references: [id], onDelete: Cascade)
 }
 
 model jackson_store {
-  key        String    @id
-  value      String
-  iv         String?
-  tag        String?
-  createdAt  DateTime  @default(now())
-  modifiedAt DateTime?
-  namespace  String?
-
+  key           String          @id
+  value         String
+  iv            String?
+  tag           String?
+  createdAt     DateTime        @default(now())
+  modifiedAt    DateTime?
+  namespace     String?
   jackson_index jackson_index[]
 
   @@index([namespace])
@@ -359,11 +333,10 @@ model jackson_store {
 }
 
 model jackson_index {
-  id       Int    @id @default(autoincrement())
+  id       Int           @id @default(autoincrement())
   key      String
   storeKey String
-
-  store jackson_store @relation(fields: [storeKey], references: [key], onDelete: Cascade, onUpdate: NoAction)
+  store    jackson_store @relation(fields: [storeKey], references: [key], onDelete: Cascade, onUpdate: NoAction)
 
   @@index([key])
   @@index([key, storeKey])
@@ -376,4 +349,10 @@ model jackson_ttl {
 
   @@index([expiresAt])
   @@ignore
+}
+
+enum Role {
+  ADMIN
+  OWNER
+  MEMBER
 }

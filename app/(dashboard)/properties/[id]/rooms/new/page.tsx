@@ -1,6 +1,6 @@
-import { createRoom } from "@/app/actions/rooms";
-import { RoomForm } from "@/components/rooms/room-form";
-import Link from "next/link";
+import { createRoom } from '@/app/actions/rooms';
+import { RoomForm } from '@/components/rooms/room-form';
+import Link from 'next/link';
 
 export default async function NewRoomPage({
   params,

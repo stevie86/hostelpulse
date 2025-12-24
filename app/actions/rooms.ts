@@ -1,11 +1,11 @@
-"use server";
+'use server';
 
-import { auth } from "@/auth";
-import prisma from "@/lib/db";
-import { RoomSchema, RoomFormValues } from "@/lib/schemas/room";
-import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
-import { verifyPropertyAccess } from "@/lib/auth-utils";
+import { auth } from '@/auth';
+import prisma from '@/lib/db';
+import { RoomSchema, RoomFormValues } from '@/lib/schemas/room';
+import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
+import { verifyPropertyAccess } from '@/lib/auth-utils';
 
 export type ActionState = {
   errors?: {
@@ -28,16 +28,16 @@ export async function createRoom(
   try {
     await verifyPropertyAccess(propertyId);
   } catch (error) {
-    return { message: error instanceof Error ? error.message : "Unauthorized" };
+    return { message: error instanceof Error ? error.message : 'Unauthorized' };
   }
 
   const rawData = {
-    name: formData.get("name"),
-    type: formData.get("type"),
-    beds: formData.get("beds"),
-    pricePerNight: formData.get("pricePerNight"),
-    maxOccupancy: formData.get("maxOccupancy"),
-    description: formData.get("description") || undefined,
+    name: formData.get('name'),
+    type: formData.get('type'),
+    beds: formData.get('beds'),
+    pricePerNight: formData.get('pricePerNight'),
+    maxOccupancy: formData.get('maxOccupancy'),
+    description: formData.get('description') || undefined,
   };
 
   const validatedFields = RoomSchema.safeParse(rawData);
@@ -45,11 +45,12 @@ export async function createRoom(
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,
-      message: "Missing Fields. Failed to Create Room.",
+      message: 'Missing Fields. Failed to Create Room.',
     };
   }
 
-  const { name, type, beds, pricePerNight, maxOccupancy, description } = validatedFields.data;
+  const { name, type, beds, pricePerNight, maxOccupancy, description } =
+    validatedFields.data;
 
   try {
     await prisma.room.create({
@@ -61,12 +62,12 @@ export async function createRoom(
         pricePerNight,
         maxOccupancy,
         description: description || null,
-        status: "available",
+        status: 'available',
       },
     });
   } catch (error) {
     return {
-      message: "Database Error: Failed to Create Room.",
+      message: 'Database Error: Failed to Create Room.',
     };
   }
 
@@ -83,16 +84,16 @@ export async function updateRoom(
   try {
     await verifyPropertyAccess(propertyId);
   } catch (error) {
-    return { message: error instanceof Error ? error.message : "Unauthorized" };
+    return { message: error instanceof Error ? error.message : 'Unauthorized' };
   }
 
   const rawData = {
-    name: formData.get("name"),
-    type: formData.get("type"),
-    beds: formData.get("beds"),
-    pricePerNight: formData.get("pricePerNight"),
-    maxOccupancy: formData.get("maxOccupancy"),
-    description: formData.get("description") || undefined,
+    name: formData.get('name'),
+    type: formData.get('type'),
+    beds: formData.get('beds'),
+    pricePerNight: formData.get('pricePerNight'),
+    maxOccupancy: formData.get('maxOccupancy'),
+    description: formData.get('description') || undefined,
   };
 
   const validatedFields = RoomSchema.safeParse(rawData);
@@ -100,11 +101,12 @@ export async function updateRoom(
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,
-      message: "Missing Fields. Failed to Update Room.",
+      message: 'Missing Fields. Failed to Update Room.',
     };
   }
 
-  const { name, type, beds, pricePerNight, maxOccupancy, description } = validatedFields.data;
+  const { name, type, beds, pricePerNight, maxOccupancy, description } =
+    validatedFields.data;
 
   try {
     await prisma.room.update({
@@ -120,7 +122,7 @@ export async function updateRoom(
     });
   } catch (error) {
     return {
-      message: "Database Error: Failed to Update Room.",
+      message: 'Database Error: Failed to Update Room.',
     };
   }
 
@@ -136,13 +138,13 @@ export async function deleteRoom(roomId: string, propertyId: string) {
     where: {
       roomId: roomId,
       booking: {
-        status: { in: ["confirmed", "checked_in"] }
-      }
-    }
+        status: { in: ['confirmed', 'checked_in'] },
+      },
+    },
   });
 
   if (activeBookings > 0) {
-    throw new Error("Cannot delete room with active bookings.");
+    throw new Error('Cannot delete room with active bookings.');
   }
 
   try {
@@ -151,7 +153,7 @@ export async function deleteRoom(roomId: string, propertyId: string) {
     });
     revalidatePath(`/properties/${propertyId}/rooms`);
   } catch (error) {
-    throw new Error("Failed to delete room.");
+    throw new Error('Failed to delete room.');
   }
 }
 
@@ -165,11 +167,11 @@ export async function getRooms(propertyId: string) {
   try {
     const rooms = await prisma.room.findMany({
       where: { propertyId },
-      orderBy: { name: "asc" },
+      orderBy: { name: 'asc' },
     });
     return rooms;
   } catch (error) {
-    console.error("Failed to fetch rooms:", error);
-    throw new Error("Failed to fetch rooms.");
+    console.error('Failed to fetch rooms:', error);
+    throw new Error('Failed to fetch rooms.');
   }
 }

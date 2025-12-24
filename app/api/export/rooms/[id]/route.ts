@@ -15,7 +15,10 @@ type SelectedRoomFields = {
   [key: string]: string | number | boolean | Date | null | undefined; // Add index signature
 };
 
-export async function GET(request: NextRequest, props: { params: Promise<{ id: string }> }) {
+export async function GET(
+  request: NextRequest,
+  props: { params: Promise<{ id: string }> }
+) {
   const params = await props.params;
   const propertyId = params.id;
 
@@ -32,16 +35,25 @@ export async function GET(request: NextRequest, props: { params: Promise<{ id: s
       },
     });
 
-    const headers = ['name', 'type', 'beds', 'pricePerNight', 'maxOccupancy', 'status'];
+    const headers = [
+      'name',
+      'type',
+      'beds',
+      'pricePerNight',
+      'maxOccupancy',
+      'status',
+    ];
     const csvRows = [
       headers.join(','),
       ...rooms.map((room: SelectedRoomFields) =>
-        headers.map(field => {
-          if (field === 'pricePerNight') {
-            return JSON.stringify((room[field] / 100).toFixed(2)); // Convert cents to readable format
-          }
-          return JSON.stringify(room[field] || '');
-        }).join(',')
+        headers
+          .map((field) => {
+            if (field === 'pricePerNight') {
+              return JSON.stringify((room[field] / 100).toFixed(2)); // Convert cents to readable format
+            }
+            return JSON.stringify(room[field] || '');
+          })
+          .join(',')
       ),
     ];
 

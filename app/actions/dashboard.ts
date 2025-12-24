@@ -1,15 +1,17 @@
-"use server";
+'use server';
 
-import { auth } from "@/auth";
-import prisma from "@/lib/db"; // Corrected: default import
-import { startOfDay, endOfDay } from "date-fns";
+import { auth } from '@/auth';
+import prisma from '@/lib/db'; // Corrected: default import
+import { startOfDay, endOfDay } from 'date-fns';
 import { toZonedTime, fromZonedTime } from 'date-fns-tz';
 import { revalidatePath } from 'next/cache';
-import { verifyPropertyAccess } from "@/lib/auth-utils";
+import { verifyPropertyAccess } from '@/lib/auth-utils';
 
-import { DashboardStats } from "@/types/dashboard";
+import { DashboardStats } from '@/types/dashboard';
 
-export async function getDashboardStats(propertyId: string): Promise<DashboardStats | null> {
+export async function getDashboardStats(
+  propertyId: string
+): Promise<DashboardStats | null> {
   try {
     await verifyPropertyAccess(propertyId);
   } catch (error) {
@@ -52,7 +54,8 @@ export async function getDashboardStats(propertyId: string): Promise<DashboardSt
     where: { propertyId },
   });
 
-  const occupancyPercentage = totalBedCount > 0 ? Math.round((occupiedBeds / totalBedCount) * 100) : 0;
+  const occupancyPercentage =
+    totalBedCount > 0 ? Math.round((occupiedBeds / totalBedCount) * 100) : 0;
 
   // Arrivals: Count of bookings checking in today in the property's timezone
   const arrivalsCount = await prisma.booking.count({
@@ -204,7 +207,9 @@ export async function checkIn(bookingId: string) {
     return { success: true };
   } catch (error) {
     console.error('Error checking in booking:', error);
-    throw new Error(error instanceof Error ? error.message : 'Failed to check in booking.');
+    throw new Error(
+      error instanceof Error ? error.message : 'Failed to check in booking.'
+    );
   }
 }
 
@@ -230,6 +235,8 @@ export async function checkOut(bookingId: string) {
     return { success: true };
   } catch (error) {
     console.error('Error checking out booking:', error);
-    throw new Error(error instanceof Error ? error.message : 'Failed to check out booking.');
+    throw new Error(
+      error instanceof Error ? error.message : 'Failed to check out booking.'
+    );
   }
 }

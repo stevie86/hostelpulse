@@ -1,6 +1,6 @@
-import { getDailyActivity } from "@/app/actions/dashboard";
-import Link from "next/link";
-import { CheckInButton, CheckOutButton } from "./activity-buttons";
+import { getDailyActivity } from '@/app/actions/dashboard';
+import Link from 'next/link';
+import { CheckInButton, CheckOutButton } from './activity-buttons';
 
 export async function DailyActivity({ propertyId }: { propertyId: string }) {
   const { arrivals, departures } = await getDailyActivity(propertyId);
@@ -18,8 +18,9 @@ export async function DailyActivity({ propertyId }: { propertyId: string }) {
                 <li key={booking.id}>
                   <div className="flex justify-between items-center">
                     <span>
-                      Guest: {booking.guest?.firstName} {booking.guest?.lastName} <br />
-                      Room: {booking.beds[0]?.room.name || "N/A"}
+                      Guest: {booking.guest?.firstName}{' '}
+                      {booking.guest?.lastName} <br />
+                      Room: {booking.beds[0]?.room.name || 'N/A'}
                     </span>
                     <CheckInButton bookingId={booking.id} />
                   </div>
@@ -41,8 +42,9 @@ export async function DailyActivity({ propertyId }: { propertyId: string }) {
                 <li key={booking.id}>
                   <div className="flex justify-between items-center">
                     <span>
-                      Guest: {booking.guest?.firstName} {booking.guest?.lastName} <br />
-                      Room: {booking.beds[0]?.room.name || "N/A"}
+                      Guest: {booking.guest?.firstName}{' '}
+                      {booking.guest?.lastName} <br />
+                      Room: {booking.beds[0]?.room.name || 'N/A'}
                     </span>
                     <CheckOutButton bookingId={booking.id} />
                   </div>

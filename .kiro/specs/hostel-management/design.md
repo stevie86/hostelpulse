@@ -73,34 +73,34 @@ app/
 #### Prisma Client Singleton (`lib/db.ts`)
 
 ```typescript
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient } from '@prisma/client';
 
 const globalForPrisma = globalThis as unknown as {
-  prisma: PrismaClient | undefined
-}
+  prisma: PrismaClient | undefined;
+};
 
-export const prisma = globalForPrisma.prisma ?? new PrismaClient()
+export const prisma = globalForPrisma.prisma ?? new PrismaClient();
 
-if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma
+if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
 ```
 
 #### Room Queries (`lib/queries/rooms.ts`)
 
 ```typescript
-export async function getRooms(propertyId: string)
-export async function getRoomById(id: string)
-export async function createRoom(data: CreateRoomInput)
-export async function getRoomOccupation(roomId: string, date: Date)
+export async function getRooms(propertyId: string);
+export async function getRoomById(id: string);
+export async function createRoom(data: CreateRoomInput);
+export async function getRoomOccupation(roomId: string, date: Date);
 ```
 
 #### Booking Queries (`lib/queries/bookings.ts`)
 
 ```typescript
-export async function getBookings(propertyId: string, filters?: BookingFilters)
-export async function getBookingById(id: string)
-export async function createBooking(data: CreateBookingInput)
-export async function cancelBooking(id: string)
-export async function getActiveBookingsForRoom(roomId: string, date: Date)
+export async function getBookings(propertyId: string, filters?: BookingFilters);
+export async function getBookingById(id: string);
+export async function createBooking(data: CreateBookingInput);
+export async function cancelBooking(id: string);
+export async function getActiveBookingsForRoom(roomId: string, date: Date);
 ```
 
 ### Server Actions
@@ -108,19 +108,19 @@ export async function getActiveBookingsForRoom(roomId: string, date: Date)
 #### Room Actions (`app/actions/rooms.ts`)
 
 ```typescript
-'use server'
+'use server';
 
-export async function createRoomAction(formData: FormData)
-export async function updateRoomAction(id: string, formData: FormData)
+export async function createRoomAction(formData: FormData);
+export async function updateRoomAction(id: string, formData: FormData);
 ```
 
 #### Booking Actions (`app/actions/bookings.ts`)
 
 ```typescript
-'use server'
+'use server';
 
-export async function createBookingAction(formData: FormData)
-export async function cancelBookingAction(id: string)
+export async function createBookingAction(formData: FormData);
+export async function cancelBookingAction(id: string);
 ```
 
 ### UI Components
@@ -155,10 +155,10 @@ The existing Prisma `Room` model is used with computed occupation data:
 
 ```typescript
 type RoomWithOccupation = Room & {
-  occupiedBeds: number
-  availableBeds: number
-  occupationRate: number
-}
+  occupiedBeds: number;
+  availableBeds: number;
+  occupationRate: number;
+};
 ```
 
 ### Extended Booking Model
@@ -167,22 +167,22 @@ The existing Prisma `Booking` model is used with related data:
 
 ```typescript
 type BookingWithDetails = Booking & {
-  guest: Guest | null
-  beds: (BookingBed & { room: Room })[]
-  property: Property
-}
+  guest: Guest | null;
+  beds: (BookingBed & { room: Room })[];
+  property: Property;
+};
 ```
 
 ### Booking Status Enum
 
 ```typescript
-type BookingStatus = 
+type BookingStatus =
   | 'pending'
   | 'confirmed'
   | 'checked_in'
   | 'checked_out'
   | 'cancelled'
-  | 'no_show'
+  | 'no_show';
 ```
 
 ## Data Models
@@ -193,102 +193,120 @@ The system calculates room occupation dynamically based on active bookings:
 
 ```typescript
 interface OccupationCalculation {
-  roomId: string
-  totalBeds: number
-  occupiedBeds: number
-  availableBeds: number
-  occupationRate: number // 0-100
-  activeBookings: Booking[]
+  roomId: string;
+  totalBeds: number;
+  occupiedBeds: number;
+  availableBeds: number;
+  occupationRate: number; // 0-100
+  activeBookings: Booking[];
 }
 ```
 
 **Calculation Logic:**
+
 1. Query all bookings where `checkIn <= currentDate` AND `checkOut > currentDate` AND `status IN ('confirmed', 'checked_in')`
 2. For each booking, count the number of `BookingBed` records associated with the room
 3. Sum the bed counts to get `occupiedBeds`
 4. Calculate `availableBeds = totalBeds - occupiedBeds`
 5. Calculate `occupationRate = (occupiedBeds / totalBeds) * 100`
 
-
-
 ## Correctness Properties
 
-*A property is a characteristic or behavior that should hold true across all valid executions of a system—essentially, a formal statement about what the system should do. Properties serve as the bridge between human-readable specifications and machine-verifiable correctness guarantees.*
+_A property is a characteristic or behavior that should hold true across all valid executions of a system—essentially, a formal statement about what the system should do. Properties serve as the bridge between human-readable specifications and machine-verifiable correctness guarantees._
 
 ### Property 1: Room display completeness
-*For any* room, when rendered in the UI, the display should contain the room name, total bed count, and occupied bed count.
+
+_For any_ room, when rendered in the UI, the display should contain the room name, total bed count, and occupied bed count.
 **Validates: Requirements 1.2**
 
 ### Property 2: Occupation visual indicators
-*For any* room, the visual indicator should be green when availableBeds > 0 and occupiedBeds == 0, yellow when 0 < occupiedBeds < totalBeds, and red when occupiedBeds == totalBeds.
+
+_For any_ room, the visual indicator should be green when availableBeds > 0 and occupiedBeds == 0, yellow when 0 < occupiedBeds < totalBeds, and red when occupiedBeds == totalBeds.
 **Validates: Requirements 1.4**
 
 ### Property 3: Booking creation with valid data
-*For any* valid booking data (guest name, room, check-in date before check-out date, room not fully occupied), creating the booking should result in the booking existing in the database and the room's occupation count being updated.
+
+_For any_ valid booking data (guest name, room, check-in date before check-out date, room not fully occupied), creating the booking should result in the booking existing in the database and the room's occupation count being updated.
 **Validates: Requirements 2.2**
 
 ### Property 4: Invalid date range rejection
-*For any* booking where check-out date is before or equal to check-in date, the creation should be rejected with an error.
+
+_For any_ booking where check-out date is before or equal to check-in date, the creation should be rejected with an error.
 **Validates: Requirements 2.3**
 
 ### Property 5: Fully occupied room rejection
-*For any* room where occupiedBeds equals totalBeds, attempting to create a new booking should be rejected with an error.
+
+_For any_ room where occupiedBeds equals totalBeds, attempting to create a new booking should be rejected with an error.
 **Validates: Requirements 2.4**
 
 ### Property 6: Bookings sorted by check-in date
-*For any* list of bookings, they should be ordered such that for each adjacent pair, the earlier booking's check-in date is less than or equal to the later booking's check-in date.
+
+_For any_ list of bookings, they should be ordered such that for each adjacent pair, the earlier booking's check-in date is less than or equal to the later booking's check-in date.
 **Validates: Requirements 3.1**
 
 ### Property 7: Booking display completeness
-*For any* booking, when rendered in the UI, the display should contain guest name, room name, check-in date, check-out date, and booking status.
+
+_For any_ booking, when rendered in the UI, the display should contain guest name, room name, check-in date, check-out date, and booking status.
 **Validates: Requirements 3.2**
 
 ### Property 8: Booking status calculation
-*For any* booking, if the current date equals the check-in date, the status should be 'checked_in' or 'confirmed'; if the current date is after the check-out date, the status should be 'checked_out' or 'completed'.
+
+_For any_ booking, if the current date equals the check-in date, the status should be 'checked_in' or 'confirmed'; if the current date is after the check-out date, the status should be 'checked_out' or 'completed'.
 **Validates: Requirements 3.3, 3.4**
 
 ### Property 9: Cancellation removes booking and updates occupation
-*For any* booking, cancelling it should result in the booking status being 'cancelled' and the room's occupied bed count being recalculated to exclude that booking's beds.
+
+_For any_ booking, cancelling it should result in the booking status being 'cancelled' and the room's occupied bed count being recalculated to exclude that booking's beds.
 **Validates: Requirements 4.2, 4.4**
 
 ### Property 10: Room creation with valid data
-*For any* valid room data (non-empty name, positive bed count), creating the room should result in the room existing in the database with status 'available' and occupiedBeds equal to 0.
+
+_For any_ valid room data (non-empty name, positive bed count), creating the room should result in the room existing in the database with status 'available' and occupiedBeds equal to 0.
 **Validates: Requirements 5.2**
 
 ### Property 11: Empty room name rejection
-*For any* room name that is empty or contains only whitespace, room creation should be rejected with an error.
+
+_For any_ room name that is empty or contains only whitespace, room creation should be rejected with an error.
 **Validates: Requirements 5.3**
 
 ### Property 12: Invalid bed count rejection
-*For any* room with bed count less than or equal to zero, room creation should be rejected with an error.
+
+_For any_ room with bed count less than or equal to zero, room creation should be rejected with an error.
 **Validates: Requirements 5.4**
 
 ### Property 13: Occupation calculation invariant
-*For any* room at any point in time, the occupied bed count should never exceed the total bed count (occupiedBeds <= totalBeds).
+
+_For any_ room at any point in time, the occupied bed count should never exceed the total bed count (occupiedBeds <= totalBeds).
 **Validates: Requirements 6.3**
 
 ### Property 14: Occupation reflects active bookings
-*For any* room and date, the occupied bed count should equal the sum of beds from all bookings where check-in <= date < check-out and status is 'confirmed' or 'checked_in'.
+
+_For any_ room and date, the occupied bed count should equal the sum of beds from all bookings where check-in <= date < check-out and status is 'confirmed' or 'checked_in'.
 **Validates: Requirements 6.1, 6.2, 6.4**
 
 ### Property 15: Touch target minimum size
-*For any* interactive UI element (button, link, input), the touch target should be at least 44x44 pixels.
+
+_For any_ interactive UI element (button, link, input), the touch target should be at least 44x44 pixels.
 **Validates: Requirements 7.1**
 
 ### Property 16: Responsive layout adaptation
-*For any* viewport width, the layout should adapt appropriately: single column for widths < 768px, multi-column for widths >= 768px.
+
+_For any_ viewport width, the layout should adapt appropriately: single column for widths < 768px, multi-column for widths >= 768px.
 **Validates: Requirements 7.2**
 
 ### Property 17: Mobile-appropriate input types
-*For any* form input, the HTML input type should match the expected data: type="email" for email fields, type="tel" for phone fields, type="date" for date fields.
+
+_For any_ form input, the HTML input type should match the expected data: type="email" for email fields, type="tel" for phone fields, type="date" for date fields.
 **Validates: Requirements 7.4**
 
 ### Property 18: Client-side navigation
-*For any* navigation between views within the app, the page should not perform a full reload (no browser refresh).
+
+_For any_ navigation between views within the app, the page should not perform a full reload (no browser refresh).
 **Validates: Requirements 8.3**
 
 ### Property 19: Direct URL navigation
-*For any* valid route URL, navigating directly to that URL should load the correct view without requiring navigation from the home page.
+
+_For any_ valid route URL, navigating directly to that URL should load the correct view without requiring navigation from the home page.
 **Validates: Requirements 8.4**
 
 ## Error Handling
@@ -296,12 +314,14 @@ interface OccupationCalculation {
 ### Validation Errors
 
 **Client-Side Validation:**
+
 - Form inputs validated before submission
 - Real-time feedback for invalid inputs
 - Clear error messages displayed inline with form fields
 - Submit button disabled until form is valid
 
 **Server-Side Validation:**
+
 - All inputs re-validated on the server
 - Business rule validation (e.g., room capacity, date conflicts)
 - Return structured error responses with field-specific messages
@@ -310,11 +330,13 @@ interface OccupationCalculation {
 ### Database Errors
 
 **Connection Errors:**
+
 - Retry logic with exponential backoff
 - Graceful degradation with cached data when possible
 - User-friendly error message: "Unable to connect. Please try again."
 
 **Constraint Violations:**
+
 - Unique constraint violations return specific error messages
 - Foreign key violations handled gracefully
 - Transaction rollback on any error
@@ -352,11 +374,13 @@ The system will use **Vitest** as the testing framework for unit tests. Unit tes
 The system will use **fast-check** as the property-based testing library for TypeScript. Property-based tests will verify universal properties across many randomly generated inputs.
 
 **Configuration:**
+
 - Each property test will run a minimum of 100 iterations
 - Tests will use custom generators for domain-specific types (rooms, bookings, dates)
 - Each property test will include a comment tag referencing the design document property
 
 **Property Test Format:**
+
 ```typescript
 // Feature: hostel-management, Property 3: Booking creation with valid data
 test('creating valid booking persists and updates occupation', () => {
@@ -365,11 +389,12 @@ test('creating valid booking persists and updates occupation', () => {
       // Test implementation
     }),
     { numRuns: 100 }
-  )
-})
+  );
+});
 ```
 
 **Key Properties to Test:**
+
 - Occupation calculation correctness (Properties 13, 14)
 - Booking validation rules (Properties 4, 5)
 - Room validation rules (Properties 11, 12)
@@ -394,22 +419,26 @@ Custom generators for property-based testing:
 const validRoomArbitrary = fc.record({
   name: fc.string({ minLength: 1 }),
   beds: fc.integer({ min: 1, max: 20 }),
-  propertyId: fc.uuid()
-})
+  propertyId: fc.uuid(),
+});
 
 // Generate valid booking data
-const validBookingArbitrary = fc.record({
-  guestName: fc.string({ minLength: 1 }),
-  roomId: fc.uuid(),
-  checkIn: fc.date(),
-  checkOut: fc.date()
-}).filter(b => b.checkOut > b.checkIn)
+const validBookingArbitrary = fc
+  .record({
+    guestName: fc.string({ minLength: 1 }),
+    roomId: fc.uuid(),
+    checkIn: fc.date(),
+    checkOut: fc.date(),
+  })
+  .filter((b) => b.checkOut > b.checkIn);
 
 // Generate invalid date ranges
-const invalidDateRangeArbitrary = fc.record({
-  checkIn: fc.date(),
-  checkOut: fc.date()
-}).filter(b => b.checkOut <= b.checkIn)
+const invalidDateRangeArbitrary = fc
+  .record({
+    checkIn: fc.date(),
+    checkOut: fc.date(),
+  })
+  .filter((b) => b.checkOut <= b.checkIn);
 ```
 
 ## Performance Considerations

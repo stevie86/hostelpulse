@@ -1,4 +1,4 @@
-import { getDashboardStats } from "@/app/actions/dashboard";
+import { getDashboardStats } from '@/app/actions/dashboard';
 
 export async function DashboardCards({ propertyId }: { propertyId: string }) {
   const stats = await getDashboardStats(propertyId);
@@ -7,10 +7,10 @@ export async function DashboardCards({ propertyId }: { propertyId: string }) {
 
   const occupancyColor =
     stats.currentOccupancyPercentage > 80
-      ? "text-error"
+      ? 'text-error'
       : stats.currentOccupancyPercentage > 50
-      ? "text-warning"
-      : "text-success";
+        ? 'text-warning'
+        : 'text-success';
 
   return (
     <div className="stats shadow w-full stats-vertical lg:stats-horizontal">

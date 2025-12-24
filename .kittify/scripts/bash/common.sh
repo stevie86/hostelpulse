@@ -15,6 +15,17 @@ get_repo_root() {
     fi
 }
 
+# Get the current worktree root (i.e., the repo root for *this* checkout).
+# In git worktrees, this differs from get_repo_root(), which intentionally
+# resolves to the primary repo root (git common dir/..).
+get_worktree_root() {
+    if git rev-parse --show-toplevel >/dev/null 2>&1; then
+        git rev-parse --show-toplevel
+    else
+        get_repo_root
+    fi
+}
+
 # Get current branch, with fallback for non-git repositories
 get_current_branch() {
     # First check if SPECIFY_FEATURE environment variable is set
@@ -344,6 +355,7 @@ PY
 
 get_feature_paths() {
     local repo_root=$(get_repo_root)
+    local worktree_root=$(get_worktree_root)
     local current_branch=$(get_current_branch)
     local has_git_repo="false"
 
@@ -351,13 +363,14 @@ get_feature_paths() {
         has_git_repo="true"
     fi
 
-    local feature_dir=$(get_feature_dir "$repo_root" "$current_branch")
+    local feature_dir=$(get_feature_dir "$worktree_root" "$current_branch")
     local mission_exports
     # Pass feature_dir to enable per-feature mission lookup from meta.json
     mission_exports=$(get_mission_exports "$repo_root" "$feature_dir") || return 1
     
     cat <<EOF
 REPO_ROOT='$repo_root'
+WORKTREE_ROOT='$worktree_root'
 CURRENT_BRANCH='$current_branch'
 HAS_GIT='$has_git_repo'
 FEATURE_DIR='$feature_dir'
@@ -439,6 +452,8 @@ output_json() {
 validate_feature_exists() {
     local feature_slug="$1"
     local repo_root="${2:-$(get_repo_root)}"
+    local worktree_root
+    worktree_root="$(get_worktree_root)"
 
     if [[ -z "$feature_slug" ]]; then
         show_log "❌ ERROR: Feature slug is required"
@@ -446,13 +461,15 @@ validate_feature_exists() {
     fi
 
     local feature_dir="$repo_root/kitty-specs/$feature_slug"
+    local worktree_feature_dir="$worktree_root/kitty-specs/$feature_slug"
     local worktree_dir="$repo_root/.worktrees/$feature_slug"
 
-    if [[ ! -d "$feature_dir" ]] && [[ ! -d "$worktree_dir" ]]; then
+    if [[ ! -d "$feature_dir" ]] && [[ ! -d "$worktree_feature_dir" ]] && [[ ! -d "$worktree_dir" ]]; then
         show_log "❌ ERROR: Feature '$feature_slug' not found"
         show_log ""
         show_log "Checked locations:"
         show_log "  - $feature_dir"
+        show_log "  - $worktree_feature_dir"
         show_log "  - $worktree_dir"
         show_log ""
         show_log "💡 TIP: Run 'spec-kitty dashboard' to see all features"

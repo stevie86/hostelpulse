@@ -1,6 +1,6 @@
-import { getBookings, cancelBooking } from "@/app/actions/bookings";
-import Link from "next/link";
-import { CancelBookingButton } from "./cancel-booking-button";
+import { getBookings, cancelBooking } from '@/app/actions/bookings';
+import Link from 'next/link';
+import { CancelBookingButton } from './cancel-booking-button';
 
 export async function BookingList({ propertyId }: { propertyId: string }) {
   const bookings = await getBookings(propertyId);
@@ -37,8 +37,8 @@ export async function BookingList({ propertyId }: { propertyId: string }) {
           {bookings.map((booking) => {
             const guestName = booking.guest
               ? `${booking.guest.firstName} ${booking.guest.lastName}`
-              : "Unknown Guest";
-            const roomName = booking.beds[0]?.room.name || "Unassigned";
+              : 'Unknown Guest';
+            const roomName = booking.beds[0]?.room.name || 'Unassigned';
 
             return (
               <tr key={booking.id}>
@@ -49,24 +49,24 @@ export async function BookingList({ propertyId }: { propertyId: string }) {
                 <td>
                   <span
                     className={`badge ${
-                      booking.status === "confirmed"
-                        ? "badge-success"
-                        : booking.status === "cancelled"
-                        ? "badge-ghost"
-                        : "badge-warning"
+                      booking.status === 'confirmed'
+                        ? 'badge-success'
+                        : booking.status === 'cancelled'
+                          ? 'badge-ghost'
+                          : 'badge-warning'
                     }`}
                   >
                     {booking.status}
                   </span>
                 </td>
                 <td>
-                  {new Intl.NumberFormat("en-IE", {
-                    style: "currency",
-                    currency: "EUR",
+                  {new Intl.NumberFormat('en-IE', {
+                    style: 'currency',
+                    currency: 'EUR',
                   }).format(booking.totalAmount / 100)}
                 </td>
                 <td>
-                  {booking.status !== "cancelled" && (
+                  {booking.status !== 'cancelled' && (
                     <CancelBookingButton
                       bookingId={booking.id}
                       propertyId={propertyId}

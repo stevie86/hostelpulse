@@ -3,6 +3,7 @@
 ## Entities
 
 ### DemoRoom
+
 - name: string
 - type: string
 - beds: number
@@ -11,6 +12,7 @@
 - status: string (available, occupied, maintenance)
 
 ### DemoBooking
+
 - guestName: string
 - roomName: string
 - checkIn: string

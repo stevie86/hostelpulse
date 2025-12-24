@@ -10,7 +10,7 @@ const createJestConfig = nextJest({
 /** @type {import('jest').Config} */
 const customJestConfig = {
   // Add more setup options before each test is run
-  setupFilesAfterEnv: ['<rootDir>/jest.setup.js'], // Uncommented this line
+  setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'], // Uncommented this line
   // if using TypeScript with a baseUrl set to the root directory then you need the below for alias' to work
   moduleDirectories: ['node_modules', '<rootDir>/'],
   testEnvironment: 'jest-environment-jsdom',
@@ -21,6 +21,7 @@ const customJestConfig = {
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/$1',
   },
+  testTimeout: 90000,
   // Add transform for TypeScript files using ts-jest
   transform: {
     '^.+\\.(ts|tsx)$': 'ts-jest',

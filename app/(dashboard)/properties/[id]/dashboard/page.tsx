@@ -1,7 +1,7 @@
-import { Suspense } from "react";
-import { DashboardCards } from "@/components/dashboard/dashboard-cards";
-import { DailyActivity } from "@/components/dashboard/daily-activity";
-import Link from "next/link";
+import { Suspense } from 'react';
+import { DashboardCards } from '@/components/dashboard/dashboard-cards';
+import { DailyActivity } from '@/components/dashboard/daily-activity';
+import Link from 'next/link';
 
 export default async function DashboardPage({
   params,

@@ -3,6 +3,7 @@
 ## Directory Layout
 
 ### Core Application Structure
+
 ```
 app/                          # Next.js App Router
 ├── (dashboard)/             # Dashboard route group
@@ -38,6 +39,7 @@ prisma/                      # Database schema and migrations
 ## Naming Conventions
 
 ### Files and Folders
+
 - **Pages**: `page.tsx` (App Router convention)
 - **Layouts**: `layout.tsx` (App Router convention)
 - **Components**: PascalCase (`BookingForm.tsx`)
@@ -46,6 +48,7 @@ prisma/                      # Database schema and migrations
 - **Types**: PascalCase interfaces (`BookingData`)
 
 ### Database Models
+
 - **Tables**: PascalCase singular (`Booking`, `Room`, `Guest`)
 - **Fields**: camelCase (`checkIn`, `checkOut`, `totalAmount`)
 - **Enums**: UPPER_CASE (`ADMIN`, `OWNER`, `MEMBER`)
@@ -53,12 +56,13 @@ prisma/                      # Database schema and migrations
 ## Component Organization
 
 ### UI Component Structure
+
 ```typescript
 // components/ui/Button.tsx
 export interface ButtonProps {
-  variant?: 'primary' | 'secondary'
-  size?: 'sm' | 'md' | 'lg'
-  children: React.ReactNode
+  variant?: 'primary' | 'secondary';
+  size?: 'sm' | 'md' | 'lg';
+  children: React.ReactNode;
 }
 
 export function Button({ variant = 'primary', ...props }: ButtonProps) {
@@ -67,10 +71,11 @@ export function Button({ variant = 'primary', ...props }: ButtonProps) {
 ```
 
 ### Feature Component Structure
+
 ```typescript
 // components/bookings/BookingForm.tsx
-import { Button } from '@/components/ui/Button'
-import styles from './BookingForm.module.css'
+import { Button } from '@/components/ui/Button';
+import styles from './BookingForm.module.css';
 
 export function BookingForm() {
   // Feature-specific logic
@@ -80,34 +85,39 @@ export function BookingForm() {
 ## Data Layer Patterns
 
 ### Server Actions Location
+
 - Place in `/app/actions/` directory
 - Group by feature (`bookings.ts`, `rooms.ts`)
 - Export named functions with clear purposes
 
 ### Database Queries
+
 - Centralize in `/lib/queries/` directory
 - One file per domain (`bookings.ts`, `rooms.ts`)
 - Include tenant isolation in all queries
 
 ### Multi-Tenant Isolation
+
 ```typescript
 // Always include tenant context
 const bookings = await prisma.booking.findMany({
   where: {
-    property: { teamId: tenantId } // Tenant isolation
-  }
+    property: { teamId: tenantId }, // Tenant isolation
+  },
 });
 ```
 
 ## Styling Conventions
 
 ### CSS Modules Pattern
+
 - One `.module.css` file per component
 - Use semantic class names (`container`, `header`, `content`)
 - Leverage Tailwind utilities for common styles
 - Custom CSS for component-specific styling
 
 ### Mobile-First Approach
+
 - Design for touch interfaces first
 - Use responsive breakpoints consistently
 - Optimize for tablet and phone usage
@@ -116,6 +126,7 @@ const bookings = await prisma.booking.findMany({
 ## Route Organization
 
 ### App Router Structure
+
 ```
 app/
 ├── (dashboard)/            # Route group (doesn't affect URL)
@@ -136,31 +147,34 @@ app/
 ## Import Conventions
 
 ### Path Aliases
+
 - Use `@/` for root-level imports
 - Prefer absolute imports over relative
 - Group imports: external, internal, relative
 
 ```typescript
 // External libraries
-import { NextRequest } from 'next/server'
-import { prisma } from '@/lib/prisma'
+import { NextRequest } from 'next/server';
+import { prisma } from '@/lib/prisma';
 
 // Internal components
-import { Button } from '@/components/ui/Button'
-import { BookingCard } from '@/components/bookings/BookingCard'
+import { Button } from '@/components/ui/Button';
+import { BookingCard } from '@/components/bookings/BookingCard';
 
 // Relative imports (when necessary)
-import styles from './BookingForm.module.css'
+import styles from './BookingForm.module.css';
 ```
 
 ## Error Handling Patterns
 
 ### Client-Side Errors
+
 - Use React Error Boundaries for component errors
 - Toast notifications for user-facing errors
 - Proper loading states and error messages
 
 ### Server-Side Errors
+
 - Structured error responses from API routes
 - Proper HTTP status codes
 - Tenant-aware error logging
@@ -168,6 +182,7 @@ import styles from './BookingForm.module.css'
 ## Testing Organization
 
 ### Test File Structure
+
 ```
 __tests__/
 ├── lib/                   # Unit tests for utilities
@@ -179,6 +194,7 @@ __tests__/
 ```
 
 ### Test Naming
+
 - Test files: `*.spec.ts` or `*.test.ts`
 - Describe blocks: Feature or component name
 - Test cases: "should [expected behavior] when [condition]"

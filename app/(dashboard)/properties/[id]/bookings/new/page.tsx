@@ -1,8 +1,8 @@
-import { createBooking } from "@/app/actions/bookings";
-import { getGuests } from "@/app/actions/guests";
-import { getRooms } from "@/app/actions/rooms";
-import { BookingForm } from "@/components/bookings/booking-form";
-import Link from "next/link";
+import { createBooking } from '@/app/actions/bookings';
+import { getGuests } from '@/app/actions/guests';
+import { getRooms } from '@/app/actions/rooms';
+import { BookingForm } from '@/components/bookings/booking-form';
+import Link from 'next/link';
 
 export default async function NewBookingPage({
   params,

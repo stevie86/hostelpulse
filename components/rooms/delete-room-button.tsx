@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { deleteRoom } from "@/app/actions/rooms";
-import { useState, useTransition } from "react";
+import { deleteRoom } from '@/app/actions/rooms';
+import { useState, useTransition } from 'react';
 
 export function DeleteRoomButton({
   roomId,
@@ -14,7 +14,11 @@ export function DeleteRoomButton({
   const [error, setError] = useState<string | null>(null);
 
   const handleDelete = () => {
-    if (!confirm("Are you sure you want to delete this room? This action cannot be undone.")) {
+    if (
+      !confirm(
+        'Are you sure you want to delete this room? This action cannot be undone.'
+      )
+    ) {
       return;
     }
 
@@ -22,8 +26,8 @@ export function DeleteRoomButton({
       try {
         await deleteRoom(roomId, propertyId);
       } catch (e) {
-        setError("Failed to delete room. It may have active bookings.");
-        alert("Failed to delete room. It may have active bookings.");
+        setError('Failed to delete room. It may have active bookings.');
+        alert('Failed to delete room. It may have active bookings.');
       }
     });
   };
@@ -34,7 +38,7 @@ export function DeleteRoomButton({
       disabled={isPending}
       className="btn btn-sm btn-error btn-outline"
     >
-      {isPending ? "..." : "Delete"}
+      {isPending ? '...' : 'Delete'}
     </button>
   );
 }

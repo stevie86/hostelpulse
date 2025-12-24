@@ -1,17 +1,14 @@
-"use client";
+'use client';
 
-import { useActionState, useEffect } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { RoomSchema, RoomFormValues } from "@/lib/schemas/room";
-import { ActionState } from "@/app/actions/rooms";
+import { useActionState, useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { RoomSchema, RoomFormValues } from '@/lib/schemas/room';
+import { ActionState } from '@/app/actions/rooms';
 
 interface RoomFormProps {
   propertyId: string;
-  action: (
-    prevState: ActionState,
-    formData: FormData
-  ) => Promise<ActionState>;
+  action: (prevState: ActionState, formData: FormData) => Promise<ActionState>;
   initialValues?: Partial<RoomFormValues>;
   isEditMode?: boolean;
   roomId?: string; // Needed if we bind the action
@@ -28,7 +25,7 @@ export function RoomForm({
   // Since action signature is (arg, state, formData), we need to ensure we pass what's needed.
   // In actions/rooms.ts: createRoom(propertyId, prevState, formData)
   // updateRoom(roomId, propertyId, prevState, formData)
-  
+
   // We need to handle the binding carefully or use a wrapper.
   // Best practice: Pass the *bound* action from the parent, OR bind it here.
   // But useActionState expects (state, payload) -> state.
@@ -38,7 +35,7 @@ export function RoomForm({
   // Let's assume the parent passes a BOUND action, or we bind it here.
   // Since 'action' prop usually comes from a server component where it can be bound:
   // <RoomForm action={createRoom.bind(null, propertyId)} />
-  
+
   const [state, formAction, isPending] = useActionState(action, {
     message: null,
     errors: {},
@@ -51,12 +48,12 @@ export function RoomForm({
   } = useForm({
     resolver: zodResolver(RoomSchema),
     defaultValues: {
-      name: initialValues?.name || "",
-      type: initialValues?.type || "private",
+      name: initialValues?.name || '',
+      type: initialValues?.type || 'private',
       beds: initialValues?.beds || 1,
       pricePerNight: initialValues?.pricePerNight || 0,
       maxOccupancy: initialValues?.maxOccupancy || 1,
-      description: initialValues?.description || "",
+      description: initialValues?.description || '',
     },
   });
 
@@ -85,13 +82,13 @@ export function RoomForm({
           type="text"
           placeholder="e.g. 101 or Blue Dorm"
           className={`input input-bordered w-full ${
-            state.errors?.name || clientErrors.name ? "input-error" : ""
+            state.errors?.name || clientErrors.name ? 'input-error' : ''
           }`}
-          {...register("name")}
+          {...register('name')}
         />
         <label className="label">
           <span className="label-text-alt text-error">
-            {state.errors?.name?.join(", ") || clientErrors.name?.message}
+            {state.errors?.name?.join(', ') || clientErrors.name?.message}
           </span>
         </label>
       </div>
@@ -101,17 +98,14 @@ export function RoomForm({
         <label className="label">
           <span className="label-text">Type</span>
         </label>
-        <select
-          className="select select-bordered"
-          {...register("type")}
-        >
+        <select className="select select-bordered" {...register('type')}>
           <option value="dormitory">Dormitory</option>
           <option value="private">Private Room</option>
           <option value="suite">Suite</option>
         </select>
         <label className="label">
           <span className="label-text-alt text-error">
-            {state.errors?.type?.join(", ") || clientErrors.type?.message}
+            {state.errors?.type?.join(', ') || clientErrors.type?.message}
           </span>
         </label>
       </div>
@@ -126,13 +120,13 @@ export function RoomForm({
             type="number"
             min="1"
             className={`input input-bordered w-full ${
-              state.errors?.beds || clientErrors.beds ? "input-error" : ""
+              state.errors?.beds || clientErrors.beds ? 'input-error' : ''
             }`}
-            {...register("beds")}
+            {...register('beds')}
           />
           <label className="label">
             <span className="label-text-alt text-error">
-              {state.errors?.beds?.join(", ") || clientErrors.beds?.message}
+              {state.errors?.beds?.join(', ') || clientErrors.beds?.message}
             </span>
           </label>
         </div>
@@ -146,13 +140,16 @@ export function RoomForm({
             type="number"
             min="1"
             className={`input input-bordered w-full ${
-              state.errors?.maxOccupancy || clientErrors.maxOccupancy ? "input-error" : ""
+              state.errors?.maxOccupancy || clientErrors.maxOccupancy
+                ? 'input-error'
+                : ''
             }`}
-            {...register("maxOccupancy")}
+            {...register('maxOccupancy')}
           />
           <label className="label">
             <span className="label-text-alt text-error">
-              {state.errors?.maxOccupancy?.join(", ") || clientErrors.maxOccupancy?.message}
+              {state.errors?.maxOccupancy?.join(', ') ||
+                clientErrors.maxOccupancy?.message}
             </span>
           </label>
         </div>
@@ -167,16 +164,19 @@ export function RoomForm({
           type="number"
           min="0"
           className={`input input-bordered w-full ${
-            state.errors?.pricePerNight || clientErrors.pricePerNight ? "input-error" : ""
+            state.errors?.pricePerNight || clientErrors.pricePerNight
+              ? 'input-error'
+              : ''
           }`}
-          {...register("pricePerNight")}
+          {...register('pricePerNight')}
         />
         <label className="label">
           <span className="label-text-alt text-gray-500">
             Example: 2500 = €25.00
           </span>
           <span className="label-text-alt text-error">
-            {state.errors?.pricePerNight?.join(", ") || clientErrors.pricePerNight?.message}
+            {state.errors?.pricePerNight?.join(', ') ||
+              clientErrors.pricePerNight?.message}
           </span>
         </label>
       </div>
@@ -189,11 +189,12 @@ export function RoomForm({
         <textarea
           className="textarea textarea-bordered h-24"
           placeholder="Room details..."
-          {...register("description")}
+          {...register('description')}
         ></textarea>
         <label className="label">
-           <span className="label-text-alt text-error">
-            {state.errors?.description?.join(", ") || clientErrors.description?.message}
+          <span className="label-text-alt text-error">
+            {state.errors?.description?.join(', ') ||
+              clientErrors.description?.message}
           </span>
         </label>
       </div>
@@ -206,9 +207,9 @@ export function RoomForm({
         {isPending ? (
           <span className="loading loading-spinner"></span>
         ) : isEditMode ? (
-          "Update Room"
+          'Update Room'
         ) : (
-          "Create Room"
+          'Create Room'
         )}
       </button>
     </form>

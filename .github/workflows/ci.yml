@@ -10,9 +10,9 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
     env:
-      DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/hostelpulse"
-      NEXTAUTH_SECRET: "supersecret"
-      NEXTAUTH_URL: "http://localhost:3000"
+      DATABASE_URL: 'postgresql://postgres:postgres@localhost:5432/hostelpulse'
+      NEXTAUTH_SECRET: 'supersecret'
+      NEXTAUTH_URL: 'http://localhost:3000'
 
     services:
       postgres:
@@ -59,7 +59,7 @@ jobs:
         run: pnpm run type-check
 
       - name: Unit Tests
-        run: pnpm run test
+        run: pnpm run test:ci
 
       - name: Build
         run: pnpm run build

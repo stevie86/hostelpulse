@@ -8,10 +8,14 @@ import bcrypt from 'bcryptjs';
 
 // Define the expected return type from NextAuth to maintain strict typing across the app
 interface NextAuthResult {
-  auth: unknown; // These are complex functions from the library
-  signIn: unknown;
-  signOut: unknown;
-  handlers: unknown;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  auth: any; // Using any here as a last resort for complex NextAuth internal types
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  signIn: (...args: any[]) => Promise<any>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  signOut: (...args: any[]) => Promise<any>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  handlers: any;
 }
 
 // Workaround for NextAuth v5 beta type issue where the default export is not seen as callable.
@@ -19,6 +23,7 @@ const nextAuth = NextAuth as unknown as (config: unknown) => NextAuthResult;
 
 export const { auth, signIn, signOut, handlers } = nextAuth({
   ...authConfig,
+  trustHost: true,
   session: { strategy: 'jwt' },
   providers: [
     Credentials({
@@ -29,7 +34,7 @@ export const { auth, signIn, signOut, handlers } = nextAuth({
 
         if (parsedCredentials.success) {
           const { email, password } = parsedCredentials.data;
-          
+
           console.log(`[AUTH DEBUG] Attempting login for: ${email}`);
           const user = await prisma.user.findUnique({
             where: { email },
@@ -41,16 +46,27 @@ export const { auth, signIn, signOut, handlers } = nextAuth({
           }
 
           console.log(`[AUTH DEBUG] User found: ${user.email}, ID: ${user.id}`);
-          
+
           // If stored password is a hash, use bcrypt.compare
-          if (user.password && (user.password.startsWith('$2a$') || user.password.startsWith('$2b$') || user.password.startsWith('$2y$'))) {
-             console.log('[AUTH DEBUG] Attempting bcrypt compare...');
-             const passwordsMatch = await bcrypt.compare(password, user.password);
-             console.log(`[AUTH DEBUG] Bcrypt comparison match: ${passwordsMatch}`);
-             if (passwordsMatch) {
-               return { id: user.id, name: user.name, email: user.email };
-             }
-          } else if (user.password === password) { // Fallback for plaintext seeded password
+          if (
+            user.password &&
+            (user.password.startsWith('$2a$') ||
+              user.password.startsWith('$2b$') ||
+              user.password.startsWith('$2y$'))
+          ) {
+            console.log('[AUTH DEBUG] Attempting bcrypt compare...');
+            const passwordsMatch = await bcrypt.compare(
+              password,
+              user.password
+            );
+            console.log(
+              `[AUTH DEBUG] Bcrypt comparison match: ${passwordsMatch}`
+            );
+            if (passwordsMatch) {
+              return { id: user.id, name: user.name, email: user.email };
+            }
+          } else if (user.password === password) {
+            // Fallback for plaintext seeded password
             console.log('[AUTH DEBUG] Plaintext comparison match: true');
             return { id: user.id, name: user.name, email: user.email };
           }

@@ -15,7 +15,10 @@ type SelectedGuestFields = {
   [key: string]: string | null; // Add index signature for dynamic access
 };
 
-export async function GET(request: NextRequest, props: { params: Promise<{ id: string }> }) {
+export async function GET(
+  request: NextRequest,
+  props: { params: Promise<{ id: string }> }
+) {
   const params = await props.params;
   const propertyId = params.id;
 
@@ -32,11 +35,18 @@ export async function GET(request: NextRequest, props: { params: Promise<{ id: s
       },
     });
 
-    const headers = ['firstName', 'lastName', 'email', 'phone', 'nationality', 'documentId'];
+    const headers = [
+      'firstName',
+      'lastName',
+      'email',
+      'phone',
+      'nationality',
+      'documentId',
+    ];
     const csvRows = [
       headers.join(','),
       ...guests.map((guest: SelectedGuestFields) =>
-        headers.map(field => JSON.stringify(guest[field] || '')).join(',')
+        headers.map((field) => JSON.stringify(guest[field] || '')).join(',')
       ),
     ];
 
