@@ -67,6 +67,9 @@ server-manual*.log
 repair-*.log
 e2e-dashboard.log
 
+# test videos
+test-results/videos/
+
 # Added by Spec Kitty CLI (auto-managed)
 .claude/
 .codex/

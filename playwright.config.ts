@@ -18,7 +18,7 @@ const config: PlaywrightTestConfig = {
   reporter: 'html',
   webServer: {
     // Run dev server on 4002 to avoid clashing with other local apps
-    command: 'pnpm run dev -- --port 4002',
+    command: 'pnpm run dev --port 4002',
     url: 'http://localhost:4002',
     reuseExistingServer: !process.env.CI,
   },
@@ -28,6 +28,7 @@ const config: PlaywrightTestConfig = {
     ignoreHTTPSErrors: true,
     baseURL: 'http://localhost:4002',
     trace: 'retain-on-first-failure',
+    video: 'on', // Always record videos for demo purposes
     navigationTimeout: 60 * 1000, // New: Add navigation timeout
   },
   testDir: './tests/e2e', // Point to the generic E2E test directory
