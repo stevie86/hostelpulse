@@ -14,6 +14,8 @@ import {
   Settings,
   LogOut,
   Database,
+  Monitor,
+  CheckCircle,
 } from 'lucide-react';
 
 interface SidebarItemProps {
@@ -82,6 +84,16 @@ export default function Sidebar() {
   const pid = propertyMatch ? propertyMatch[1] : 'default';
 
   const menuItems = [
+    {
+      icon: <Monitor size={20} />,
+      label: 'POS Terminal',
+      href: `/properties/${pid}/pos`,
+    },
+    {
+      icon: <CheckCircle size={20} />,
+      label: 'Check-in/Out',
+      href: `/properties/${pid}/check-in-out`,
+    },
     {
       icon: <LayoutDashboard size={20} />,
       label: 'Dashboard',
