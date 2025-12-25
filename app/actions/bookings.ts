@@ -51,15 +51,20 @@ export async function createBooking(
     };
   }
 
-  const { guestId, roomId, checkIn, checkOut, notes, bedLabel } = validatedFields.data;
+  const { guestId, roomId, checkIn, checkOut, notes, bedLabel } =
+    validatedFields.data;
 
   try {
     await prisma.$transaction(async (tx) => {
       // 1. Re-check availability within the transaction
-      const isAvailable = await AvailabilityService.isBedAvailable(roomId, bedLabel, {
-        checkIn,
-        checkOut,
-      });
+      const isAvailable = await AvailabilityService.isBedAvailable(
+        roomId,
+        bedLabel,
+        {
+          checkIn,
+          checkOut,
+        }
+      );
 
       if (!isAvailable) {
         throw new Error('The selected bed is no longer available.');
@@ -102,7 +107,12 @@ export async function createBooking(
     revalidatePath(`/properties/${propertyId}/bookings`);
     revalidatePath(`/properties/${propertyId}/dashboard`);
   } catch (error) {
-    if (error && typeof error === 'object' && 'digest' in error && (error as { digest: string }).digest.startsWith('NEXT_REDIRECT')) {
+    if (
+      error &&
+      typeof error === 'object' &&
+      'digest' in error &&
+      (error as { digest: string }).digest.startsWith('NEXT_REDIRECT')
+    ) {
       throw error;
     }
     console.error('Booking Creation Error:', error);
@@ -129,9 +139,9 @@ export async function getBookings(propertyId: string, query?: string) {
       propertyId,
       OR: query
         ? [
-            { guest: { firstName: { contains: query, mode: 'insensitive' } } },
-            { guest: { lastName: { contains: query, mode: 'insensitive' } } },
-            { confirmationCode: { contains: query, mode: 'insensitive' } },
+            { guest: { firstName: { contains: query } } },
+            { guest: { lastName: { contains: query } } },
+            { confirmationCode: { contains: query } },
           ]
         : undefined,
     },

@@ -10,7 +10,9 @@ export default function LoginForm() {
   return (
     <form action={dispatch} className="space-y-3">
       <div className="flex-1 rounded-lg bg-base-200 px-6 pb-4 pt-8">
-        <h1 className="mb-3 text-2xl font-bold text-base-content">Please log in to continue.</h1>
+        <h1 className="mb-3 text-2xl font-bold text-base-content">
+          Please log in to continue.
+        </h1>
         <div className="w-full">
           <div>
             <label
@@ -58,9 +60,7 @@ export default function LoginForm() {
           aria-live="polite"
           aria-atomic="true"
         >
-          {errorMessage && (
-            <p className="text-sm text-error">{errorMessage}</p>
-          )}
+          {errorMessage && <p className="text-sm text-error">{errorMessage}</p>}
         </div>
         <p className="text-xs text-base-content/70 mt-4">
           Demo: admin@hostelpulse.com / password
@@ -76,9 +76,10 @@ function LoginButton() {
   return (
     <button
       className="mt-4 w-full rounded-lg bg-primary py-3 text-sm font-medium text-primary-content transition-colors hover:bg-primary/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:opacity-50"
+      disabled={pending}
       aria-disabled={pending}
     >
-      Log in
+      {pending ? 'Logging in...' : 'Log in'}
     </button>
   );
 }

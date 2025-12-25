@@ -8,6 +8,7 @@ import { revalidatePath } from 'next/cache';
 import { verifyPropertyAccess } from '@/lib/auth-utils';
 
 import { DashboardStats } from '@/types/dashboard';
+import { startOfMonth, endOfMonth } from 'date-fns';
 
 export async function getDashboardStats(
   propertyId: string
@@ -144,8 +145,6 @@ export async function getDailyActivity(propertyId: string) {
         select: {
           bedLabel: true,
           pricePerNight: true,
-        },
-        include: {
           room: {
             select: {
               name: true, // Room name
@@ -180,8 +179,6 @@ export async function getDailyActivity(propertyId: string) {
         select: {
           bedLabel: true,
           pricePerNight: true,
-        },
-        include: {
           room: {
             select: {
               name: true, // Room name
@@ -193,6 +190,47 @@ export async function getDailyActivity(propertyId: string) {
   });
 
   return { arrivals, departures };
+}
+
+export async function getBookingsForMonth(
+  propertyId: string,
+  month: number,
+  year: number
+) {
+  try {
+    await verifyPropertyAccess(propertyId);
+  } catch (error) {
+    return [];
+  }
+
+  const startDate = new Date(year, month, 1);
+  const endDate = new Date(year, month + 1, 0);
+
+  const bookings = await prisma.booking.findMany({
+    where: {
+      propertyId,
+      checkIn: {
+        lte: endDate,
+      },
+      checkOut: {
+        gte: startDate,
+      },
+    },
+    select: {
+      id: true,
+      checkIn: true,
+      checkOut: true,
+      status: true,
+      guest: {
+        select: {
+          firstName: true,
+          lastName: true,
+        },
+      },
+    },
+  });
+
+  return bookings;
 }
 
 export async function checkIn(bookingId: string) {

@@ -120,9 +120,9 @@ export async function getGuests(propertyId: string, query?: string) {
       propertyId,
       OR: query
         ? [
-            { firstName: { contains: query, mode: 'insensitive' } },
-            { lastName: { contains: query, mode: 'insensitive' } },
-            { email: { contains: query, mode: 'insensitive' } },
+            { firstName: { contains: query } },
+            { lastName: { contains: query } },
+            { email: { contains: query } },
           ]
         : undefined,
     },
