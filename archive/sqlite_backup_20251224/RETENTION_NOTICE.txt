@@ -1,0 +1,18 @@
+SQLite Database Archive
+=======================
+
+Created: 2025-12-24 13:04:12 UTC
+Contents: Complete SQLite database (dev.db) with all development data
+Purpose: Backup before switching to Vercel PostgreSQL for Dev.to pitch
+Retention: Keep until after Dev.to Show and Tell Challenge completion
+Deletion: Requires explicit confirmation before deletion
+
+Files:
+- dev.db.backup.20251224_130412: Raw SQLite database file
+- sqlite_backup_20251224.tar.gz: Compressed archive  
+- sqlite_schema_snapshot_20251224.sql: Schema export
+
+Verification: All files should be restorable if needed.
+Contact: Retain for Dev.to Show and Tell Challenge period
+
+DO NOT DELETE WITHOUT EXPLICIT CONFIRMATION

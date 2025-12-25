@@ -1,0 +1,92 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - button "Open Next.js Dev Tools" [ref=e7] [cursor=pointer]:
+    - img [ref=e8]
+  - alert [ref=e11]
+  - generic [ref=e12]:
+    - complementary [ref=e13]:
+      - generic [ref=e14]:
+        - generic [ref=e16]: H
+        - generic [ref=e17]:
+          - heading "HostelPulse" [level=1] [ref=e18]
+          - generic [ref=e19]: Property Management
+      - navigation [ref=e20]:
+        - generic [ref=e21]: Menu
+        - link "Dashboard" [ref=e22] [cursor=pointer]:
+          - /url: /properties/9330e8ed-0131-4122-911e-5c2b74f5f67b/dashboard
+          - generic [ref=e23]:
+            - img [ref=e25]
+            - generic [ref=e30]: Dashboard
+        - link "Rooms" [ref=e32] [cursor=pointer]:
+          - /url: /properties/9330e8ed-0131-4122-911e-5c2b74f5f67b/rooms
+          - generic [ref=e33]:
+            - img [ref=e35]
+            - generic [ref=e37]: Rooms
+        - link "Bookings" [ref=e38] [cursor=pointer]:
+          - /url: /properties/9330e8ed-0131-4122-911e-5c2b74f5f67b/bookings
+          - generic [ref=e39]:
+            - img [ref=e41]
+            - generic [ref=e43]: Bookings
+        - link "Guests" [ref=e44] [cursor=pointer]:
+          - /url: /properties/9330e8ed-0131-4122-911e-5c2b74f5f67b/guests
+          - generic [ref=e45]:
+            - img [ref=e47]
+            - generic [ref=e52]: Guests
+        - link "Data Hub" [ref=e53] [cursor=pointer]:
+          - /url: /properties/9330e8ed-0131-4122-911e-5c2b74f5f67b/data
+          - generic [ref=e54]:
+            - img [ref=e56]
+            - generic [ref=e60]: Data Hub
+      - generic [ref=e61]:
+        - link "Settings" [ref=e62] [cursor=pointer]:
+          - /url: /settings
+          - generic [ref=e63]:
+            - img [ref=e65]
+            - generic [ref=e68]: Settings
+        - button "Logout" [ref=e69] [cursor=pointer]:
+          - img [ref=e70]
+          - generic [ref=e73]: Logout
+      - button [ref=e74] [cursor=pointer]:
+        - img [ref=e75]
+    - main [ref=e77]:
+      - generic [ref=e79]:
+        - button "Switch to dark mode" [ref=e80] [cursor=pointer]:
+          - img [ref=e82]
+        - generic [ref=e88]:
+          - generic [ref=e89]: Admin User
+          - generic [ref=e90]: HostelPulse Lisbon
+        - generic [ref=e93]: AD
+      - generic [ref=e96]:
+        - heading "Dashboard" [level=1] [ref=e98]
+        - generic [ref=e99]:
+          - generic [ref=e100]:
+            - generic [ref=e101]: Total Rooms
+            - generic [ref=e102]: "3"
+          - generic [ref=e103]:
+            - generic [ref=e104]: Total Beds
+            - generic [ref=e105]: "12"
+          - generic [ref=e106]:
+            - generic [ref=e107]: Occupied Beds
+            - generic [ref=e108]: "0"
+          - generic [ref=e109]:
+            - generic [ref=e110]: Available Beds
+            - generic [ref=e111]: "12"
+          - generic [ref=e112]:
+            - generic [ref=e113]: Arrivals Today
+            - generic [ref=e114]: "0"
+          - generic [ref=e115]:
+            - generic [ref=e116]: Departures Today
+            - generic [ref=e117]: "0"
+          - generic [ref=e118]:
+            - generic [ref=e119]: Occupancy
+            - generic [ref=e120]: 0%
+        - generic [ref=e121]:
+          - generic [ref=e123]:
+            - heading "Arrivals Today" [level=2] [ref=e124]
+            - paragraph [ref=e125]: No arrivals today.
+          - generic [ref=e127]:
+            - heading "Departures Today" [level=2] [ref=e128]
+            - paragraph [ref=e129]: No departures today.
+```
