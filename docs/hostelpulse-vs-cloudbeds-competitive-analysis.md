@@ -227,25 +227,25 @@ Portuguese hostels face **severe penalties** for non-compliance:
 
 **HostelPulse Solution**: Touch-optimized interfaces, 2-week training time.
 
-### **Success Metrics from Beta Testing**
+### **Estimated Operational Benefits**
 
-#### **Compliance Improvement**
+#### **Compliance Savings**
 
-- **100% SIBA reporting** accuracy (vs 70% manual)
-- **Zero compliance fines** in 6 months
-- **4 hours/week** time savings on administrative tasks
+- **€2,500+ annual savings** from avoiding SIBA/SEF fines
+- **€4,000+ annual savings** from eliminating tourist tax errors
+- **90+ hours/year** saved on administrative compliance tasks
 
-#### **Revenue Growth**
+#### **Revenue Enhancement**
 
-- **€480/month** additional tourist tax revenue (Lisbon hostel)
-- **15% increase** in direct bookings (compliance trust factor)
-- **20% reduction** in operational costs
+- **€5,760+ annual increase** from automated tourist tax collection (€480/month × 12)
+- **15-25% boost** in direct bookings through compliance credibility
+- **€2,400+ annual savings** from reduced operational errors
 
-#### **Staff Efficiency**
+#### **Staff Productivity Gains**
 
-- **80% reduction** in training time
-- **50% fewer** check-in errors
-- **90% positive** staff feedback on usability
+- **75-85% reduction** in staff training time for compliance tasks
+- **50-70% fewer** booking and check-in errors
+- **4-6 hours/week** freed up for guest service and revenue activities
 
 ---
 
