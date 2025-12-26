@@ -84,3 +84,10 @@ test-results/videos/
 .amazonq/
 .github/copilot/
 .worktrees/.kittify/AGENTS.md
+
+# Reference analysis code
+hostelmanagement-by-manus/
+
+# Test artifacts
+test-results/
+.playwright-artifacts-*/
