@@ -1,6 +1,7 @@
 import { getDashboardStats } from '@/app/actions/dashboard';
 import { DailyActivity } from '@/components/dashboard/daily-activity';
-import { CheckCircle, LogOut, Users, Calendar, UserPlus } from 'lucide-react';
+import { QuickCheckInOut } from '@/components/check-in-out/quick-check-in-out';
+import { CheckedInGuests } from '@/components/check-in-out/checked-in-guests';
 
 export default async function CheckInOutPage({
   params,
@@ -53,60 +54,18 @@ export default async function CheckInOutPage({
           </div>
         </div>
 
-        {/* Main Actions - Simplified */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-          {/* Check-in Section */}
-          <div className="bg-white rounded-xl p-6 shadow-lg border">
-            <div className="flex items-center mb-4">
-              <CheckCircle className="w-6 h-6 mr-2 text-green-500" />
-              <h2 className="text-xl font-semibold">Quick Check-in</h2>
-            </div>
+        {/* Main Actions */}
+        <QuickCheckInOut propertyId={propertyId} />
 
-            <div className="space-y-4">
-              <button className="w-full btn btn-primary btn-lg">
-                <UserPlus className="w-5 h-5 mr-2" />
-                New Guest Check-in
-              </button>
-
-              <button className="w-full btn btn-outline btn-lg">
-                <Users className="w-5 h-5 mr-2" />
-                Returning Guest
-              </button>
-
-              <button className="w-full btn btn-outline btn-lg">
-                <Calendar className="w-5 h-5 mr-2" />
-                Group Check-in
-              </button>
-            </div>
-          </div>
-
-          {/* Check-out Section */}
-          <div className="bg-white rounded-xl p-6 shadow-lg border">
-            <div className="flex items-center mb-4">
-              <LogOut className="w-6 h-6 mr-2 text-blue-500" />
-              <h2 className="text-xl font-semibold">Quick Check-out</h2>
-            </div>
-
-            <div className="space-y-4">
-              <button className="w-full btn btn-secondary btn-lg">
-                <LogOut className="w-5 h-5 mr-2" />
-                Guest Check-out
-              </button>
-
-              <button className="w-full btn btn-outline btn-lg">
-                <Users className="w-5 h-5 mr-2" />
-                Bulk Check-out
-              </button>
-
-              <button className="w-full btn btn-outline btn-lg">
-                <Calendar className="w-5 h-5 mr-2" />
-                View Departures
-              </button>
-            </div>
-          </div>
+        {/* Checked-in Guests */}
+        <div
+          id="checked-in-guests"
+          className="bg-white rounded-xl p-6 shadow-lg border"
+        >
+          <CheckedInGuests propertyId={propertyId} />
         </div>
 
-        {/* Today's Activity - Simplified */}
+        {/* Today's Activity */}
         <div className="bg-white rounded-xl p-6 shadow-lg border">
           <h2 className="text-xl font-semibold mb-4">Today&apos;s Activity</h2>
           <DailyActivity propertyId={propertyId} />

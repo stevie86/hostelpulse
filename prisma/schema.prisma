@@ -109,10 +109,13 @@ model Property {
   cityTaxRate  Float     @default(2.0) // Lisbon city tax per night per person
   checkInTime  String    @default("15:00")
   checkOutTime String    @default("11:00")
+  invoicingProvider String?  // 'moloni', 'external', null
+  externalInvoiceUrl String? // For external invoicing tools
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @default(now())
   bookings     Booking[]
   guests       Guest[]
+  sefReports   SEFReport[]
   team         Team      @relation(fields: [teamId], references: [id], onDelete: Cascade)
   rooms        Room[]
 }
@@ -148,6 +151,11 @@ model Booking {
   status           String       @default("confirmed")
   channel          String?
   totalAmount      Int          @default(0)
+  accommodationAmount Int       @default(0) // Accommodation cost before tax
+  touristTaxAmount Int          @default(0) // Tourist tax in cents
+  guestCount       Int          @default(1) // Number of guests (MANDATORY for tax calculation)
+  municipality     String?      // Municipality for tax calculation
+  taxBreakdown     Json?        // Full tax calculation breakdown
   amountPaid       Int          @default(0)
   paymentStatus    String       @default("pending")
   notes            String?
@@ -160,6 +168,7 @@ model Booking {
   property         Property     @relation(fields: [propertyId], references: [id], onDelete: Cascade)
   beds             BookingBed[]
   payments         Payment[]
+  sefReports       SEFReport[]
 
   @@index([propertyId])
   @@index([checkIn])
@@ -195,12 +204,14 @@ model Guest {
   address      String?
   city         String?
   country      String?
-  notes        String?
-  blacklisted  Boolean   @default(false)
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @default(now())
-  bookings     Booking[]
-  property     Property  @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  notes         String?
+  blacklisted   Boolean   @default(false)
+  passportExpiry DateTime?  // For SEF document validation
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @default(now())
+  bookings      Booking[]
+  sefReports    SEFReport[]
+  property      Property  @relation(fields: [propertyId], references: [id], onDelete: Cascade)
 
   @@index([propertyId])
   @@index([email])
@@ -361,4 +372,38 @@ enum Role {
   ADMIN
   OWNER
   MEMBER
+}
+
+enum SEFReportType {
+  CHECK_IN
+  CHECK_OUT
+  MONTHLY_SUMMARY
+}
+
+enum SEFStatus {
+  PENDING
+  SUBMITTED
+  FAILED
+  RETRY
+}
+
+model SEFReport {
+  id            String       @id @default(uuid())
+  propertyId    String
+  guestId       String
+  bookingId     String
+  reportType    SEFReportType
+  status        SEFStatus    @default(PENDING)
+  submittedAt   DateTime?
+  referenceId   String?      // SEF reference number
+  errorMessage  String?
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @default(now())
+
+  property      Property     @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  guest         Guest        @relation(fields: [guestId], references: [id], onDelete: Cascade)
+  booking       Booking      @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+
+  @@index([propertyId, status])
+  @@index([submittedAt])
 }

@@ -12,7 +12,7 @@ agent: 'Gemini-CLI'
 shell_pid: '6049'
 ---
 
-# Work Package Prompt: WP04 – CI/CD Stabilization & Test Fixes
+# Work Package Prompt: WP04 -- CI/CD Stabilization & Test Fixes
 
 ## Goal
 

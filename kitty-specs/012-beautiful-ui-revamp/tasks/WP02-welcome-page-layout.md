@@ -13,7 +13,7 @@ review_status: 'approved'
 reviewed_by: 'user'
 ---
 
-# Work Package Prompt: WP02 – Welcome page layout + demo data
+# Work Package Prompt: WP02 -- Welcome page layout + demo data
 
 ## Goal
 

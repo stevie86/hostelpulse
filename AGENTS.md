@@ -1,500 +1,178 @@
-# Repository Guidelines & Agent Context
+# Agent Rules for Spec Kitty Projects
 
-**Project:** HostelPulse (Clean Slate / Operation Bedrock)
-**Stack:** Next.js 15, Prisma, Tailwind CSS, DaisyUI
-**Package Manager:** **pnpm** (Strictly enforced)
+**⚠️ CRITICAL**: All AI agents working in this project must follow these rules.
 
-## Core Philosophy
+These rules apply to **all commands** (specify, plan, research, tasks, implement, review, merge, etc.).
 
-**Operation Bedrock:** Prioritize stability, type safety, and clean architecture over rapid feature expansion.
-**Anti-Scope Creep:** Stick to the MVP Roadmap. Advanced SaaS features (AWS Lambda, EventBridge) are _reference patterns_ but should not delay the Vercel-based MVP launch unless critical.
+---
 
-## 1. Workflow: Spec-Driven Development
+## 1. Path Reference Rule
 
-All feature work is managed by `spec-kitty`.
+**When you mention directories or files, provide either the absolute path or a path relative to the project root.**
 
-- **Start Feature:** `pnpm .venv-speckitty/bin/spec-kitty research --feature "feature-name"` (Creates research artifacts).
-- **Plan & Task:** `pnpm .venv-speckitty/bin/spec-kitty plan` -> `pnpm .venv-speckitty/bin/spec-kitty tasks`.
-- **Implement:** Work strictly within `kitty-specs/feature-name/` directory.
-- **Merge:** `pnpm .venv-speckitty/bin/spec-kitty merge`.
-- **Dashboard:** `pnpm .venv-speckitty/bin/spec-kitty dashboard`.
+✅ **CORRECT** (v0.9.0+):
+- `kitty-specs/001-feature/tasks/WP01.md`
+- `/Users/robert/Code/myproject/kitty-specs/001-feature/spec.md`
+- `tasks/WP01.md` (relative to feature directory)
 
-**Rule:** NEVER commit directly to `main`. Always use spec-kitty for feature development and follow the research → plan → tasks → implement → merge workflow.
+❌ **WRONG**:
+- "the tasks folder" (which one? where?)
+- "WP01.md" (where? which feature?)
+- "the spec" (which feature's spec?)
+- `tasks/planned/WP01.md` (v0.8.x format - no longer used)
+- `tasks/phase-1/WP01.md` (NO subdirectories!)
 
-## 2. Directory Structure
+**Why**: Clarity and precision prevent errors. Never refer to a folder by name alone.
 
-- `app/`: Next.js App Router (Primary).
-- `app/actions/`: Server Actions (Data mutations).
-- `components/`: Reusable UI (Atomic design).
-- `lib/`: Shared utilities & DB (`lib/db.ts`).
-- `prisma/`: Schema & Seeds.
-- `kitty-specs/`: Feature specifications and plans.
-- `.worktrees/`: Active development workspaces (Git ignored).
+---
 
-## 3. Commands
+## 2. UTF-8 Encoding Rule
 
-- **Install:** `mise run -- pnpm install`
-- **Dev:** `mise run -- pnpm run dev`
-- **Build:** `mise run -- pnpm run build`
-- **Lint:** `mise run -- pnpm run lint` / `pnpm run lint:fix`
-- **Format:** `mise run -- pnpm run format` / `pnpm run format:check`
-- **Type-check:** `mise run -- pnpm run type-check`
-- **Test (Unit):** `mise run -- pnpm run test`
-- **Test (Single):** `pnpm test __tests__/path/to/test.test.ts` (Jest pattern matching)
-- **Test (E2E):** `mise run -- pnpm run test:e2e`
-- **Test (All):** `mise run -- pnpm run test:all`
-- **DB Push:** `mise run -- npx prisma db push` (Prototyping)
-- **Spec Kitty:** `mise run -- pnpm .venv-speckitty/bin/spec-kitty <command>`
+**When writing ANY markdown, JSON, YAML, CSV, or code files, use ONLY UTF-8 compatible characters.**
 
-## 4. Coding Standards
+### What to Avoid (Will Break the Dashboard)
 
-### Build/Lint/Test Commands
+❌ **Windows-1252 smart quotes**: " " ' ' (from Word/Outlook/Office)
+❌ **Em/en dashes and special punctuation**: — –
+❌ **Copy-pasted arrows**: → (becomes illegal bytes)
+❌ **Multiplication sign**: × (0xD7 in Windows-1252)
+❌ **Plus-minus sign**: ± (0xB1 in Windows-1252)
+❌ **Degree symbol**: ° (0xB0 in Windows-1252)
+❌ **Copy/paste from Microsoft Office** without cleaning
 
-- **Install:** `mise run -- pnpm install`
-- **Build:** `mise run -- pnpm run build`
-- **Lint:** `mise run -- pnpm run lint` (fix with `pnpm run lint:fix`)
-- **Format:** `mise run -- pnpm run format` (check with `pnpm run format:check`)
-- **Type Check:** `mise run -- pnpm run type-check`
-- **Unit Tests:** `mise run -- pnpm run test` (single test: `pnpm test __tests__/path/to/test.test.ts`)
-- **E2E Tests:** `mise run -- pnpm run test:e2e`
-- **All Tests:** `mise run -- pnpm run test:all`
+**Real examples that crashed the dashboard:**
+- "User's favorite feature" → "User's favorite feature" (smart quote)
+- "Price: $100 ± $10" → "Price: $100 +/- $10"
+- "Temperature: 72°F" → "Temperature: 72 degrees F"
+- "3 × 4 matrix" → "3 x 4 matrix"
 
-### Code Style Guidelines
+### What to Use Instead
 
-- **Formatting:** Single quotes, trailing comma 'es5', semicolons, 80 char width
-- **Types:** Strict TypeScript, zero `any` usage, define Zod schemas in `lib/schemas/`
-- **Naming:** PascalCase components, camelCase variables/functions, kebab-case files
-- **Imports:** Absolute paths with `@/` alias, group by external/internal
-- **Error Handling:** Try/catch in async functions, descriptive error messages
-- **Server Actions:** Use for all mutations, validate inputs with Zod
-- **Forms:** `react-hook-form` + `zodResolver`, handle server validation errors
-- **UI:** Tailwind utility classes + DaisyUI components, atomic design pattern
-- **Components:** Functional with hooks, explicit return types, prop interfaces
-- **Database:** Filter all queries by `propertyId` (multi-tenancy)
+✅ Standard ASCII quotes: `"`, `'`
+✅ Hyphen-minus: `-` instead of en/em dash
+✅ ASCII arrow: `->` instead of →
+✅ Lowercase `x` for multiplication
+✅ `+/-` for plus-minus
+✅ ` degrees` for temperature
+✅ Plain punctuation
 
-## 5. SaaS Architecture Patterns
+### Safe Characters
 
-Refer to `docs/SAAS_BUILDER_SETUP.md` for multi-tenancy logic.
+✅ Emoji (proper UTF-8)  
+✅ Accented characters typed directly: café, naïve, Zürich  
+✅ Unicode math typed directly (√ ≈ ≠ ≤ ≥)  
 
-- **Multi-Tenancy:** Ensure every Prisma query filters by `propertyId` (which maps to Tenant).
-- **Usage Tracking:** (Future) Implement tracking points where identified.
+### Copy/Paste Guidance
 
-## 6. Testing
+1. Paste into a plain-text buffer first (VS Code, TextEdit in plain mode)
+2. Replace smart quotes and dashes
+3. Verify no � replacement characters appear
+4. Run `spec-kitty validate-encoding --feature <feature-id>` to check
+5. Run `spec-kitty validate-encoding --feature <feature-id> --fix` to auto-repair
 
-- **Unit:** Jest for all Server Actions and Logic. Colocate tests in `__tests__` or next to files.
-- **E2E:** Playwright for critical user flows (Booking, Login).
-- **Coverage:** Aim for 80%+ coverage for critical business actions.
+**Failure to follow this rule causes the dashboard to render blank pages.**
 
-## 7. Commit Guidelines
+### Auto-Fix Available
 
-- **Format:** `feat:`, `fix:`, `chore:`.
-- **Scope:** Keep changes specific to the active `spec-kitty` feature.
-
-## 8. Interaction Logging
-
-To keep a record of our interactions, all commands should be piped to a timestamped log file in the `logs/` directory.
-
-**Example:**
-
+If you accidentally introduce problematic characters:
 ```bash
-# General command logging
-some_command | tee -a logs/interaction-$(date +%Y-%m-%d).log
+# Check for encoding issues
+spec-kitty validate-encoding --feature 001-my-feature
 
-# Spec-kitty command logging
-pnpm .venv-speckitty/bin/spec-kitty <command> | tee -a logs/interaction-$(date +%Y-%m-%d).log
+# Automatically fix all issues (creates .bak backups)
+spec-kitty validate-encoding --feature 001-my-feature --fix
+
+# Check all features at once
+spec-kitty validate-encoding --all --fix
 ```
 
 ---
 
-## Build, Lint, Test Commands
+## 3. Context Management Rule
 
-### Single Test Execution
+**Build the context you need, then maintain it intelligently.**
 
-To run a specific test file:
-
-```bash
-pnpm test __tests__/actions/auth.test.ts
-```
-
-This uses Jest pattern matching to run only the auth test file.
-
-### E2E Test Execution
-
-To run Playwright E2E tests:
-
-```bash
-mise run -- pnpm run test:e2e
-```
-
-## Code Style Guidelines
-
-### Formatting
-
-- **Configuration**: Single quotes, trailing comma 'es5', semicolons, 80 character width
-- **Tools**: Prettier for automated formatting
-
-### TypeScript Standards
-
-- **Strict Mode**: Enforced via tsconfig.json
-- **Zero `any` Usage**: Define explicit types for all variables
-- **Interface Definitions**: Use for all function signatures and component props
-
-### Naming Conventions
-
-- **Files**: kebab-case (e.g., `booking-form.tsx`)
-- **Components**: PascalCase (e.g., `BookingForm`)
-- **Variables/Functions**: camelCase (e.g., `propertyId`, `getBookings`)
-- **Constants**: UPPER_SNAKE_CASE (e.g., `API_BASE_URL`)
-
-### Import Organization
-
-```typescript
-// External dependencies
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import type { NextPage } from 'next';
-
-// Internal utilities
-import { prisma } from '@/lib/db';
-import { format } from 'date-fns';
-import { bookingSchema } from '@/lib/schemas/booking';
-
-// Group imports by blank lines
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-```
-
-### Error Handling
-
-All async functions must use try/catch blocks with descriptive error messages:
-
-```typescript
-export async function createBooking(data: BookingData) {
-  try {
-    // Database operations
-    const booking = await prisma.booking.create({
-      data: validatedData,
-    });
-
-    return { success: true, data: booking };
-  } catch (error) {
-    console.error('Error creating booking:', error);
-    throw new Error(
-      error instanceof Error ? error.message : 'Failed to create booking.'
-    );
-  }
-}
-```
-
-## Database Patterns
-
-### Multi-tenancy
-
-All database queries MUST filter by `propertyId` for security and data isolation:
-
-```typescript
-export async function getBookings(propertyId: string) {
-  const bookings = await prisma.booking.findMany({
-    where: {
-      propertyId, // Critical for multi-tenancy
-      status: {
-        in: ['confirmed', 'checked_in'],
-      },
-    },
-    include: {
-      guest: {
-        select: {
-          firstName: true,
-          lastName: true,
-          email: true,
-        },
-      },
-    },
-    orderBy: {
-      checkIn: 'asc',
-    },
-  });
-
-  return bookings;
-}
-```
-
-### Performance Optimization
-
-Use appropriate database indexes and consider complex query optimization for large datasets.
-
-## Component Architecture
-
-### Atomic Design Pattern
-
-Build small, reusable components with clear responsibilities:
-
-```typescript
-// Button component (components/ui/button.tsx)
-interface ButtonProps {
-  children: React.ReactNode;
-  variant?: 'primary' | 'secondary';
-  onClick?: () => void;
-}
-
-export function Button({ children, variant = 'primary', onClick }: ButtonProps) {
-  return (
-    <button
-      className={btnStyles[variant]}
-      onClick={onClick}
-    >
-      {children}
-    </button>
-  );
-}
-```
-
-### Server Actions
-
-All data mutations must use Server Actions with proper validation:
-
-```typescript
-'use server';
-
-import { z } from 'zod';
-import { revalidatePath } from 'next/cache';
-
-const bookingSchema = z.object({
-  propertyId: z.string().uuid(),
-  guestId: z.string().uuid().optional(),
-  checkIn: z.date(),
-  checkOut: z.date(),
-  totalAmount: z.number().min(0),
-});
-
-export async function createBooking(prevState: any, formData: FormData) {
-  const validatedData = bookingSchema.parse({
-    propertyId: formData.get('propertyId'),
-    guestId: formData.get('guestId'),
-    checkIn: new Date(formData.get('checkIn')),
-    checkOut: new Date(formData.get('checkOut')),
-    totalAmount: parseInt(formData.get('totalAmount')),
-  });
-
-  const booking = await prisma.booking.create({
-    data: validatedData,
-  });
-
-  revalidatePath('/bookings');
-
-  return { success: true, data: booking };
-}
-```
-
-## Form Handling
-
-### React Hook Form
-
-Use `react-hook-form` with Zod integration for form validation:
-
-```typescript
-'use client';
-
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers';
-import { bookingSchema } from '@/lib/schemas/booking';
-
-export function BookingForm() {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors }
-  } = useForm({
-    resolver: zodResolver(bookingSchema),
-    defaultValues: {
-      propertyId: '',
-      guestId: '',
-      checkIn: new Date(),
-      checkOut: new Date()
-    }
-  });
-
-  const onSubmit = async (data) => {
-    const result = await createBooking(data);
-    if (result.success) {
-      // Handle success
-    }
-  };
-
-  return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      {/* Form fields with error handling */}
-    </form>
-  );
-}
-```
-
-## Testing Standards
-
-### Unit Testing
-
-Write comprehensive tests for Server Actions and utility functions:
-
-```typescript
-// __tests__/actions/booking.test.ts
-import { describe, it, expect, beforeEach, afterEach } from '@jest/globals';
-import { createBooking } from '@/app/actions/booking';
-
-describe('createBooking', () => {
-  beforeEach(async () => {
-    // Setup test data
-  });
-
-  afterEach(async () => {
-    // Cleanup test data
-  });
-
-  it('should create a booking with valid data', async () => {
-    const bookingData = {
-      propertyId: 'test-property-id',
-      guestId: 'test-guest-id',
-      checkIn: new Date('2024-01-01'),
-      checkOut: new Date('2024-01-02'),
-      totalAmount: 10000,
-    };
-
-    const result = await createBooking(undefined, createFormData(bookingData));
-
-    expect(result.success).toBe(true);
-    expect(result.data).toHaveProperty('id');
-    expect(result.data.totalAmount).toBe(10000);
-  });
-
-  it('should throw error with invalid data', async () => {
-    const invalidData = {
-      propertyId: 'invalid-id',
-      // ... other fields
-    };
-
-    await expect(
-      createBooking(undefined, createFormData(invalidData))
-    ).rejects.toThrow('Invalid booking data');
-  });
-});
-```
-
-### E2E Testing
-
-Use Playwright for end-to-end user flow testing:
-
-```typescript
-// tests/e2e/booking.spec.ts
-import { test, expect } from '@playwright/test';
-import { createBookingFormData } from '@/tests/utils/test-data';
-
-test.describe('Booking Flow', () => {
-  test('should allow user to create a booking', async ({ page }) => {
-    await page.goto('/bookings/new');
-
-    // Fill form
-    await page.fill('input[name="propertyId"]', 'test-property-id');
-    await page.fill('input[name="checkIn"]', '2024-01-01');
-    await page.fill('input[name="checkOut"]', '2024-01-02');
-
-    // Submit form
-    await page.click('button[type="submit"]');
-
-    // Verify success
-    await expect(
-      page.locator('text=Booking created successfully')
-    ).toBeVisible();
-    await expect(page).toHaveURL(/\/bookings\/[a-f0-9]{36}/);
-  });
-});
-```
-
-## Security Guidelines
-
-### Input Validation
-
-- Always validate user inputs on both client and server side
-- Use Zod schemas for type-safe validation
-- Sanitize all user-generated content
-
-### Authentication
-
-- Use NextAuth.js for authentication
-- Implement role-based access control
-- Secure session management
-
-### Data Protection
-
-- Filter database queries by `propertyId`
-- Implement proper data encryption
-- Follow GDPR guidelines for EU users
-
-## Performance Standards
-
-### Database Queries
-
-- Use appropriate indexes
-- Optimize complex queries
-- Consider connection pooling
-- Implement caching where appropriate
-
-### Frontend Optimization
-
-- Use React.memo for expensive components
-- Implement lazy loading for large lists
-- Optimize images and assets
-- Use Next.js built-in optimizations
-
-## Documentation Standards
-
-### Code Comments
-
-- Add JSDoc comments for complex functions
-- Document API endpoints
-- Include usage examples
-
-### README Updates
-
-- Update setup instructions for new features
-- Document environment variables
-- Include deployment guides
-
-## Environment Management
-
-### Development
-
-```bash
-# Local development
-DATABASE_URL="postgresql://postgres:postgres@localhost:5432/hostelpulse_dev"
-NODE_ENV="development"
-```
-
-### Production
-
-```bash
-# Production deployment
-DATABASE_URL=postgresql://user:pass@host:5432/hostelpulse_prod"
-NEXTAUTH_URL=https://hostelpulse.com
-NODE_ENV="production"
-```
+- Session start (0 tokens): You have zero context. Read plan.md, tasks.md, relevant artifacts.  
+- Mid-session (you already read them): Use your judgment—don’t re-read everything unless necessary.  
+- Never skip relevant information; do skip redundant re-reads to save tokens.  
+- Rely on the steps in the command you are executing.
 
 ---
 
-## Priority Framework
+## 4. Work Quality Rule
 
-1. **Critical**: Bugs affecting user data or revenue
-2. **High**: Feature completion for MVP
-3. **Medium**: Performance improvements, UI enhancements
-4. **Low**: Documentation updates, minor improvements
+**Produce secure, tested, documented work.**
 
-## Getting Help
-
-For questions about the codebase, architecture, or best practices:
-
-1. Search existing documentation in `docs/`
-2. Check for similar implementations in the codebase
-3. Review the architecture patterns in existing features
-4. Ask the project maintainer or team lead
+- Follow the plan and constitution requirements.  
+- Prefer existing patterns over invention.  
+- Treat security warnings as fatal—fix or escalate.  
+- Run all required tests before claiming work is complete.  
+- Be transparent: state what you did, what you didn’t, and why.
 
 ---
 
-This document serves as a comprehensive guide for maintaining code quality and consistency across the HostelPulse codebase.
+## 5. Task Lane Management Rule (v0.9.0+)
+
+**v0.9.0+ FLAT STRUCTURE**: All WP files are stored directly in `tasks/` (no subdirectories).
+
+The lane is determined **solely by the `lane:` frontmatter field**, not directory location.
+
+**Directory structure:**
+```
+tasks/
+├── WP01-setup.md       (lane: "planned" in frontmatter)
+├── WP02-backend.md     (lane: "doing" in frontmatter)
+├── WP03-frontend.md    (lane: "for_review" in frontmatter)
+└── WP04-testing.md     (lane: "done" in frontmatter)
+```
+
+⚠️  **CRITICAL: NO SUBDIRECTORIES IN tasks/**
+
+**NEVER** create subdirectories for organization:
+- ❌ `tasks/phase-1/WP01.md` - WRONG
+- ❌ `tasks/backend/WP02.md` - WRONG
+- ❌ `tasks/planned/WP03.md` - WRONG (old v0.8.x format)
+- ✅ `tasks/WP01.md` - CORRECT
+
+Use frontmatter fields for organization:
+- `phase: "Phase 1"` - NOT directories
+- `component: "Backend"` - NOT directories
+
+**To change lanes, use the update command:**
+```bash
+python3 .kittify/scripts/tasks/tasks_cli.py update <FEATURE> <WPID> <lane> --note "Your note"
+
+# Examples:
+python3 .kittify/scripts/tasks/tasks_cli.py update 011-my-feature WP04 doing --note "Starting implementation"
+python3 .kittify/scripts/tasks/tasks_cli.py update 011-my-feature WP04 for_review --note "Ready for review"
+```
+
+The update command handles:
+1. Updating the `lane:` field in frontmatter (file stays in `tasks/`)
+2. Updating the `lane:` field in YAML frontmatter
+3. Recording `agent` and `shell_pid` metadata
+4. Appending an entry to the Activity Log
+5. Staging the changes for commit
+
+---
+
+## 6. Git Discipline Rule
+
+**Keep commits clean and auditable.**
+
+- Commit only meaningful units of work.  
+- Write descriptive commit messages (imperative mood).  
+- Do not rewrite history of shared branches.  
+- Keep feature branches up to date with main via merge or rebase as appropriate.  
+- Never commit secrets, tokens, or credentials.
+
+---
+
+### Quick Reference
+
+- **Paths**: Always specify exact locations.
+- **Encoding**: UTF-8 only. Run the validator when unsure.
+- **Context**: Read what you need; don't forget what you already learned.
+- **Quality**: Follow secure, tested, documented practices.
+- **Tasks**: FLAT structure only - NO subdirectories in `tasks/`. Use `tasks_cli.py update` to change lanes.
+- **Git**: Commit cleanly with clear messages.

@@ -264,7 +264,7 @@ test('should calculate tourist tax correctly', async ({ page }) => {
   await page.fill('[data-testid="nights"]', '8');
   await page.fill('[data-testid="guests"]', '2');
 
-  // Should calculate €4 × 7 nights × 2 guests = €56
+  // Should calculate €4 x 7 nights x 2 guests = €56
   await expect(page.locator('[data-testid="tourist-tax"]')).toContainText(
     '€56.00'
   );
@@ -403,7 +403,7 @@ describe('BookingWorkflow', () => {
     });
 
     // Verify compliance
-    expect(booking.touristTax).toBe(32.0); // €4 × 2 guests × 4 nights
+    expect(booking.touristTax).toBe(32.0); // €4 x 2 guests x 4 nights
     expect(booking.sibaRequired).toBe(true);
 
     // Generate invoice

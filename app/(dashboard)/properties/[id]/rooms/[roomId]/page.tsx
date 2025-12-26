@@ -44,7 +44,7 @@ export default async function EditRoomPage({
             name: room.name,
             type: room.type as 'dormitory' | 'private' | 'suite',
             beds: room.beds,
-            pricePerNight: room.pricePerNight,
+            pricePerNight: room.pricePerNight / 100, // Convert cents to euros for form
             maxOccupancy: room.maxOccupancy,
             description: room.description || '',
           }}

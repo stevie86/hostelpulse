@@ -16,6 +16,7 @@ import {
   Database,
   Monitor,
   CheckCircle,
+  CreditCard,
 } from 'lucide-react';
 
 interface SidebarItemProps {
@@ -119,6 +120,11 @@ export default function Sidebar() {
       label: 'Data Hub',
       href: `/properties/${pid}/data`,
     },
+    {
+      icon: <CreditCard size={20} />,
+      label: 'Invoices',
+      href: `/properties/${pid}/invoices`,
+    },
   ];
 
   return (
@@ -205,8 +211,8 @@ export default function Sidebar() {
           <SidebarItem
             icon={<Settings size={20} />}
             label="Settings"
-            href="/settings"
-            active={pathname === '/settings'}
+            href={`/properties/${pid}/settings`}
+            active={pathname === `/properties/${pid}/settings`}
             collapsed={collapsed}
           />
           <motion.button

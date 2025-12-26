@@ -21,6 +21,7 @@ HostelPulse is a comprehensive SaaS platform designed to revolutionize hostel ma
 - **Room Management**: Flexible room/bed configurations with availability tracking
 - **CSV Import/Export**: Bulk data operations for seamless migrations
 - **Staff Collaboration**: Role-based access with team coordination tools
+- **SEF Compliance**: Automated Portuguese immigration reporting to prevent €500+ daily fines
 
 ## 🏗️ Architecture
 
