@@ -49,6 +49,13 @@ export async function DashboardCards({ propertyId }: { propertyId: string }) {
         <div className={`stat-value ${occupancyColor}`}>
           {stats.currentOccupancyPercentage.toFixed(0)}%
         </div>
+        <div className="stat-desc">
+          <progress
+            className={`progress ${stats.currentOccupancyPercentage > 80 ? 'progress-error' : stats.currentOccupancyPercentage > 50 ? 'progress-warning' : 'progress-success'}`}
+            value={stats.currentOccupancyPercentage}
+            max="100"
+          ></progress>
+        </div>
       </div>
     </div>
   );

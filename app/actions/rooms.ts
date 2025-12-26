@@ -31,11 +31,16 @@ export async function createRoom(
     return { message: error instanceof Error ? error.message : 'Unauthorized' };
   }
 
+  const priceInEuros = formData.get('pricePerNight');
+  const priceInCents = priceInEuros
+    ? Math.round(parseFloat(priceInEuros as string) * 100)
+    : 0;
+
   const rawData = {
     name: formData.get('name'),
     type: formData.get('type'),
     beds: formData.get('beds'),
-    pricePerNight: formData.get('pricePerNight'),
+    pricePerNight: priceInCents,
     maxOccupancy: formData.get('maxOccupancy'),
     description: formData.get('description') || undefined,
   };
@@ -87,11 +92,16 @@ export async function updateRoom(
     return { message: error instanceof Error ? error.message : 'Unauthorized' };
   }
 
+  const priceInEuros = formData.get('pricePerNight');
+  const priceInCents = priceInEuros
+    ? Math.round(parseFloat(priceInEuros as string) * 100)
+    : 0;
+
   const rawData = {
     name: formData.get('name'),
     type: formData.get('type'),
     beds: formData.get('beds'),
-    pricePerNight: formData.get('pricePerNight'),
+    pricePerNight: priceInCents,
     maxOccupancy: formData.get('maxOccupancy'),
     description: formData.get('description') || undefined,
   };

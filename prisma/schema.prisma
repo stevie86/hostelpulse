@@ -3,8 +3,8 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = "file:./dev.db"
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model Account {
@@ -66,7 +66,7 @@ model Team {
   name            String
   slug            String       @unique
   domain          String?      @unique
-  defaultRole     String         @default("MEMBER")
+  defaultRole     Role         @default(MEMBER)
   billingId       String?
   billingProvider String?
   createdAt       DateTime     @default(now())
@@ -83,7 +83,7 @@ model TeamMember {
   id        String   @id @default(uuid())
   teamId    String
   userId    String
-  role      String     @default("MEMBER")
+  role      Role     @default(MEMBER)
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
   team      Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
@@ -109,10 +109,13 @@ model Property {
   cityTaxRate  Float     @default(2.0) // Lisbon city tax per night per person
   checkInTime  String    @default("15:00")
   checkOutTime String    @default("11:00")
+  invoicingProvider String?  // 'moloni', 'external', null
+  externalInvoiceUrl String? // For external invoicing tools
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @default(now())
   bookings     Booking[]
   guests       Guest[]
+  sefReports   SEFReport[]
   team         Team      @relation(fields: [teamId], references: [id], onDelete: Cascade)
   rooms        Room[]
 }
@@ -148,16 +151,24 @@ model Booking {
   status           String       @default("confirmed")
   channel          String?
   totalAmount      Int          @default(0)
+  accommodationAmount Int       @default(0) // Accommodation cost before tax
+  touristTaxAmount Int          @default(0) // Tourist tax in cents
+  guestCount       Int          @default(1) // Number of guests (MANDATORY for tax calculation)
+  municipality     String?      // Municipality for tax calculation
+  taxBreakdown     Json?        // Full tax calculation breakdown
   amountPaid       Int          @default(0)
   paymentStatus    String       @default("pending")
   notes            String?
   confirmationCode String?      @unique
   createdAt        DateTime     @default(now())
   updatedAt        DateTime     @default(now())
+  feedback         String?
+  rating           Int?         @default(0)
   guest            Guest?       @relation(fields: [guestId], references: [id])
   property         Property     @relation(fields: [propertyId], references: [id], onDelete: Cascade)
   beds             BookingBed[]
   payments         Payment[]
+  sefReports       SEFReport[]
 
   @@index([propertyId])
   @@index([checkIn])
@@ -183,6 +194,7 @@ model Guest {
   propertyId   String
   firstName    String
   lastName     String
+  currency     String    @default("EUR")
   email        String?
   phone        String?
   nationality  String?
@@ -192,12 +204,14 @@ model Guest {
   address      String?
   city         String?
   country      String?
-  notes        String?
-  blacklisted  Boolean   @default(false)
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @default(now())
-  bookings     Booking[]
-  property     Property  @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  notes         String?
+  blacklisted   Boolean   @default(false)
+  passportExpiry DateTime?  // For SEF document validation
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @default(now())
+  bookings      Booking[]
+  sefReports    SEFReport[]
+  property      Property  @relation(fields: [propertyId], references: [id], onDelete: Cascade)
 
   @@index([propertyId])
   @@index([email])
@@ -245,7 +259,7 @@ model Invitation {
   id             String   @id @default(uuid())
   teamId         String
   email          String?
-  role           String     @default("MEMBER")
+  role           Role     @default(MEMBER)
   token          String   @unique
   expires        DateTime
   invitedBy      String
@@ -315,7 +329,7 @@ model Price {
   currency      String
   serviceId     String
   amount        Int?
-
+  metadata      Json
   type          String
   created       DateTime
   service       Service  @relation(fields: [serviceId], references: [id], onDelete: Cascade)
@@ -354,4 +368,42 @@ model jackson_ttl {
   @@ignore
 }
 
+enum Role {
+  ADMIN
+  OWNER
+  MEMBER
+}
 
+enum SEFReportType {
+  CHECK_IN
+  CHECK_OUT
+  MONTHLY_SUMMARY
+}
+
+enum SEFStatus {
+  PENDING
+  SUBMITTED
+  FAILED
+  RETRY
+}
+
+model SEFReport {
+  id            String       @id @default(uuid())
+  propertyId    String
+  guestId       String
+  bookingId     String
+  reportType    SEFReportType
+  status        SEFStatus    @default(PENDING)
+  submittedAt   DateTime?
+  referenceId   String?      // SEF reference number
+  errorMessage  String?
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @default(now())
+
+  property      Property     @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  guest         Guest        @relation(fields: [guestId], references: [id], onDelete: Cascade)
+  booking       Booking      @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+
+  @@index([propertyId, status])
+  @@index([submittedAt])
+}

@@ -51,7 +51,9 @@ export function RoomForm({
       name: initialValues?.name || '',
       type: initialValues?.type || 'private',
       beds: initialValues?.beds || 1,
-      pricePerNight: initialValues?.pricePerNight || 0,
+      pricePerNight: initialValues?.pricePerNight
+        ? initialValues.pricePerNight / 100
+        : 0, // Convert cents to euros
       maxOccupancy: initialValues?.maxOccupancy || 1,
       description: initialValues?.description || '',
     },
@@ -158,21 +160,32 @@ export function RoomForm({
       {/* Price */}
       <div className="form-control w-full">
         <label className="label">
-          <span className="label-text">Price per Night (Cents)</span>
+          <span className="label-text font-semibold text-lg">
+            💰 Price per Night
+          </span>
         </label>
-        <input
-          type="number"
-          min="0"
-          className={`input input-bordered w-full ${
-            state.errors?.pricePerNight || clientErrors.pricePerNight
-              ? 'input-error'
-              : ''
-          }`}
-          {...register('pricePerNight')}
-        />
+        <div className="join">
+          <span className="join-item btn btn-outline">€</span>
+          <input
+            type="number"
+            min="0"
+            step="0.01"
+            placeholder="25.00"
+            className={`input input-bordered join-item w-full ${
+              state.errors?.pricePerNight || clientErrors.pricePerNight
+                ? 'input-error'
+                : ''
+            }`}
+            {...register('pricePerNight')}
+          />
+        </div>
         <label className="label">
           <span className="label-text-alt text-gray-500">
-            Example: 2500 = €25.00
+            For dorms: price per person per night
+            <br />
+            For private rooms: price per room per night
+            <br />
+            Enter in euros (e.g., 25.00 for €25)
           </span>
           <span className="label-text-alt text-error">
             {state.errors?.pricePerNight?.join(', ') ||

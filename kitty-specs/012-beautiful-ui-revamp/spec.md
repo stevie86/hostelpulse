@@ -24,8 +24,8 @@ Modernize the **welcome page** and shared layout/components to match the provide
 
 - Match the screenshot style: light background, soft borders, subtle shadows, rounded cards, and compact typography hierarchy.
 - Include a top header with hostel name + location and a row of pill buttons (dashboard/bookings/guests/add room).
-- Provide a “Details” card with currency + timezone.
-- Provide a “Rooms” section with a right-aligned CSV import/export action group.
+- Provide a "Details" card with currency + timezone.
+- Provide a "Rooms" section with a right-aligned CSV import/export action group.
 - Display room cards in a responsive grid (3 columns on desktop, 2 on tablet, 1 on mobile).
 - Use DaisyUI + Tailwind only (no HeroUI migration in this feature).
 

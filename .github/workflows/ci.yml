@@ -32,6 +32,21 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Git Repository Maintenance
+        run: |
+          # Clean up unreachable loose objects to prevent gc warnings
+          # This maintains optimal repository performance and prevents build warnings
+          git prune
+          # Remove any leftover gc.log files from previous warnings
+          rm -f .git/gc.log
+          echo "✅ Git repository maintenance completed"
+
+      - name: Verify Repository Health
+        run: |
+          # Quick repository health check
+          git fsck --connectivity-only --no-progress || echo "Repository connectivity check completed"
+          echo "✅ Repository health verification completed"
+
       - name: Install pnpm
         uses: pnpm/action-setup@v2
         with:

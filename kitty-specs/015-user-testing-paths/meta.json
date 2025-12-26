@@ -1,0 +1,18 @@
+{
+  "id": "015-user-testing-paths",
+  "name": "User Testing Paths & QA Framework",
+  "description": "Comprehensive testing framework for HostelPulse covering user journeys, compliance validation, and quality assurance",
+  "priority": "high",
+  "status": "planned",
+  "tags": ["testing", "qa", "compliance", "user-experience"],
+  "estimated_effort": "8 weeks",
+  "dependencies": [
+    "001-restore-room-management",
+    "002-booking-management",
+    "003-guest-management",
+    "010-check-in-out-ui"
+  ],
+  "owner": "QA Team",
+  "created": "2025-01-01",
+  "updated": "2025-01-01"
+}

@@ -1,0 +1,7 @@
+{
+  "feature_number": "014",
+  "slug": "014-integrate-playwright-screen-recorder-for-pitch-demo",
+  "friendly_name": "Integrate Playwright Screen Recorder for Pitch Demo",
+  "source_description": "Integrate Playwright screen recorder to capture test execution videos for pitch walkthroughs.",
+  "created_at": "2025-12-24T14:30:00Z"
+}

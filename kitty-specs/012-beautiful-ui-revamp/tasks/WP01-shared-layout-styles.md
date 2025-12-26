@@ -13,7 +13,7 @@ review_status: 'approved'
 reviewed_by: 'user'
 ---
 
-# Work Package Prompt: WP01 – Shared layout + component styling foundation
+# Work Package Prompt: WP01 -- Shared layout + component styling foundation
 
 ## Goal
 

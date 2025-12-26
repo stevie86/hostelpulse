@@ -1,0 +1,22 @@
+{
+  "id": "017-tourist-tax-calculation",
+  "name": "Tourist Tax Calculation Engine",
+  "description": "Implement automated Portuguese tourist tax calculation with 40+ municipality support, 7-night legal cap, and exemption processing",
+  "priority": "critical",
+  "status": "planned",
+  "tags": [
+    "tax-calculation",
+    "portuguese-compliance",
+    "revenue",
+    "booking-integration"
+  ],
+  "estimated_effort": "4 weeks",
+  "dependencies": [
+    "001-restore-room-management",
+    "002-booking-management",
+    "003-guest-management"
+  ],
+  "owner": "Development Team",
+  "created": "2025-01-01",
+  "updated": "2025-01-01"
+}

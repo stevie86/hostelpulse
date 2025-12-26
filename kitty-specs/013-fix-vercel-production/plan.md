@@ -5,7 +5,7 @@
 
 **Note**: This template is filled in by the `/spec-kitty.plan` command. See `.kittify/templates/commands/plan.md` for the execution workflow.
 
-The planner will not begin until all planning questions have been answered—capture those answers in this document before progressing to later phases.
+The planner will not begin until all planning questions have been answered---capture those answers in this document before progressing to later phases.
 
 ## Summary
 

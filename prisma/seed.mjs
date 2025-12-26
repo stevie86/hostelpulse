@@ -134,29 +134,109 @@ async function seedRooms(properties) {
   const propertyId = properties[0].id;
 
   const roomData = [
+    // Dorms
     {
-      name: 'Dorm 1',
+      name: 'Ocean View Dorm',
+      type: 'dormitory',
+      beds: 10,
+      pricePerNight: 2500,
+      maxOccupancy: 10,
+      status: 'available',
+      description: 'Shared dorm with amazing ocean views',
+    },
+    {
+      name: 'Mountain View Dorm',
       type: 'dormitory',
       beds: 8,
-      pricePerNight: 2500,
+      pricePerNight: 2200,
       maxOccupancy: 8,
       status: 'available',
+      description: 'Cozy dorm overlooking the mountains',
     },
     {
-      name: 'Private A',
+      name: 'City Center Dorm',
+      type: 'dormitory',
+      beds: 12,
+      pricePerNight: 2800,
+      maxOccupancy: 12,
+      status: 'available',
+      description: 'Perfect for budget travelers',
+    },
+    {
+      name: 'Garden Dorm',
+      type: 'dormitory',
+      beds: 6,
+      pricePerNight: 2600,
+      maxOccupancy: 6,
+      status: 'available',
+      description: 'Peaceful garden setting',
+    },
+
+    // Private Rooms
+    {
+      name: 'Sunset Private',
       type: 'private',
       beds: 2,
-      pricePerNight: 6000,
+      pricePerNight: 6500,
       maxOccupancy: 2,
       status: 'available',
+      description: 'Romantic room with sunset views',
     },
     {
-      name: 'Suite Deluxe',
-      type: 'suite',
+      name: 'Deluxe Private',
+      type: 'private',
       beds: 2,
-      pricePerNight: 10000,
+      pricePerNight: 7000,
       maxOccupancy: 2,
       status: 'available',
+      description: 'Spacious room with city views',
+    },
+    {
+      name: 'Budget Private',
+      type: 'private',
+      beds: 2,
+      pricePerNight: 4500,
+      maxOccupancy: 2,
+      status: 'available',
+      description: 'Affordable private option',
+    },
+    {
+      name: 'Family Room',
+      type: 'private',
+      beds: 4,
+      pricePerNight: 12000,
+      maxOccupancy: 4,
+      status: 'available',
+      description: 'Perfect for families',
+    },
+
+    // Suites
+    {
+      name: 'Presidential Suite',
+      type: 'suite',
+      beds: 2,
+      pricePerNight: 15000,
+      maxOccupancy: 2,
+      status: 'available',
+      description: 'Luxury suite with all amenities',
+    },
+    {
+      name: 'Executive Suite',
+      type: 'suite',
+      beds: 2,
+      pricePerNight: 12000,
+      maxOccupancy: 2,
+      status: 'available',
+      description: "Business traveler's dream",
+    },
+    {
+      name: 'Honeymoon Suite',
+      type: 'suite',
+      beds: 2,
+      pricePerNight: 18000,
+      maxOccupancy: 2,
+      status: 'available',
+      description: 'Romantic getaway suite',
     },
   ];
 
@@ -193,7 +273,50 @@ async function seedGuests(properties) {
   }
   const propertyId = properties[0].id;
 
-  for (let i = 0; i < 5; i++) {
+  // Create some VIP guests with more details
+  const vipGuests = [
+    {
+      firstName: 'Sarah',
+      lastName: 'Johnson',
+      email: 'sarah.johnson@email.com',
+      phone: '+1-555-0123',
+      nationality: 'United States',
+      notes: 'Frequent traveler, prefers ocean view rooms',
+    },
+    {
+      firstName: 'Marco',
+      lastName: 'Rodriguez',
+      email: 'marco.rodriguez@email.com',
+      phone: '+34-666-0123',
+      nationality: 'Spain',
+      notes: 'Business traveler, needs quiet room',
+    },
+    {
+      firstName: 'Emma',
+      lastName: 'Chen',
+      email: 'emma.chen@email.com',
+      phone: '+86-138-0123',
+      nationality: 'China',
+      notes: 'Group leader for student tours',
+    },
+  ];
+
+  for (const vipData of vipGuests) {
+    try {
+      const guest = await client.guest.create({
+        data: {
+          propertyId,
+          ...vipData,
+        },
+      });
+      newGuests.push(guest);
+    } catch (ex) {
+      console.error('Error seeding VIP guest:', ex);
+    }
+  }
+
+  // Add regular guests
+  for (let i = 0; i < 17; i++) {
     try {
       const guest = await client.guest.create({
         data: {
@@ -236,11 +359,18 @@ async function seedBookings(properties, rooms, guests) {
     return newBookings;
   }
 
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < 25; i++) {
     const randomRoom = allRooms[Math.floor(Math.random() * allRooms.length)];
     const randomGuest = allGuests[Math.floor(Math.random() * allGuests.length)];
-    const checkIn = faker.date.soon({ days: 10, refDate: new Date() });
-    const checkOut = faker.date.soon({ days: 5, refDate: checkIn });
+    // Mix of past, current, and future bookings
+    const checkIn = faker.date.between({
+      from: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), // 30 days ago
+      to: new Date(Date.now() + 60 * 24 * 60 * 60 * 1000), // 60 days future
+    });
+    const checkOut = faker.date.soon({
+      days: faker.number.int({ min: 1, max: 7 }),
+      refDate: checkIn,
+    });
 
     try {
       const booking = await client.booking.create({
@@ -249,7 +379,12 @@ async function seedBookings(properties, rooms, guests) {
           guestId: randomGuest.id,
           checkIn,
           checkOut,
-          status: 'confirmed',
+          status: faker.helpers.arrayElement([
+            'confirmed',
+            'pending',
+            'checked_in',
+            'completed',
+          ]),
           totalAmount:
             randomRoom.pricePerNight *
             Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24)),

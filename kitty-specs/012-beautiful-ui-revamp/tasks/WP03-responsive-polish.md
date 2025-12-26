@@ -13,7 +13,7 @@ review_status: 'approved'
 reviewed_by: 'user'
 ---
 
-# Work Package Prompt: WP03 – Responsive polish + visual parity pass
+# Work Package Prompt: WP03 -- Responsive polish + visual parity pass
 
 ## Goal
 

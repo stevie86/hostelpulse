@@ -1,0 +1,36 @@
+---
+work_package_id: 'WP02'
+title: 'Welcome page layout + demo data'
+lane: 'done'
+subtasks:
+  - 'T003'
+  - 'T004'
+phase: 'Phase 2 - Welcome Page'
+assignee: 'user'
+agent: 'Gemini'
+shell_pid: '8081'
+review_status: 'approved'
+reviewed_by: 'user'
+---
+
+# Work Package Prompt: WP02 – Welcome page layout + demo data
+
+## Goal
+
+Implement the welcome page UI to match the screenshot, including the demo hostel details and room cards.
+
+## Tasks
+
+- T003: Replace redirect-only `app/page.tsx` with the new welcome page layout.
+- T004: Add static demo data (8 rooms, 5 bookings) for the page display.
+
+## Activity Log
+
+- 2025-12-19T00:00:00Z - system - lane=planned - Prompt generated via manual task creation
+- 2025-12-19T10:30:00Z - Gemini - shell_pid=8081 - lane=doing - Implementation started
+- 2025-12-19T11:00:00Z - Gemini - shell_pid=8081 - lane=done - Implementation completed and verified
+
+## Notes
+
+- Keep DaisyUI/Tailwind.
+- No DB or server action changes.

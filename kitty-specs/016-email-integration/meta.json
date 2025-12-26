@@ -1,0 +1,17 @@
+{
+  "id": "016-email-integration",
+  "name": "Email Integration & Invoice Delivery",
+  "description": "Implement professional email functionality using SendGrid for invoice delivery, booking confirmations, and guest communications",
+  "priority": "high",
+  "status": "planned",
+  "tags": ["email", "sendgrid", "invoicing", "communication", "gdpr"],
+  "estimated_effort": "4 weeks",
+  "dependencies": [
+    "002-booking-management",
+    "010-check-in-out-ui",
+    "015-user-testing-paths"
+  ],
+  "owner": "Development Team",
+  "created": "2025-01-01",
+  "updated": "2025-01-01"
+}

@@ -1,104 +1,178 @@
-# Repository Guidelines & Agent Context
+# Agent Rules for Spec Kitty Projects
 
-**Project:** HostelPulse (Clean Slate / Operation Bedrock)
-**Stack:** Next.js 15, Prisma, Tailwind CSS, DaisyUI
-**Package Manager:** **pnpm** (Strictly enforced)
+**⚠️ CRITICAL**: All AI agents working in this project must follow these rules.
 
-## Core Philosophy
+These rules apply to **all commands** (specify, plan, research, tasks, implement, review, merge, etc.).
 
-**Operation Bedrock:** Prioritize stability, type safety, and clean architecture over rapid feature expansion.
-**Anti-Scope Creep:** Stick to the MVP Roadmap. Advanced SaaS features (AWS Lambda, EventBridge) are _reference patterns_ but should not delay the Vercel-based MVP launch unless critical.
+---
 
-## 1. Workflow: Spec-Driven Development
+## 1. Path Reference Rule
 
-All feature work is managed by `spec-kitty`.
+**When you mention directories or files, provide either the absolute path or a path relative to the project root.**
 
-- **Start Feature:** `npm run spec -- specify "Feature Name"` (Creates branch & worktree).
-- **Plan & Task:** `npm run spec -- plan` -> `npm run spec -- tasks`.
-- **Implement:** Work strictly within `.worktrees/XXX-feature-name`.
-- **Merge:** `npm run spec -- merge`.
-- **Dashboard:** `npm run spec -- dashboard`.
+✅ **CORRECT** (v0.9.0+):
+- `kitty-specs/001-feature/tasks/WP01.md`
+- `/Users/robert/Code/myproject/kitty-specs/001-feature/spec.md`
+- `tasks/WP01.md` (relative to feature directory)
 
-**Rule:** NEVER commit directly to `main`. Always use a feature branch managed by `spec-kitty`.
+❌ **WRONG**:
+- "the tasks folder" (which one? where?)
+- "WP01.md" (where? which feature?)
+- "the spec" (which feature's spec?)
+- `tasks/planned/WP01.md` (v0.8.x format - no longer used)
+- `tasks/phase-1/WP01.md` (NO subdirectories!)
 
-## 2. Directory Structure
+**Why**: Clarity and precision prevent errors. Never refer to a folder by name alone.
 
-- `app/`: Next.js App Router (Primary).
-- `app/actions/`: Server Actions (Data mutations).
-- `components/`: Reusable UI (Atomic design).
-- `lib/`: Shared utilities & DB (`lib/db.ts`).
-- `prisma/`: Schema & Seeds.
-- `kitty-specs/`: Feature specifications and plans.
-- `.worktrees/`: Active development workspaces (Git ignored).
+---
 
-## 3. Commands
+## 2. UTF-8 Encoding Rule
 
-- **Install:** `mise run -- pnpm install`
-- **Dev:** `mise run -- pnpm run dev`
-- **Build:** `mise run -- pnpm run build`
-- **Lint:** `mise run -- pnpm run lint` / `pnpm run lint:fix`
-- **Format:** `mise run -- pnpm run format` / `pnpm run format:check`
-- **Type-check:** `mise run -- pnpm run type-check`
-- **Test (Unit):** `mise run -- pnpm run test`
-- **Test (Single):** `pnpm test __tests__/actions/auth.test.ts` (Jest pattern matching)
-- **Test (E2E):** `mise run -- pnpm run test:e2e`
-- **Test (All):** `mise run -- pnpm run test:all`
-- **DB Push:** `mise run -- npx prisma db push` (Prototyping)
-- **Spec Kitty:** `mise run -- pnpm run spec -- <command>`
+**When writing ANY markdown, JSON, YAML, CSV, or code files, use ONLY UTF-8 compatible characters.**
 
-## 4. Coding Standards
+### What to Avoid (Will Break the Dashboard)
 
-### Build/Lint/Test Commands
+❌ **Windows-1252 smart quotes**: " " ' ' (from Word/Outlook/Office)
+❌ **Em/en dashes and special punctuation**: — –
+❌ **Copy-pasted arrows**: → (becomes illegal bytes)
+❌ **Multiplication sign**: × (0xD7 in Windows-1252)
+❌ **Plus-minus sign**: ± (0xB1 in Windows-1252)
+❌ **Degree symbol**: ° (0xB0 in Windows-1252)
+❌ **Copy/paste from Microsoft Office** without cleaning
 
-- **Install:** `mise run -- pnpm install`
-- **Build:** `mise run -- pnpm run build`
-- **Lint:** `mise run -- pnpm run lint` (fix with `pnpm run lint:fix`)
-- **Format:** `mise run -- pnpm run format` (check with `pnpm run format:check`)
-- **Type Check:** `mise run -- pnpm run type-check`
-- **Unit Tests:** `mise run -- pnpm run test` (single test: `pnpm test __tests__/path/to/test.test.ts`)
-- **E2E Tests:** `mise run -- pnpm run test:e2e`
-- **All Tests:** `mise run -- pnpm run test:all`
+**Real examples that crashed the dashboard:**
+- "User's favorite feature" → "User's favorite feature" (smart quote)
+- "Price: $100 ± $10" → "Price: $100 +/- $10"
+- "Temperature: 72°F" → "Temperature: 72 degrees F"
+- "3 × 4 matrix" → "3 x 4 matrix"
 
-### Code Style Guidelines
+### What to Use Instead
 
-- **Formatting:** Single quotes, trailing comma 'es5', semicolons, 80 char width
-- **Types:** Strict TypeScript, zero `any` usage, define Zod schemas in `lib/schemas/`
-- **Naming:** PascalCase components, camelCase variables/functions, kebab-case files
-- **Imports:** Absolute paths with `@/` alias, group by external/internal
-- **Error Handling:** Try/catch in async functions, descriptive error messages
-- **Server Actions:** Use for all mutations, validate inputs with Zod
-- **Forms:** `react-hook-form` + `zodResolver`, handle server validation errors
-- **UI:** Tailwind utility classes + DaisyUI components, atomic design pattern
-- **Components:** Functional with hooks, explicit return types, prop interfaces
-- **Database:** Filter all queries by `propertyId` (multi-tenancy)
+✅ Standard ASCII quotes: `"`, `'`
+✅ Hyphen-minus: `-` instead of en/em dash
+✅ ASCII arrow: `->` instead of →
+✅ Lowercase `x` for multiplication
+✅ `+/-` for plus-minus
+✅ ` degrees` for temperature
+✅ Plain punctuation
 
-## 5. SaaS Architecture Patterns
+### Safe Characters
 
-Refer to `docs/SAAS_BUILDER_SETUP.md` for multi-tenancy logic.
+✅ Emoji (proper UTF-8)  
+✅ Accented characters typed directly: café, naïve, Zürich  
+✅ Unicode math typed directly (√ ≈ ≠ ≤ ≥)  
 
-- **Multi-Tenancy:** Ensure every Prisma query filters by `propertyId` (which maps to Tenant).
-- **Usage Tracking:** (Future) Implement tracking points where identified.
+### Copy/Paste Guidance
 
-## 6. Testing
+1. Paste into a plain-text buffer first (VS Code, TextEdit in plain mode)
+2. Replace smart quotes and dashes
+3. Verify no � replacement characters appear
+4. Run `spec-kitty validate-encoding --feature <feature-id>` to check
+5. Run `spec-kitty validate-encoding --feature <feature-id> --fix` to auto-repair
 
-- **Unit:** Jest for all Server Actions and Logic. Colocate tests in `__tests__` or next to files.
-- **E2E:** Playwright for critical user flows (Booking, Login).
+**Failure to follow this rule causes the dashboard to render blank pages.**
 
-## 7. Commit Guidelines
+### Auto-Fix Available
 
-- Format: `feat:`, `fix:`, `chore:`.
-- Scope: Keep changes specific to the active `spec-kitty` feature.
-
-## 8. Interaction Logging
-
-To keep a record of our interactions, all commands should be piped to a timestamped log file in the `logs/` directory.
-
-**Example:**
-
+If you accidentally introduce problematic characters:
 ```bash
-# General command logging
-some_command | tee -a logs/interaction-$(date +%Y-%m-%d).log
+# Check for encoding issues
+spec-kitty validate-encoding --feature 001-my-feature
 
-# Spec-kitty command logging
-pnpm run spec -- <command> | tee -a logs/interaction-$(date +%Y-%m-%d).log
+# Automatically fix all issues (creates .bak backups)
+spec-kitty validate-encoding --feature 001-my-feature --fix
+
+# Check all features at once
+spec-kitty validate-encoding --all --fix
 ```
+
+---
+
+## 3. Context Management Rule
+
+**Build the context you need, then maintain it intelligently.**
+
+- Session start (0 tokens): You have zero context. Read plan.md, tasks.md, relevant artifacts.  
+- Mid-session (you already read them): Use your judgment—don’t re-read everything unless necessary.  
+- Never skip relevant information; do skip redundant re-reads to save tokens.  
+- Rely on the steps in the command you are executing.
+
+---
+
+## 4. Work Quality Rule
+
+**Produce secure, tested, documented work.**
+
+- Follow the plan and constitution requirements.  
+- Prefer existing patterns over invention.  
+- Treat security warnings as fatal—fix or escalate.  
+- Run all required tests before claiming work is complete.  
+- Be transparent: state what you did, what you didn’t, and why.
+
+---
+
+## 5. Task Lane Management Rule (v0.9.0+)
+
+**v0.9.0+ FLAT STRUCTURE**: All WP files are stored directly in `tasks/` (no subdirectories).
+
+The lane is determined **solely by the `lane:` frontmatter field**, not directory location.
+
+**Directory structure:**
+```
+tasks/
+├── WP01-setup.md       (lane: "planned" in frontmatter)
+├── WP02-backend.md     (lane: "doing" in frontmatter)
+├── WP03-frontend.md    (lane: "for_review" in frontmatter)
+└── WP04-testing.md     (lane: "done" in frontmatter)
+```
+
+⚠️  **CRITICAL: NO SUBDIRECTORIES IN tasks/**
+
+**NEVER** create subdirectories for organization:
+- ❌ `tasks/phase-1/WP01.md` - WRONG
+- ❌ `tasks/backend/WP02.md` - WRONG
+- ❌ `tasks/planned/WP03.md` - WRONG (old v0.8.x format)
+- ✅ `tasks/WP01.md` - CORRECT
+
+Use frontmatter fields for organization:
+- `phase: "Phase 1"` - NOT directories
+- `component: "Backend"` - NOT directories
+
+**To change lanes, use the update command:**
+```bash
+python3 .kittify/scripts/tasks/tasks_cli.py update <FEATURE> <WPID> <lane> --note "Your note"
+
+# Examples:
+python3 .kittify/scripts/tasks/tasks_cli.py update 011-my-feature WP04 doing --note "Starting implementation"
+python3 .kittify/scripts/tasks/tasks_cli.py update 011-my-feature WP04 for_review --note "Ready for review"
+```
+
+The update command handles:
+1. Updating the `lane:` field in frontmatter (file stays in `tasks/`)
+2. Updating the `lane:` field in YAML frontmatter
+3. Recording `agent` and `shell_pid` metadata
+4. Appending an entry to the Activity Log
+5. Staging the changes for commit
+
+---
+
+## 6. Git Discipline Rule
+
+**Keep commits clean and auditable.**
+
+- Commit only meaningful units of work.  
+- Write descriptive commit messages (imperative mood).  
+- Do not rewrite history of shared branches.  
+- Keep feature branches up to date with main via merge or rebase as appropriate.  
+- Never commit secrets, tokens, or credentials.
+
+---
+
+### Quick Reference
+
+- **Paths**: Always specify exact locations.
+- **Encoding**: UTF-8 only. Run the validator when unsure.
+- **Context**: Read what you need; don't forget what you already learned.
+- **Quality**: Follow secure, tested, documented practices.
+- **Tasks**: FLAT structure only - NO subdirectories in `tasks/`. Use `tasks_cli.py update` to change lanes.
+- **Git**: Commit cleanly with clear messages.

@@ -50,7 +50,7 @@ history:
     agent: 'system'
     action: 'Prompt generated via /spec-kitty.tasks'
 ---
-# Work Package Prompt: WP01 – Work Package Title
+# Work Package Prompt: WP01 -- Work Package Title
 
 [Content follows...]
 ```
