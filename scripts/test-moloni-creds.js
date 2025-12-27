@@ -3,7 +3,54 @@
  * Run with: node scripts/test-moloni-creds.js
  */
 
+const path = require('path');
+const fs = require('fs');
+
+// Debug: Check if .env.local exists
+const envLocalFile = path.resolve('.env.local');
+console.log('🔍 Looking for .env.local at:', envLocalFile);
+console.log('📄 .env.local exists:', fs.existsSync(envLocalFile));
+
 require('dotenv').config({ path: '.env.local' });
+require('dotenv').config({ path: '.env' });
+
+// Debug: Show what dotenv found
+console.log('🔧 Environment after dotenv load:');
+console.log('   MOLONI_CLIENT_ID:', process.env.MOLONI_CLIENT_ID ? '✅' : '❌');
+console.log(
+  '   MOLONI_CLIENT_SECRET:',
+  process.env.MOLONI_CLIENT_SECRET ? '✅' : '❌'
+);
+console.log(
+  '   MOLONI_REDIRECT_URI:',
+  process.env.MOLONI_REDIRECT_URI ? '✅' : '❌'
+);
+require('dotenv').config({ path: '.env' });
+
+// Debug: Show what dotenv found
+console.log('🔧 Environment after dotenv load:');
+console.log('   MOLONI_CLIENT_ID:', process.env.MOLONI_CLIENT_ID ? '✅' : '❌');
+console.log(
+  '   MOLONI_CLIENT_SECRET:',
+  process.env.MOLONI_CLIENT_SECRET ? '✅' : '❌'
+);
+console.log(
+  '   MOLONI_REDIRECT_URI:',
+  process.env.MOLONI_REDIRECT_URI ? '✅' : '❌'
+); // Try .env.local first
+require('dotenv').config({ path: '.env' }); // Fallback to .env
+
+// Debug: Show what dotenv found
+console.log('🔧 Environment after dotenv load:');
+console.log('   MOLONI_CLIENT_ID:', process.env.MOLONI_CLIENT_ID ? '✅' : '❌');
+console.log(
+  '   MOLONI_CLIENT_SECRET:',
+  process.env.MOLONI_CLIENT_SECRET ? '✅' : '❌'
+);
+console.log(
+  '   MOLONI_REDIRECT_URI:',
+  process.env.MOLONI_REDIRECT_URI ? '✅' : '❌'
+);
 
 async function testMoloniCredentials() {
   console.log('🔍 Testing Moloni API Credentials...\n');
