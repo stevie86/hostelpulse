@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { getDailyActivity } from '@/app/actions/dashboard';
-import { DailyActivity } from '@/components/dashboard/daily-activity';
+// import { DailyActivity } from '@/components/dashboard/daily-activity';
 import { WalkInCheckInForm } from '@/components/guests/walkin-checkin-form';
 import { CheckOutForm } from '@/components/bookings/checkout-form';
 import { CheckCircle, LogOut, Users, Calendar, UserPlus } from 'lucide-react';
@@ -191,7 +191,15 @@ export function CheckInOutClient({
         {/* Today's Activity */}
         <div className="bg-white rounded-xl p-6 shadow-lg border">
           <h2 className="text-xl font-semibold mb-4">Today&apos;s Activity</h2>
-          <DailyActivity propertyId={propertyId} />
+          {/* DailyActivity temporarily disabled */}
+          <div className="bg-white rounded-xl p-6 shadow-lg border">
+            <h2 className="text-xl font-semibold mb-4">
+              Today&apos;s Activity
+            </h2>
+            <p className="text-base-content/70">
+              Activity dashboard temporarily disabled for production deployment.
+            </p>
+          </div>
         </div>
       </div>
     </div>

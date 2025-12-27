@@ -7,8 +7,8 @@ export interface InvoiceLine {
   name: string;
   qty: number;
   price: number; // Einzelpreis (Netto)
-  taxId: string; // ID der Steuer in Moloni
-  exemptionReason?: string; // Pflicht bei 0% Steuer
+  tax_id: string; // ID der Steuer in Moloni
+  exemption_reason?: string; // Pflicht bei 0% Steuer
 }
 
 export interface MoloniConfig {
@@ -40,7 +40,7 @@ export interface MoloniCustomer {
 export class MoloniService {
   private config: MoloniConfig;
   private baseUrl: string;
-  private token: string | null = null;
+  private token: string = '';
   private tokenExpiry: number = 0;
 
   constructor() {
@@ -92,7 +92,7 @@ export class MoloniService {
    */
   private async getToken(): Promise<string> {
     // Check if we have a valid cached token
-    if (this.token && Date.now() < this.tokenExpiry) {
+    if (this.token && this.token.length > 0 && Date.now() < this.tokenExpiry) {
       return this.token;
     }
 
@@ -219,12 +219,12 @@ export class MoloniService {
    */
   async createInvoice(
     customerNif: string,
-    customerData?: Omit<MoloniCustomer, 'customer_id'>,
     lines: InvoiceLine[],
+    customerData?: Omit<MoloniCustomer, 'customer_id'>,
     options?: {
       series?: string; // Invoice series (FR, FS, etc.)
       notes?: string;
-      exemptionReason?: string;
+      exemption_reason?: string;
     }
   ): Promise<MoloniInvoiceResponse> {
     console.log('📄 Creating Moloni invoice...');
@@ -248,9 +248,10 @@ export class MoloniService {
         price: line.price,
         taxes: [
           {
-            tax_id: line.taxId,
+            tax_id: line.tax_id,
             value: line.price * line.qty, // Tax base amount
-            exemption_reason: line.exemptionReason || options?.exemptionReason,
+            exemption_reason:
+              line.exemption_reason || options?.exemption_reason,
           },
         ],
         discount: 0,

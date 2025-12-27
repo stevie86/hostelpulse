@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 import { DashboardCards } from '@/components/dashboard/dashboard-cards';
-import { DailyActivity } from '@/components/dashboard/daily-activity';
+import DailyActivity from '@/components/dashboard/daily-activity';
 import Link from 'next/link';
 import { Settings } from 'lucide-react';
 import prisma from '@/lib/db';

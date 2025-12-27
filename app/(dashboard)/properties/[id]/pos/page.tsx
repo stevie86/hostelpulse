@@ -1,5 +1,5 @@
 import { getDashboardStats } from '@/app/actions/dashboard';
-import { DailyActivity } from '@/components/dashboard/daily-activity';
+import DailyActivity from '@/components/dashboard/daily-activity';
 import Link from 'next/link';
 import {
   Calendar,
