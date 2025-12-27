@@ -1,4 +1,4 @@
-import { GuestList } from '@/components/guests/guest-list';
+import GuestList from '@/components/guests/guest-list';
 import Link from 'next/link';
 import { Suspense } from 'react';
 
@@ -37,8 +37,7 @@ export default async function GuestsPage({
       </div>
 
       <div className="bg-base-100 rounded-box shadow">
-        <Suspense fallback={<div>Loading...</div>}>
-          <GuestList propertyId={propertyId} query={q} />
+    <GuestList propertyId={propertyId} query={q} />
         </Suspense>
       </div>
     </div>

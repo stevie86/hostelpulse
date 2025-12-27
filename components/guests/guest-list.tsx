@@ -1,17 +1,59 @@
 import { getGuests } from '@/app/actions/guests';
 import { getBookings } from '@/app/actions/bookings';
 import Link from 'next/link';
-import { GuestActions } from '@/components/guests/guest-actions';
 
-export default async function GuestsPage({
-  propertyId,
-  query,
-}: {
+// Define interfaces for type safety
+interface Guest {
+  id: string;
+  firstName: string;
+  lastName: string;
+  currency: string;
+  email: string | null;
+  phone: string | null;
+  nationality: string | null;
+  documentType: string | null;
+}
+
+interface Booking {
+  id: string;
+  propertyId: string;
+  guestId: string;
+  status: string;
+  checkIn?: Date;
+  checkOut?: Date;
+  totalAmount: number;
+  accommodationAmount: number;
+  createdAt: Date;
+  updatedAt: Date;
+  currency: string;
+}
+
+interface GuestListProps {
   propertyId: string;
   query?: string;
-}) {
-  const guests = await getGuests(propertyId, query);
-  const bookings = await getBookings(propertyId, 'checked_in');
+}
+
+export default function GuestList({ propertyId, query }: GuestListProps) {
+  const [guests, setGuests] = useState([]);
+  const [bookings, setBookings] = useState([]);
+
+  // Load data on mount
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const [guestsData, bookingsData] = await Promise.all([
+          getGuests(propertyId, query),
+          getBookings(propertyId, 'checked_in'),
+        ]);
+        setGuests(guestsData);
+        setBookings(bookingsData);
+      } catch (error) {
+        console.error('Error loading data:', error);
+      }
+    };
+
+    loadData();
+  }, [propertyId, query]);
 
   return (
     <div className="space-y-6">
@@ -39,41 +81,7 @@ export default async function GuestsPage({
         </form>
       </div>
 
-      {/* Guest Management Actions */}
-      <div className="bg-white rounded-xl p-6 shadow-lg border">
-        <h2 className="text-xl font-semibold mb-4">Quick Actions</h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div className="stat-card text-center">
-            <h3 className="text-2xl font-bold text-blue-600">
-              {bookings.filter((b) => b.status === 'checked_in').length}
-            </h3>
-            <p className="text-sm text-base-content/70">Currently Checked In</p>
-          </div>
-
-          <div className="stat-card text-center">
-            <h3 className="text-2xl font-bold text-green-600">
-              {bookings.filter((b) => b.status === 'confirmed').length}
-            </h3>
-            <p className="text-sm text-base-content/70">Expected Arrivals</p>
-          </div>
-
-          <div className="stat-card text-center">
-            <h3 className="text-2xl font-bold text-orange-600">
-              {bookings.filter((b) => b.status === 'completed').length}
-            </h3>
-            <p className="text-sm text-base-content/70">Departed Today</p>
-          </div>
-
-          <div className="stat-card text-center">
-            <h3 className="text-2xl font-bold text-purple-600">
-              {guests.length}
-            </h3>
-            <p className="text-sm text-base-content/70">Total Guests</p>
-          </div>
-        </div>
-      </div>
-
-      {/* Guests Table */}
+      {/* Guest Table */}
       <div className="bg-base-100 rounded-xl shadow-lg border overflow-x-auto">
         <table className="table">
           <thead>
@@ -81,8 +89,7 @@ export default async function GuestsPage({
               <th>Name</th>
               <th>Email</th>
               <th>Phone</th>
-              <th>Check-in</th>
-              <th>Booking Status</th>
+              <th>Status</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -98,6 +105,15 @@ export default async function GuestsPage({
                 const currentBooking = bookings.find(
                   (b) => b.guestId === guest.id
                 );
+                const status = currentBooking?.status || 'no_booking';
+                const statusColor =
+                  status === 'checked_in'
+                    ? 'badge-success'
+                    : status === 'completed'
+                      ? 'badge-gray'
+                      : status === 'confirmed'
+                        ? 'badge-warning'
+                        : 'badge-info';
 
                 return (
                   <tr key={guest.id}>
@@ -107,30 +123,18 @@ export default async function GuestsPage({
                     <td>{guest.email || '-'}</td>
                     <td>{guest.phone || '-'}</td>
                     <td>
-                      {currentBooking?.checkIn
-                        ? new Date(currentBooking.checkIn).toLocaleDateString()
-                        : '-'}
-                    </td>
-                    <td>
-                      <span
-                        className={`badge ${
-                          currentBooking?.status === 'checked_in'
-                            ? 'badge-success'
-                            : currentBooking?.status === 'completed'
-                              ? 'badge-gray'
-                              : 'badge-warning'
-                        }`}
-                      >
-                        {currentBooking?.status || 'No Booking'}
+                      <span className={`badge ${statusColor}`}>
+                        {status || 'No Booking'}
                       </span>
                     </td>
-                    <td>
-                      <GuestActions
-                        guestId={guest.id}
-                        propertyId={propertyId}
-                        bookingId={currentBooking?.id}
-                        bookingStatus={currentBooking?.status}
-                      />
+                    <td className="text-right">
+                      {/* Simple edit action */}
+                      <Link
+                        href={`/properties/${propertyId}/guests/${guest.id}`}
+                        className="btn btn-ghost btn-sm"
+                      >
+                        Edit
+                      </Link>
                     </td>
                   </tr>
                 );
