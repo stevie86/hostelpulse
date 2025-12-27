@@ -56,15 +56,96 @@ export const billingService = {
     bookingId: string,
     propertyId: string
   ): Promise<BillingResult> {
-    // TODO: Implement actual Moloni API integration
     console.log(`📄 Generating Moloni invoice for booking ${bookingId}`);
 
-    // Placeholder implementation
-    return {
-      success: true,
-      message: 'Moloni invoice generation placeholder',
-      invoiceId: `MOL-${bookingId.slice(0, 8)}`,
-    };
+    try {
+      // Import improved Moloni service
+      const { moloniService } = await import('@/lib/services/moloniService');
+
+      // Get booking details for invoice
+      const booking = await prisma.booking.findUnique({
+        where: { id: bookingId },
+        include: {
+          guest: true,
+          room: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      });
+
+      if (!booking || !booking.guest) {
+        throw new Error('Booking or guest not found');
+      }
+
+      // Prepare invoice lines from booking
+      const nights = Math.ceil(
+        (new Date(booking.checkOut).getTime() -
+          new Date(booking.checkIn).getTime()) /
+          (1000 * 60 * 60 * 24)
+      );
+
+      const invoiceLines = [
+        {
+          name: `Estadia - ${booking.room?.name || 'Quarto'} (${nights} noites)`,
+          qty: nights,
+          price: booking.totalPrice / nights, // Price per night
+          taxId: '1', // Standard Portuguese tax rate (23%)
+        },
+      ];
+
+      // Add tourist tax if applicable
+      if (booking.totalTouristTax && booking.totalTouristTax > 0) {
+        invoiceLines.push({
+          name: 'Taxa Turística',
+          qty: 1,
+          price: booking.totalTouristTax,
+          taxId: '2', // Tourist tax rate
+          exemptionReason: 'Isento de taxa nos termos do artigo 15º do EBF',
+        });
+      }
+
+      // Create invoice with Moloni
+      const result = await moloniService.createInvoice(
+        booking.guest.nif || '999999990', // Guest NIF or default
+        {
+          name: booking.guest.name,
+          email: booking.guest.email,
+          nif: booking.guest.nif,
+          address: booking.guest.address,
+        },
+        invoiceLines,
+        {
+          series: 'FT', // Fatura (invoice) series
+          notes: `Booking ID: ${bookingId}\nCheck-in: ${booking.checkIn.toLocaleDateString('pt-PT')}\nCheck-out: ${booking.checkOut.toLocaleDateString('pt-PT')}`,
+        }
+      );
+
+      console.log('✅ Moloni invoice generated successfully:', result);
+
+      // Send invoice by email if guest has email
+      if (booking.guest.email && result.url_pdf) {
+        await moloniService.sendInvoiceByEmail(
+          result.document_id!,
+          booking.guest.email
+        );
+      }
+
+      return {
+        success: true,
+        message: 'Moloni invoice created and sent successfully',
+        invoiceId: result.document_id,
+        url: result.url,
+      };
+    } catch (error) {
+      console.error('❌ Moloni invoice generation failed:', error);
+      return {
+        success: false,
+        message: 'Moloni invoice generation failed',
+        error: error instanceof Error ? error.message : 'Unknown error',
+      };
+    }
   },
 
   async triggerExternalInvoice(
