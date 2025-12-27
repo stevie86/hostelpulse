@@ -134,7 +134,16 @@ export async function getDailyActivity(propertyId: string) {
         in: ['pending', 'confirmed'],
       },
     },
-    include: {
+    select: {
+      id: true,
+      checkIn: true,
+      checkOut: true,
+      status: true,
+      totalAmount: true,
+      amountPaid: true,
+      guestCount: true,
+      touristTaxAmount: true,
+      municipality: true,
       guest: {
         select: {
           firstName: true,
@@ -148,7 +157,7 @@ export async function getDailyActivity(propertyId: string) {
           pricePerNight: true,
           room: {
             select: {
-              name: true, // Room name
+              name: true,
             },
           },
         },
@@ -168,7 +177,16 @@ export async function getDailyActivity(propertyId: string) {
         in: ['checked_in'],
       },
     },
-    include: {
+    select: {
+      id: true,
+      checkIn: true,
+      checkOut: true,
+      status: true,
+      totalAmount: true,
+      amountPaid: true,
+      guestCount: true,
+      touristTaxAmount: true,
+      municipality: true,
       guest: {
         select: {
           firstName: true,
@@ -182,7 +200,7 @@ export async function getDailyActivity(propertyId: string) {
           pricePerNight: true,
           room: {
             select: {
-              name: true, // Room name
+              name: true,
             },
           },
         },

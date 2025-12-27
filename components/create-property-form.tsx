@@ -30,7 +30,7 @@ export function CreatePropertyForm() {
         </div>
 
         {state.message && (
-          <div className="alert alert-error bg-red-50 text-red-700 border-red-100 mb-6 p-4 rounded-lg">
+          <div className="alert alert-error bg-error/10 text-error border-error/20 mb-6 p-4 rounded-lg">
             <span>{state.message}</span>
           </div>
         )}
@@ -50,7 +50,7 @@ export function CreatePropertyForm() {
                 id="name"
                 name="name"
                 placeholder="e.g., Lisbon Central Hostel"
-                className="input input-bordered w-full bg-white/50 backdrop-blur-sm"
+                className="input input-bordered w-full bg-base-100/50 backdrop-blur-sm"
                 required
               />
               {state.errors?.name && (
@@ -73,7 +73,7 @@ export function CreatePropertyForm() {
                 id="city"
                 name="city"
                 placeholder="e.g., Lisbon"
-                className="input input-bordered w-full bg-white/50 backdrop-blur-sm"
+                className="input input-bordered w-full bg-base-100/50 backdrop-blur-sm"
                 required
               />
               {state.errors?.city && (
@@ -96,7 +96,7 @@ export function CreatePropertyForm() {
                 id="country"
                 name="country"
                 placeholder="e.g., Portugal"
-                className="input input-bordered w-full bg-white/50 backdrop-blur-sm"
+                className="input input-bordered w-full bg-base-100/50 backdrop-blur-sm"
                 required
               />
               {state.errors?.country && (
@@ -119,7 +119,7 @@ export function CreatePropertyForm() {
                 id="address"
                 name="address"
                 placeholder="Street address"
-                className="input input-bordered w-full bg-white/50 backdrop-blur-sm"
+                className="input input-bordered w-full bg-base-100/50 backdrop-blur-sm"
                 required
               />
               {state.errors?.address && (
@@ -143,7 +143,7 @@ export function CreatePropertyForm() {
                 name="checkInTime"
                 type="time"
                 defaultValue="15:00"
-                className="input input-bordered w-full bg-white/50 backdrop-blur-sm"
+                className="input input-bordered w-full bg-base-100/50 backdrop-blur-sm"
                 required
               />
               {state.errors?.checkInTime && (
@@ -167,7 +167,7 @@ export function CreatePropertyForm() {
                 name="checkOutTime"
                 type="time"
                 defaultValue="11:00"
-                className="input input-bordered w-full bg-white/50 backdrop-blur-sm"
+                className="input input-bordered w-full bg-base-100/50 backdrop-blur-sm"
                 required
               />
               {state.errors?.checkOutTime && (

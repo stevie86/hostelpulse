@@ -90,7 +90,7 @@ export default async function PropertySettingsPage({
         {/* Moloni Integration */}
         <div className="bg-base-100 p-6 rounded-box shadow">
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-6 h-6 bg-blue-500 rounded text-white flex items-center justify-center text-sm font-bold">
+            <div className="w-6 h-6 bg-info rounded text-info-content flex items-center justify-center text-sm font-bold">
               M
             </div>
             <h3 className="text-lg font-semibold">Moloni Integration</h3>
@@ -113,7 +113,7 @@ export default async function PropertySettingsPage({
               <div className="space-y-3">
                 <div className="alert alert-info">
                   <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+                    <div className="w-2 h-2 bg-info rounded-full animate-pulse"></div>
                     <span>Ready to connect - Credentials verified</span>
                   </div>
                 </div>
@@ -146,7 +146,7 @@ export default async function PropertySettingsPage({
         {/* Recent Invoices */}
         <div className="bg-base-100 p-6 rounded-box shadow">
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-6 h-6 bg-green-500 rounded text-white flex items-center justify-center text-sm font-bold">
+            <div className="w-6 h-6 bg-success rounded text-success-content flex items-center justify-center text-sm font-bold">
               📄
             </div>
             <h3 className="text-lg font-semibold">Recent Invoices</h3>
@@ -155,7 +155,7 @@ export default async function PropertySettingsPage({
           <div className="space-y-3">
             <div className="alert alert-info">
               <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                <div className="w-2 h-2 bg-info rounded-full"></div>
                 <span>Invoices will appear here after check-out</span>
               </div>
             </div>

@@ -119,7 +119,7 @@ export default function HelpSystem({
       {/* Floating Help Button */}
       <button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-4 right-4 z-50 bg-blue-600 text-white p-3 rounded-full shadow-lg hover:bg-blue-700 transition-colors duration-200"
+        className="fixed bottom-4 right-4 z-50 bg-primary text-primary-content p-3 rounded-full shadow-lg hover:bg-primary/90 transition-colors duration-200"
         title="Press '?' for help"
       >
         <HelpCircle className="h-5 w-5" />
@@ -128,18 +128,18 @@ export default function HelpSystem({
       {/* Help Modal */}
       {isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="bg-white rounded-lg shadow-xl max-w-4xl max-h-[80vh] w-full mx-4 flex flex-col">
+          <div className="bg-base-100 rounded-lg shadow-xl max-w-4xl max-h-[80vh] w-full mx-4 flex flex-col">
             {/* Header */}
             <div className="flex items-center justify-between p-6 border-b">
               <div className="flex items-center gap-3">
-                <BookOpen className="h-5 w-5 text-blue-600" />
+                <BookOpen className="h-5 w-5 text-primary" />
                 <h2 className="text-lg font-semibold">
                   HostelPulse Help Center
                 </h2>
               </div>
               <button
                 onClick={() => setIsOpen(false)}
-                className="text-gray-400 hover:text-gray-600 transition-colors"
+                className="text-base-content/40 hover:text-base-content/60 transition-colors"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -148,13 +148,13 @@ export default function HelpSystem({
             {/* Search */}
             <div className="p-4 border-b">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-base-content/40" />
                 <input
                   type="text"
                   placeholder="Search for help topics..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
                   autoFocus
                 />
               </div>
@@ -164,7 +164,7 @@ export default function HelpSystem({
             <div className="flex-1 overflow-y-auto p-6">
               {searchQuery === '' && (
                 <div className="mb-6">
-                  <h3 className="text-sm font-semibold text-gray-600 mb-2">
+                  <h3 className="text-sm font-semibold text-base-content/60 mb-2">
                     Quick Access
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -172,10 +172,10 @@ export default function HelpSystem({
                       <button
                         key={topic.id}
                         onClick={() => handleTopicClick(topic)}
-                        className="p-4 text-left border rounded-lg hover:bg-gray-50 transition-colors"
+                        className="p-4 text-left border rounded-lg hover:bg-base-200 transition-colors"
                       >
                         <h4 className="font-medium mb-1">{topic.title}</h4>
-                        <p className="text-sm text-gray-600 line-clamp-2">
+                        <p className="text-sm text-base-content/60 line-clamp-2">
                           {topic.description}
                         </p>
                       </button>
@@ -195,19 +195,19 @@ export default function HelpSystem({
                     <div className="flex items-start gap-3">
                       <div className="flex-1">
                         <h4 className="font-medium mb-2">{topic.title}</h4>
-                        <p className="text-gray-700 mb-3">
+                        <p className="text-base-content/70 mb-3">
                           {topic.description}
                         </p>
 
                         {/* Keyboard Shortcuts */}
                         {topic.shortcuts && showKeyboardShortcuts && (
-                          <div className="flex items-center gap-2 text-sm text-gray-600">
+                          <div className="flex items-center gap-2 text-sm text-base-content/60">
                             <Keyboard className="h-4 w-4" />
                             <div className="flex gap-2">
                               {topic.shortcuts.map((shortcut, index) => (
                                 <span
                                   key={index}
-                                  className="bg-gray-100 px-2 py-1 rounded font-mono"
+                                  className="bg-base-200 px-2 py-1 rounded font-mono"
                                 >
                                   {shortcut}
                                 </span>
@@ -220,7 +220,9 @@ export default function HelpSystem({
                         {topic.relatedTopics &&
                           topic.relatedTopics.length > 0 && (
                             <div className="text-sm">
-                              <span className="text-gray-600">Related: </span>
+                              <span className="text-base-content/60">
+                                Related:{' '}
+                              </span>
                               {topic.relatedTopics.map((related, index) => (
                                 <button
                                   key={index}
@@ -231,7 +233,7 @@ export default function HelpSystem({
                                     if (relatedTopic)
                                       setActiveTopic(relatedTopic);
                                   }}
-                                  className="text-blue-600 hover:underline mx-1"
+                                  className="text-primary hover:underline mx-1"
                                 >
                                   {related}
                                 </button>
@@ -246,17 +248,17 @@ export default function HelpSystem({
             </div>
 
             {/* Footer */}
-            <div className="p-4 border-t bg-gray-50">
-              <div className="text-center text-sm text-gray-600">
+            <div className="p-4 border-t bg-base-200">
+              <div className="text-center text-sm text-base-content/60">
                 <p>
-                  Press <kbd className="bg-white px-2 py-1 rounded">?</kbd>{' '}
+                  Press <kbd className="bg-base-100 px-2 py-1 rounded">?</kbd>{' '}
                   anytime for help
                 </p>
                 <p className="mt-2">
                   Need more support?{' '}
                   <a
                     href="mailto:support@hostelpulse.com"
-                    className="text-blue-600 hover:underline"
+                    className="text-primary hover:underline"
                   >
                     Contact Support
                   </a>

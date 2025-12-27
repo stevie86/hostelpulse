@@ -4,7 +4,13 @@ import { useTransition, useState } from 'react';
 import { checkIn, checkOut } from '@/app/actions/dashboard';
 import { CheckCircle, XCircle } from 'lucide-react';
 
-export function CheckInButton({ bookingId }: { bookingId: string }) {
+export function CheckInButton({
+  bookingId,
+  className = 'btn btn-primary btn-sm',
+}: {
+  bookingId: string;
+  className?: string;
+}) {
   const [isPending, startTransition] = useTransition();
   const [feedback, setFeedback] = useState<{
     type: 'success' | 'error' | 'info';
@@ -35,11 +41,11 @@ export function CheckInButton({ bookingId }: { bookingId: string }) {
   };
 
   return (
-    <div className="flex flex-col items-end gap-2">
+    <div className="flex flex-col items-end gap-2 w-full sm:w-auto">
       <button
         onClick={handleCheckIn}
         disabled={isPending}
-        className="btn btn-primary btn-sm"
+        className={className}
       >
         {isPending ? (
           <span className="loading loading-spinner loading-xs"></span>
@@ -80,7 +86,13 @@ export function CheckInButton({ bookingId }: { bookingId: string }) {
   );
 }
 
-export function CheckOutButton({ bookingId }: { bookingId: string }) {
+export function CheckOutButton({
+  bookingId,
+  className = 'btn btn-secondary btn-sm',
+}: {
+  bookingId: string;
+  className?: string;
+}) {
   const [isPending, startTransition] = useTransition();
   const [feedback, setFeedback] = useState<{
     type: 'success' | 'error' | 'info';
@@ -120,11 +132,11 @@ export function CheckOutButton({ bookingId }: { bookingId: string }) {
   };
 
   return (
-    <div className="flex flex-col items-end gap-2">
+    <div className="flex flex-col items-end gap-2 w-full sm:w-auto">
       <button
         onClick={handleCheckOut}
         disabled={isPending}
-        className="btn btn-secondary btn-sm"
+        className={className}
       >
         {isPending ? (
           <span className="loading loading-spinner loading-xs"></span>

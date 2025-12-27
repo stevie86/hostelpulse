@@ -180,7 +180,7 @@ export function RoomForm({
           />
         </div>
         <label className="label">
-          <span className="label-text-alt text-gray-500">
+          <span className="label-text-alt text-base-content/50">
             For dorms: price per person per night
             <br />
             For private rooms: price per room per night

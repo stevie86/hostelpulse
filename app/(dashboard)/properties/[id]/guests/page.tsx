@@ -13,33 +13,10 @@ export default async function GuestsPage({
   const { q } = await searchParams;
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold">Guests</h1>
-        <Link
-          href={`/properties/${propertyId}/guests/new`}
-          className="btn btn-primary"
-        >
-          Add Guest
-        </Link>
-      </div>
-
-      <div className="form-control w-full max-w-xs">
-        <form>
-          <input
-            name="q"
-            type="text"
-            placeholder="Search guests..."
-            className="input input-bordered w-full"
-            defaultValue={q}
-          />
-        </form>
-      </div>
-
-      <div className="bg-base-100 rounded-box shadow">
-    <GuestList propertyId={propertyId} query={q} />
-        </Suspense>
-      </div>
+    <div className="bg-base-100 rounded-box shadow">
+      <Suspense fallback={<div>Loading guests...</div>}>
+        <GuestList propertyId={propertyId} query={q} />
+      </Suspense>
     </div>
   );
 }

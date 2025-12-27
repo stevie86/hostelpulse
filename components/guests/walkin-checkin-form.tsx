@@ -2,17 +2,7 @@
 
 import React, { useActionState, useState } from 'react';
 import { createWalkInBooking } from '@/app/actions/dashboard';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Loader2, User, Calendar, CreditCard, MapPin } from 'lucide-react';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+import { User, Calendar, CreditCard, MapPin, FileText } from 'lucide-react';
 import { portugueseTaxCalculator } from '@/lib/portuguese-tourist-tax';
 
 interface Room {
@@ -75,14 +65,13 @@ export function WalkInCheckInForm({
     };
   } | null>(null);
 
-  // Calculate taxes when dates or guest count change
   React.useEffect(() => {
     if (checkInDate && checkOutDate && guestCount > 0) {
       const taxResult = portugueseTaxCalculator.calculateTax(
         new Date(checkInDate),
         new Date(checkOutDate),
         guestCount,
-        'lisbon' // Assuming Lisbon for now
+        'lisbon'
       );
       setTaxCalculation(taxResult);
     }
@@ -90,7 +79,6 @@ export function WalkInCheckInForm({
 
   const selectedRoom = rooms.find((room) => room.id === selectedRoomId);
 
-  // Calculate total cost
   const calculateTotal = () => {
     if (!selectedRoom || !checkInDate || !checkOutDate) return 0;
 
@@ -111,11 +99,11 @@ export function WalkInCheckInForm({
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-3 mb-6">
-        <div className="p-2 bg-primary/10 text-primary rounded-lg">
-          <User size={20} />
+        <div className="p-3 bg-primary/10 text-primary rounded-xl">
+          <User size={24} />
         </div>
         <div>
-          <h3 className="text-lg font-semibold text-base-content">
+          <h3 className="text-xl font-bold text-base-content">
             Walk-in Guest Check-in
           </h3>
           <p className="text-sm text-base-content/70">
@@ -125,7 +113,20 @@ export function WalkInCheckInForm({
       </div>
 
       {state.message && (
-        <div className="alert alert-error bg-red-50 text-red-700 border-red-100">
+        <div className="alert alert-error shadow-sm">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="stroke-current shrink-0 h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
           <span>{state.message}</span>
         </div>
       )}
@@ -134,298 +135,341 @@ export function WalkInCheckInForm({
         <input type="hidden" name="propertyId" value={propertyId} />
         <input type="hidden" name="selectedRoomId" value={selectedRoomId} />
 
-        {/* Guest Information */}
-        <div className="bg-base-100 rounded-xl p-6 border border-base-200">
-          <div className="flex items-center gap-2 mb-4">
-            <User className="w-5 h-5 text-primary" />
-            <h4 className="text-lg font-medium">Guest Information</h4>
-          </div>
+        <div className="card bg-base-100 shadow-xl border border-base-200">
+          <div className="card-body">
+            <h4 className="card-title text-lg flex items-center gap-2 mb-4">
+              <User className="w-5 h-5 text-primary" />
+              Guest Information
+            </h4>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="firstName">First Name *</Label>
-              <Input
-                id="firstName"
-                name="firstName"
-                required
-                placeholder="Enter first name"
-                className={state.errors.firstName ? 'border-red-500' : ''}
-              />
-              {state.errors.firstName && (
-                <p className="text-sm text-red-600">
-                  {state.errors.firstName[0]}
-                </p>
-              )}
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="lastName">Last Name *</Label>
-              <Input
-                id="lastName"
-                name="lastName"
-                required
-                placeholder="Enter last name"
-                className={state.errors.lastName ? 'border-red-500' : ''}
-              />
-              {state.errors.lastName && (
-                <p className="text-sm text-red-600">
-                  {state.errors.lastName[0]}
-                </p>
-              )}
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                name="email"
-                type="email"
-                placeholder="guest@example.com"
-                className={state.errors.email ? 'border-red-500' : ''}
-              />
-              {state.errors.email && (
-                <p className="text-sm text-red-600">{state.errors.email[0]}</p>
-              )}
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="phone">Phone</Label>
-              <Input
-                id="phone"
-                name="phone"
-                placeholder="+351 123 456 789"
-                className={state.errors.phone ? 'border-red-500' : ''}
-              />
-              {state.errors.phone && (
-                <p className="text-sm text-red-600">{state.errors.phone[0]}</p>
-              )}
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="nationality">Nationality</Label>
-              <Input
-                id="nationality"
-                name="nationality"
-                placeholder="Portuguese"
-                className={state.errors.nationality ? 'border-red-500' : ''}
-              />
-              {state.errors.nationality && (
-                <p className="text-sm text-red-600">
-                  {state.errors.nationality[0]}
-                </p>
-              )}
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="documentType">Document Type</Label>
-              <Select name="documentType">
-                <SelectTrigger>
-                  <SelectValue placeholder="Select document type" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="passport">Passport</SelectItem>
-                  <SelectItem value="id_card">ID Card</SelectItem>
-                  <SelectItem value="drivers_license">
-                    Driver&apos;s License
-                  </SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="space-y-2 md:col-span-2">
-              <Label htmlFor="documentId">Document ID *</Label>
-              <Input
-                id="documentId"
-                name="documentId"
-                required
-                placeholder="Document number"
-                className={state.errors.documentId ? 'border-red-500' : ''}
-              />
-              {state.errors.documentId && (
-                <p className="text-sm text-red-600">
-                  {state.errors.documentId[0]}
-                </p>
-              )}
-            </div>
-          </div>
-        </div>
-
-        {/* Stay Details */}
-        <div className="bg-base-100 rounded-xl p-6 border border-base-200">
-          <div className="flex items-center gap-2 mb-4">
-            <Calendar className="w-5 h-5 text-primary" />
-            <h4 className="text-lg font-medium">Stay Details</h4>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="checkIn">Check-in Date *</Label>
-              <Input
-                id="checkIn"
-                name="checkIn"
-                type="date"
-                required
-                value={checkInDate}
-                onChange={(e) => setCheckInDate(e.target.value)}
-                className={state.errors.checkIn ? 'border-red-500' : ''}
-              />
-              {state.errors.checkIn && (
-                <p className="text-sm text-red-600">
-                  {state.errors.checkIn[0]}
-                </p>
-              )}
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="checkOut">Check-out Date *</Label>
-              <Input
-                id="checkOut"
-                name="checkOut"
-                type="date"
-                required
-                value={checkOutDate}
-                onChange={(e) => setCheckOutDate(e.target.value)}
-                className={state.errors.checkOut ? 'border-red-500' : ''}
-              />
-              {state.errors.checkOut && (
-                <p className="text-sm text-red-600">
-                  {state.errors.checkOut[0]}
-                </p>
-              )}
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="guestCount">Number of Guests *</Label>
-              <Select
-                name="guestCount"
-                value={guestCount.toString()}
-                onValueChange={(value) => setGuestCount(parseInt(value))}
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {[1, 2, 3, 4, 5, 6].map((num) => (
-                    <SelectItem key={num} value={num.toString()}>
-                      {num} {num === 1 ? 'Guest' : 'Guests'}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-        </div>
-
-        {/* Room Selection */}
-        <div className="bg-base-100 rounded-xl p-6 border border-base-200">
-          <div className="flex items-center gap-2 mb-4">
-            <MapPin className="w-5 h-5 text-primary" />
-            <h4 className="text-lg font-medium">Room Selection</h4>
-          </div>
-
-          <div className="space-y-4">
-            <Label>Available Rooms</Label>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {rooms
-                .filter((room) => room.status === 'available')
-                .map((room) => (
-                  <div
-                    key={room.id}
-                    className={`border rounded-lg p-4 cursor-pointer transition-all ${
-                      selectedRoomId === room.id
-                        ? 'border-primary bg-primary/5'
-                        : 'border-base-200 hover:border-primary/50'
-                    }`}
-                    onClick={() => setSelectedRoomId(room.id)}
-                  >
-                    <div className="flex justify-between items-start mb-2">
-                      <h5 className="font-medium">{room.name}</h5>
-                      <span className="text-sm text-primary font-medium">
-                        €{room.pricePerNight}/night
-                      </span>
-                    </div>
-                    <p className="text-sm text-base-content/70 mb-2">
-                      {room.type} • Max {room.maxOccupancy} guests
-                    </p>
-                    {selectedRoomId === room.id && (
-                      <div className="text-xs text-primary font-medium">
-                        ✓ Selected
-                      </div>
-                    )}
-                  </div>
-                ))}
+              <div className="form-control w-full">
+                <label className="label">
+                  <span className="label-text">First Name *</span>
+                </label>
+                <input
+                  name="firstName"
+                  required
+                  placeholder="Enter first name"
+                  className={`input input-bordered w-full ${state.errors.firstName ? 'input-error' : ''}`}
+                />
+                {state.errors.firstName && (
+                  <span className="label-text-alt text-error mt-1">
+                    {state.errors.firstName[0]}
+                  </span>
+                )}
+              </div>
+
+              <div className="form-control w-full">
+                <label className="label">
+                  <span className="label-text">Last Name *</span>
+                </label>
+                <input
+                  name="lastName"
+                  required
+                  placeholder="Enter last name"
+                  className={`input input-bordered w-full ${state.errors.lastName ? 'input-error' : ''}`}
+                />
+                {state.errors.lastName && (
+                  <span className="label-text-alt text-error mt-1">
+                    {state.errors.lastName[0]}
+                  </span>
+                )}
+              </div>
+
+              <div className="form-control w-full">
+                <label className="label">
+                  <span className="label-text">Email</span>
+                </label>
+                <input
+                  name="email"
+                  type="email"
+                  placeholder="guest@example.com"
+                  className={`input input-bordered w-full ${state.errors.email ? 'input-error' : ''}`}
+                />
+                {state.errors.email && (
+                  <span className="label-text-alt text-error mt-1">
+                    {state.errors.email[0]}
+                  </span>
+                )}
+              </div>
+
+              <div className="form-control w-full">
+                <label className="label">
+                  <span className="label-text">Phone</span>
+                </label>
+                <input
+                  name="phone"
+                  placeholder="+351 123 456 789"
+                  className={`input input-bordered w-full ${state.errors.phone ? 'input-error' : ''}`}
+                />
+                {state.errors.phone && (
+                  <span className="label-text-alt text-error mt-1">
+                    {state.errors.phone[0]}
+                  </span>
+                )}
+              </div>
+
+              <div className="form-control w-full">
+                <label className="label">
+                  <span className="label-text">Nationality</span>
+                </label>
+                <input
+                  name="nationality"
+                  placeholder="Portuguese"
+                  className={`input input-bordered w-full ${state.errors.nationality ? 'input-error' : ''}`}
+                />
+                {state.errors.nationality && (
+                  <span className="label-text-alt text-error mt-1">
+                    {state.errors.nationality[0]}
+                  </span>
+                )}
+              </div>
+
+              <div className="form-control w-full">
+                <label className="label">
+                  <span className="label-text">Document Type</span>
+                </label>
+                <select
+                  name="documentType"
+                  className="select select-bordered w-full"
+                >
+                  <option value="passport">Passport</option>
+                  <option value="id_card">ID Card</option>
+                  <option value="drivers_license">Driver&apos;s License</option>
+                </select>
+              </div>
+
+              <div className="form-control w-full md:col-span-2">
+                <label className="label">
+                  <span className="label-text">Document ID *</span>
+                </label>
+                <input
+                  name="documentId"
+                  required
+                  placeholder="Document number"
+                  className={`input input-bordered w-full ${state.errors.documentId ? 'input-error' : ''}`}
+                />
+                {state.errors.documentId && (
+                  <span className="label-text-alt text-error mt-1">
+                    {state.errors.documentId[0]}
+                  </span>
+                )}
+              </div>
             </div>
-            {rooms.filter((room) => room.status === 'available').length ===
-              0 && (
-              <p className="text-center text-base-content/50 py-4">
-                No rooms available for the selected dates
-              </p>
-            )}
           </div>
         </div>
 
-        {/* Billing Summary */}
-        {selectedRoom && taxCalculation && (
-          <div className="bg-base-100 rounded-xl p-6 border border-base-200">
-            <div className="flex items-center gap-2 mb-4">
-              <CreditCard className="w-5 h-5 text-primary" />
-              <h4 className="text-lg font-medium">Billing Summary</h4>
+        <div className="card bg-base-100 shadow-xl border border-base-200">
+          <div className="card-body">
+            <h4 className="card-title text-lg flex items-center gap-2 mb-4">
+              <Calendar className="w-5 h-5 text-primary" />
+              Stay Details
+            </h4>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="form-control w-full">
+                <label className="label">
+                  <span className="label-text">Check-in Date *</span>
+                </label>
+                <input
+                  name="checkIn"
+                  type="date"
+                  required
+                  value={checkInDate}
+                  onChange={(e) => setCheckInDate(e.target.value)}
+                  className={`input input-bordered w-full ${state.errors.checkIn ? 'input-error' : ''}`}
+                />
+                {state.errors.checkIn && (
+                  <span className="label-text-alt text-error mt-1">
+                    {state.errors.checkIn[0]}
+                  </span>
+                )}
+              </div>
+
+              <div className="form-control w-full">
+                <label className="label">
+                  <span className="label-text">Check-out Date *</span>
+                </label>
+                <input
+                  name="checkOut"
+                  type="date"
+                  required
+                  value={checkOutDate}
+                  onChange={(e) => setCheckOutDate(e.target.value)}
+                  className={`input input-bordered w-full ${state.errors.checkOut ? 'input-error' : ''}`}
+                />
+                {state.errors.checkOut && (
+                  <span className="label-text-alt text-error mt-1">
+                    {state.errors.checkOut[0]}
+                  </span>
+                )}
+              </div>
+
+              <div className="form-control w-full">
+                <label className="label">
+                  <span className="label-text">Number of Guests *</span>
+                </label>
+                <select
+                  name="guestCount"
+                  value={guestCount.toString()}
+                  onChange={(e) => setGuestCount(parseInt(e.target.value))}
+                  className="select select-bordered w-full"
+                >
+                  {[1, 2, 3, 4, 5, 6].map((num) => (
+                    <option key={num} value={num.toString()}>
+                      {num} {num === 1 ? 'Guest' : 'Guests'}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
+          </div>
+        </div>
 
-            <div className="space-y-3">
-              <div className="flex justify-between">
-                <span>Accommodation ({selectedRoom.name})</span>
-                <span>
-                  €{selectedRoom.pricePerNight} ×{' '}
-                  {Math.ceil(
-                    (new Date(checkOutDate).getTime() -
-                      new Date(checkInDate).getTime()) /
-                      (1000 * 60 * 60 * 24)
-                  )}{' '}
-                  nights
+        <div className="card bg-base-100 shadow-xl border border-base-200">
+          <div className="card-body">
+            <h4 className="card-title text-lg flex items-center gap-2 mb-4">
+              <MapPin className="w-5 h-5 text-primary" />
+              Room Selection
+            </h4>
+
+            <div className="space-y-4">
+              <label className="label">
+                <span className="label-text font-semibold">
+                  Available Rooms
                 </span>
+              </label>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {rooms
+                  .filter((room) => room.status === 'available')
+                  .map((room) => (
+                    <div
+                      key={room.id}
+                      className={`border rounded-xl p-4 cursor-pointer transition-all ${
+                        selectedRoomId === room.id
+                          ? 'border-primary bg-primary/10 shadow-md'
+                          : 'border-base-300 hover:border-primary/50 hover:bg-base-200'
+                      }`}
+                      onClick={() => setSelectedRoomId(room.id)}
+                    >
+                      <div className="flex justify-between items-start mb-2">
+                        <h5 className="font-bold">{room.name}</h5>
+                        <div className="badge badge-primary badge-outline">
+                          €{room.pricePerNight}/night
+                        </div>
+                      </div>
+                      <p className="text-sm text-base-content/70 mb-2">
+                        {room.type} • Max {room.maxOccupancy} guests
+                      </p>
+                      {selectedRoomId === room.id && (
+                        <div className="text-xs text-primary font-bold flex items-center gap-1">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-4 w-4"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                          Selected
+                        </div>
+                      )}
+                    </div>
+                  ))}
               </div>
+              {rooms.filter((room) => room.status === 'available').length ===
+                0 && (
+                <div className="alert alert-warning shadow-sm">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="stroke-current shrink-0 h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                    />
+                  </svg>
+                  <span>No rooms available for the selected dates</span>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
 
-              <div className="flex justify-between">
-                <span>Tourist Tax</span>
-                <span>€{taxCalculation.amount.toFixed(2)}</span>
-              </div>
+        {selectedRoom && taxCalculation && (
+          <div className="card bg-base-100 shadow-xl border border-base-200">
+            <div className="card-body">
+              <h4 className="card-title text-lg flex items-center gap-2 mb-4">
+                <CreditCard className="w-5 h-5 text-primary" />
+                Billing Summary
+              </h4>
 
-              <div className="border-t pt-3">
-                <div className="flex justify-between font-semibold text-lg">
+              <div className="space-y-3">
+                <div className="flex justify-between">
+                  <span>Accommodation ({selectedRoom.name})</span>
+                  <span className="font-mono">
+                    €{selectedRoom.pricePerNight} ×{' '}
+                    {Math.ceil(
+                      (new Date(checkOutDate).getTime() -
+                        new Date(checkInDate).getTime()) /
+                        (1000 * 60 * 60 * 24)
+                    )}{' '}
+                    nights
+                  </span>
+                </div>
+
+                <div className="flex justify-between">
+                  <span>Tourist Tax</span>
+                  <span className="font-mono">
+                    €{taxCalculation.amount.toFixed(2)}
+                  </span>
+                </div>
+
+                <div className="divider my-2"></div>
+
+                <div className="flex justify-between font-bold text-lg text-primary">
                   <span>Total Amount</span>
-                  <span>€{totalAmount.toFixed(2)}</span>
+                  <span className="font-mono">€{totalAmount.toFixed(2)}</span>
                 </div>
               </div>
             </div>
           </div>
         )}
 
-        {/* Notes */}
-        <div className="bg-base-100 rounded-xl p-6 border border-base-200">
-          <Label htmlFor="notes">Notes</Label>
-          <textarea
-            id="notes"
-            name="notes"
-            placeholder="Any special requests or notes..."
-            className="w-full mt-2 px-3 py-2 border border-base-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-            rows={3}
-          />
+        <div className="card bg-base-100 shadow-xl border border-base-200">
+          <div className="card-body">
+            <h4 className="card-title text-lg flex items-center gap-2 mb-2">
+              <FileText className="w-5 h-5 text-primary" />
+              Notes
+            </h4>
+            <textarea
+              name="notes"
+              placeholder="Any special requests or notes..."
+              className="textarea textarea-bordered w-full h-24"
+            />
+          </div>
         </div>
 
-        <Button
+        <button
           type="submit"
           disabled={isPending || !selectedRoomId}
-          className="w-full h-[3.5rem] rounded-xl text-base font-bold shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all active:scale-[0.98]"
+          className="btn btn-primary w-full h-[3.5rem] text-lg shadow-lg hover:shadow-primary/30"
         >
           {isPending ? (
-            <>
-              <Loader2 className="animate-spin mr-2" /> Processing Check-in...
-            </>
+            <span className="loading loading-spinner"></span>
           ) : (
             'Complete Check-in'
           )}
-        </Button>
+        </button>
       </form>
     </div>
   );

@@ -19,25 +19,55 @@ export default async function NewBookingPage({
   const createBookingWithId = createBooking.bind(null, propertyId);
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center gap-4">
-        <Link
-          href={`/properties/${propertyId}/bookings`}
-          className="btn btn-ghost btn-sm"
-        >
-          ← Back
-        </Link>
-        <h1 className="text-2xl font-bold">New Booking</h1>
+    <div className="space-y-8 max-w-4xl mx-auto">
+      <div className="space-y-4">
+        <div className="text-sm breadcrumbs text-base-content/70">
+          <ul>
+            <li>
+              <Link href={`/properties/${propertyId}/bookings`}>Bookings</Link>
+            </li>
+            <li>New Booking</li>
+          </ul>
+        </div>
+
+        <div className="flex items-center gap-4">
+          <Link
+            href={`/properties/${propertyId}/bookings`}
+            className="btn btn-circle btn-ghost btn-sm"
+            aria-label="Back to bookings"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M15 19l-7-7 7-7"
+              />
+            </svg>
+          </Link>
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight">
+              Create Booking
+            </h1>
+            <p className="text-base-content/70">
+              Enter reservation details manually.
+            </p>
+          </div>
+        </div>
       </div>
 
-      <div className="bg-base-100 p-6 rounded-box shadow max-w-2xl">
-        <BookingForm
-          propertyId={propertyId}
-          action={createBookingWithId}
-          rooms={rooms}
-          guests={guests}
-        />
-      </div>
+      <BookingForm
+        propertyId={propertyId}
+        action={createBookingWithId}
+        rooms={rooms}
+        guests={guests}
+      />
     </div>
   );
 }

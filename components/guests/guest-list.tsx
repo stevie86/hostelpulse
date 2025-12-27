@@ -1,5 +1,7 @@
+'use client';
+
+import { useState, useEffect } from 'react';
 import { getGuests } from '@/app/actions/guests';
-import { getBookings } from '@/app/actions/bookings';
 import Link from 'next/link';
 
 // Define interfaces for type safety
@@ -34,17 +36,16 @@ interface GuestListProps {
 }
 
 export default function GuestList({ propertyId, query }: GuestListProps) {
-  const [guests, setGuests] = useState([]);
-  const [bookings, setBookings] = useState([]);
+  const [guests, setGuests] = useState<Guest[]>([]);
+  const [bookings, setBookings] = useState<Booking[]>([]);
 
   // Load data on mount
   useEffect(() => {
     const loadData = async () => {
       try {
-        const [guestsData, bookingsData] = await Promise.all([
-          getGuests(propertyId, query),
-          getBookings(propertyId, 'checked_in'),
-        ]);
+        const guestsData = await getGuests(propertyId, query);
+        // TODO: Implement getBookings action
+        const bookingsData: Booking[] = [];
         setGuests(guestsData);
         setBookings(bookingsData);
       } catch (error) {
@@ -57,28 +58,32 @@ export default function GuestList({ propertyId, query }: GuestListProps) {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold">Guests</h1>
+      {/* Header with Search */}
+      <div className="flex justify-between items-center gap-4">
+        <div className="flex-1 max-w-xs">
+          <input
+            type="text"
+            placeholder="Search guests by name, email..."
+            className="input input-bordered w-full"
+            defaultValue={query}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                const searchValue = (e.target as HTMLInputElement).value;
+                if (searchValue.trim() === '') {
+                  window.location.href = `/properties/${propertyId}/guests`;
+                } else {
+                  window.location.href = `/properties/${propertyId}/guests?q=${encodeURIComponent(searchValue)}`;
+                }
+              }
+            }}
+          />
+        </div>
         <Link
           href={`/properties/${propertyId}/guests/new`}
           className="btn btn-primary"
         >
           Add Guest
         </Link>
-      </div>
-
-      {/* Search */}
-      <div className="form-control w-full max-w-xs">
-        <form>
-          <input
-            name="q"
-            type="text"
-            placeholder="Search guests..."
-            className="input input-bordered w-full"
-            defaultValue={query}
-          />
-        </form>
       </div>
 
       {/* Guest Table */}
@@ -113,7 +118,9 @@ export default function GuestList({ propertyId, query }: GuestListProps) {
                       ? 'badge-gray'
                       : status === 'confirmed'
                         ? 'badge-warning'
-                        : 'badge-info';
+                        : status === 'no_booking'
+                          ? 'badge-ghost'
+                          : 'badge-info';
 
                 return (
                   <tr key={guest.id}>
@@ -124,7 +131,15 @@ export default function GuestList({ propertyId, query }: GuestListProps) {
                     <td>{guest.phone || '-'}</td>
                     <td>
                       <span className={`badge ${statusColor}`}>
-                        {status || 'No Booking'}
+                        {status === 'no_booking'
+                          ? 'No Booking'
+                          : status === 'checked_in'
+                            ? 'Checked In'
+                            : status === 'completed'
+                              ? 'Completed'
+                              : status === 'confirmed'
+                                ? 'Confirmed'
+                                : status}
                       </span>
                     </td>
                     <td className="text-right">

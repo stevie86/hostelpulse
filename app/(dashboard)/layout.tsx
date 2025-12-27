@@ -31,7 +31,7 @@ export default function DashboardLayout({
               </span>
             </div>
             <div className="avatar placeholder">
-              <div className="bg-gradient-to-br from-primary to-secondary text-white rounded-xl w-9 shadow-md flex items-center justify-center font-bold text-sm">
+              <div className="bg-gradient-to-br from-primary to-secondary text-primary-content rounded-xl w-9 shadow-md flex items-center justify-center font-bold text-sm">
                 <span>AD</span>
               </div>
             </div>

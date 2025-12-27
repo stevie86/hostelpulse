@@ -41,11 +41,13 @@ const SidebarItem = ({
         whileTap={{ scale: 0.98 }}
         className={`relative flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 cursor-pointer group ${
           active
-            ? 'bg-gradient-to-r from-primary to-secondary text-white shadow-lg shadow-primary/25'
+            ? 'bg-gradient-to-r from-primary to-secondary text-primary-content shadow-lg shadow-primary/25'
             : 'hover:bg-base-200/80 text-base-content/85 hover:text-base-content'
         }`}
       >
-        <div className={`flex-shrink-0 ${active ? 'text-white' : ''}`}>
+        <div
+          className={`flex-shrink-0 ${active ? 'text-primary-content' : ''}`}
+        >
           {icon}
         </div>
         <AnimatePresence mode="wait">
@@ -163,7 +165,7 @@ export default function Sidebar() {
             whileHover={{ rotate: 5, scale: 1.05 }}
             className="w-11 h-11 rounded-2xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center flex-shrink-0 shadow-xl shadow-primary/30"
           >
-            <span className="text-white font-bold text-xl">H</span>
+            <span className="text-primary-content font-bold text-xl">H</span>
           </motion.div>
           {!collapsed && (
             <motion.div

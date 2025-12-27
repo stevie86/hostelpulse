@@ -30,9 +30,9 @@ export default function DailyActivity({ propertyId }: { propertyId: string }) {
   return (
     <div className="grid gap-4 md:grid-cols-2">
       {/* Today's Arrivals */}
-      <div className="bg-white rounded-lg p-4 border">
+      <div className="bg-base-100 rounded-lg p-4 border border-base-300">
         <h3 className="font-semibold text-base-content mb-3 flex items-center gap-2">
-          <CheckCircle className="h-5 w-5 text-green-600" />
+          <CheckCircle className="h-5 w-5 text-success" />
           Today&apos;s Arrivals ({activities.arrivals.length})
         </h3>
         <div className="space-y-2">
@@ -42,7 +42,7 @@ export default function DailyActivity({ propertyId }: { propertyId: string }) {
             activities.arrivals.map((booking: any) => (
               <div
                 key={booking.id}
-                className="flex items-center justify-between p-2 bg-green-50 rounded"
+                className="flex items-center justify-between p-2 bg-success/10 rounded"
               >
                 <div>
                   <p className="font-medium">{booking.guest?.name}</p>
@@ -58,9 +58,9 @@ export default function DailyActivity({ propertyId }: { propertyId: string }) {
       </div>
 
       {/* Today's Departures */}
-      <div className="bg-white rounded-lg p-4 border">
+      <div className="bg-base-100 rounded-lg p-4 border border-base-300">
         <h3 className="font-semibold text-base-content mb-3 flex items-center gap-2">
-          <LogOut className="h-5 w-5 text-blue-600" />
+          <LogOut className="h-5 w-5 text-info" />
           Today&apos;s Departures ({activities.departures.length})
         </h3>
         <div className="space-y-2">
@@ -70,7 +70,7 @@ export default function DailyActivity({ propertyId }: { propertyId: string }) {
             activities.departures.map((booking: any) => (
               <div
                 key={booking.id}
-                className="flex items-center justify-between p-2 bg-blue-50 rounded"
+                className="flex items-center justify-between p-2 bg-info/10 rounded"
               >
                 <div>
                   <p className="font-medium">{booking.guest?.name}</p>

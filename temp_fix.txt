@@ -1,0 +1,4 @@
+  if (!property) {
+    console.log('Property not found for daily activity:', propertyId);
+    return { arrivals: [], departures: [] };
+  }

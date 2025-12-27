@@ -6,9 +6,11 @@ import { useTransition } from 'react';
 export function CancelBookingButton({
   bookingId,
   propertyId,
+  className = 'btn btn-sm btn-error btn-outline',
 }: {
   bookingId: string;
   propertyId: string;
+  className?: string;
 }) {
   const [isPending, startTransition] = useTransition();
 
@@ -20,12 +22,12 @@ export function CancelBookingButton({
   };
 
   return (
-    <button
-      onClick={handleCancel}
-      disabled={isPending}
-      className="btn btn-xs btn-error btn-outline"
-    >
-      Cancel
+    <button onClick={handleCancel} disabled={isPending} className={className}>
+      {isPending ? (
+        <span className="loading loading-spinner loading-xs"></span>
+      ) : (
+        'Cancel'
+      )}
     </button>
   );
 }

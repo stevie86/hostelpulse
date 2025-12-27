@@ -95,7 +95,7 @@ export default async function InvoicesPage({
         <div className="card bg-base-100 shadow-xl">
           <div className="card-body">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-green-500 rounded text-white flex items-center justify-center font-bold">
+              <div className="w-8 h-8 bg-success rounded text-success-content flex items-center justify-center font-bold">
                 €
               </div>
               <div>
@@ -124,7 +124,7 @@ export default async function InvoicesPage({
         <div className="card bg-base-100 shadow-xl">
           <div className="card-body">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-blue-500 rounded text-white flex items-center justify-center font-bold">
+              <div className="w-8 h-8 bg-info rounded text-info-content flex items-center justify-center font-bold">
                 {property?.invoicingProvider === 'moloni' ? 'M' : 'E'}
               </div>
               <div>

@@ -3,10 +3,12 @@ import { PrismaClient } from '@prisma/client';
 
 const prismaClientSingleton = () => {
   const url = process.env.DATABASE_URL;
-  console.log('----------------------------------------');
-  console.log('Initializing Prisma Client');
-  console.log(`DATABASE_URL: ${url}`);
-  console.log('----------------------------------------');
+  if (process.env.NODE_ENV === 'development') {
+    console.log('----------------------------------------');
+    console.log('Initializing Prisma Client');
+    console.log(`DATABASE_URL: ${url}`);
+    console.log('----------------------------------------');
+  }
   return new PrismaClient();
 };
 

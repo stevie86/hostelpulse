@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import { SessionProvider } from 'next-auth/react';
+import { VersionBadge } from '@/components/ui/version-badge';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -45,8 +46,11 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} bg-base-100 text-base-content`}
+      >
         <SessionProvider>{children}</SessionProvider>
+        <VersionBadge />
       </body>
     </html>
   );

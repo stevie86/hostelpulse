@@ -24,11 +24,11 @@ export function InvoicingSetup({
 
   return (
     <div className="space-y-6">
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
-        <h3 className="text-lg font-semibold text-blue-900 mb-2">
+      <div className="bg-info/10 border border-info/20 rounded-lg p-6">
+        <h3 className="text-lg font-semibold text-base-content mb-2">
           💰 Invoicing Setup
         </h3>
-        <p className="text-blue-700 mb-4">
+        <p className="text-base-content/70 mb-4">
           Choose how you want to handle invoices for your guests.
         </p>
 
@@ -63,7 +63,7 @@ export function InvoicingSetup({
                   <div className="font-medium">
                     🔗 Moloni Integration (Recommended)
                   </div>
-                  <div className="text-sm text-gray-600 mt-1">
+                  <div className="text-sm text-base-content/60 mt-1">
                     Automated Portuguese-compliant invoicing with PDF delivery
                     and email sending.
                     <br />• Certified Portuguese invoicing
@@ -85,7 +85,7 @@ export function InvoicingSetup({
                 />
                 <div className="flex-1">
                   <div className="font-medium">📤 Export to External Tool</div>
-                  <div className="text-sm text-gray-600 mt-1">
+                  <div className="text-sm text-base-content/60 mt-1">
                     Export booking data in CSV format for import into your
                     existing invoicing software.
                     <br />• CSV export with all booking details
@@ -101,7 +101,7 @@ export function InvoicingSetup({
                       defaultValue={externalUrl || ''}
                       className="input input-bordered input-sm w-full"
                     />
-                    <div className="text-xs text-gray-500 mt-1">
+                    <div className="text-xs text-base-content/50 mt-1">
                       Optional: Link to your external invoicing tool
                     </div>
                   </div>
@@ -119,7 +119,7 @@ export function InvoicingSetup({
                 />
                 <div className="flex-1">
                   <div className="font-medium">📝 Manual Invoicing</div>
-                  <div className="text-sm text-gray-600 mt-1">
+                  <div className="text-sm text-base-content/60 mt-1">
                     No automated invoicing. Use HostelPulse for bookings and
                     handle invoices manually.
                     <br />• Complete booking management
@@ -141,14 +141,12 @@ export function InvoicingSetup({
         </form>
 
         {/* Benefits Comparison */}
-        <div className="mt-6 bg-gray-50 rounded-lg p-4">
+        <div className="mt-6 bg-base-200 rounded-lg p-4">
           <h4 className="font-medium mb-3">💡 Comparison</h4>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
             <div className="text-center">
-              <div className="font-medium text-green-700">
-                Moloni Integration
-              </div>
-              <div className="text-xs text-gray-600 mt-1">
+              <div className="font-medium text-success">Moloni Integration</div>
+              <div className="text-xs text-base-content/60 mt-1">
                 ✅ Automated
                 <br />
                 ✅ Portuguese compliant
@@ -159,8 +157,10 @@ export function InvoicingSetup({
               </div>
             </div>
             <div className="text-center">
-              <div className="font-medium text-blue-700">External Tool</div>
-              <div className="text-xs text-gray-600 mt-1">
+              <div className="font-medium text-base-content/70">
+                External Tool
+              </div>
+              <div className="text-xs text-base-content/60 mt-1">
                 ✅ Your existing software
                 <br />
                 ✅ Manual import
@@ -171,8 +171,8 @@ export function InvoicingSetup({
               </div>
             </div>
             <div className="text-center">
-              <div className="font-medium text-gray-700">Manual</div>
-              <div className="text-xs text-gray-600 mt-1">
+              <div className="font-medium text-base-content/70">Manual</div>
+              <div className="text-xs text-base-content/60 mt-1">
                 ⚠️ Time consuming
                 <br />
                 ⚠️ Error prone
